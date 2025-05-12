@@ -1,0 +1,66 @@
+{
+  "name": "custom-mui-library",
+  "version": "0.1.0",
+  "description": "Custom React component library with JSON-driven styling",
+  "type": "module",
+  "main": "index.js",
+  "module": "dist/esm/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "generate-css": "node src/utils/jsonToCss.js src/styles/theme.json src/styles/generated.css",
+    "prepare": "npm run generate-css && npm run build",
+    "convert-tokens": "node utils/convert-theme-tokens.js",
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "keywords": [
+    "react",
+    "component",
+    "library",
+    "css",
+    "json"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.0.2",
+    "@mui/material": "^7.0.2",
+    "@vitejs/plugin-react": "^4.4.0",
+    "prop-types": "^15.8.1",
+    "react-router-dom": "^7.5.0",
+    "react-scripts": "^5.0.1",
+    "vite": "^6.3.1"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^25.0.2",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@rollup/plugin-terser": "^0.4.3",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "babel-loader": "^10.0.0",
+    "css-loader": "^7.1.2",
+    "html-webpack-plugin": "^5.6.3",
+    "jest": "^29.5.0",
+    "rollup": "^3.25.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.99.5",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.1"
+  }
+}

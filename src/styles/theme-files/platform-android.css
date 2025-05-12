@@ -1,0 +1,54 @@
+/* Android platform specific typography */
+[data-platform="Android"] {
+  --Platform-Font-Families-Standard: Roboto;
+  --Platform-Font-Families-Decorative: Roboto;
+  --Platform-Body-Small-Semibold-Font-Family: var(--System-Font-Families-Standard);
+  --Platform-Body-Small-Semibold-Font-Size: 14px;
+  --Platform-Body-Small-Semibold-Line-Height: 21px;
+  --Platform-Body-Small-Semibold-AA-Paragraph-Spacing: 28px;
+  --Platform-Body-Small-Semibold-Character-Spacing: 0;
+  --Platform-Body-Small-Semibold-Font-Weight: 600;
+  --Platform-Body-Small-Semibold-SR-Character-Spacing: 1.68;
+  --Platform-Body-Small-Semibold-AAA-Paragraph-Spacing: 31.5px;
+  --Platform-Body-Medium-Font-Family: var(--System-Font-Families-Standard);
+  --Platform-Body-Medium-Font-Size: 16px;
+  --Platform-Body-Medium-Line-Height: 24px;
+  --Platform-Body-Medium-AA-Paragraph-Spacing: 22px;
+  --Platform-Body-Medium-Character-Spacing: 0;
+  --Platform-Body-Medium-Font-Weight: 500;
+  --Platform-Body-Medium-AAA-Paragraph-Spacing: 36px;
+  --Platform-Body-Medium-SR-Character-Spacing: 1.92;
+  --Platform-Body-Large-Font-Family: var(--System-Font-Families-Standard);
+  --Platform-Body-Large-Font-Size: 18px;
+  --Platform-Body-Large-Line-Height: 27px;
+  --Platform-Body-Large-AA-Paragraph-Spacing: 36px;
+  --Platform-Body-Large-Character-Spacing: 0;
+  --Platform-Body-Large-Font-Weight: 600;
+  --Platform-Body-Large-SR-Character-Spacing: 2.16;
+  --Platform-Body-Large-AAA-Paragraph-Spacing: 40.5px;
+  --Platform-Body-Large-Semibold-Font-Family: var(--System-Font-Families-Standard);
+  --Platform-Body-Large-Semibold-Font-Size: 18px;
+  --Platform-Body-Large-Semibold-Line-Height: 27px;
+  --Platform-Body-Large-Semibold-AA-Paragraph-Spacing: 26px;
+  --Platform-Body-Large-Semibold-Character-Spacing: 0;
+  --Platform-Body-Large-Semibold-Font-Weight: 500;
+  --Platform-Body-Large-Semibold-SR-Character-Spacing: 2.16;
+  --Platform-Body-Large-Semibold-AAA-Paragraph-Spacing: 40.5px;
+  --Platform-Body-Medium-Semibold-Font-Family: var(--System-Font-Families-Standard);
+  --Platform-Body-Medium-Semibold-Font-Size: 16px;
+  --Platform-Body-Medium-Semibold-Line-Height: 24px;
+  --Platform-Body-Medium-Semibold-AA-Paragraph-Spacing: 32px;
+  --Platform-Body-Medium-Semibold-Character-Spacing: 0;
+  --Platform-Body-Medium-Semibold-Font-Weight: 600;
+  --Platform-Body-Medium-Semibold-SR-Character-Spacing: 1.92;
+  --Platform-Body-Medium-Semibold-AAA-Paragraph-Spacing: 36px;
+  --Platform-Body-Small-Font-Family: var(--System-Font-Families-Standard);
+  --Platform-Body-Small-Font-Size: 14px;
+  --Platform-Body-Small-Line-Height: 21px;
+  --Platform-Body-Small-AA-Paragraph-Spacing: 28px;
+  --Platform-Body-Small-Character-Spacing: 0;
+  --Platform-Body-Small-Font-Weight: 500;
+  --Platform-Body-Small-SR-Character-Spacing: 1.68;
+  --Platform-Body-Small-AAA-Paragraph-Spacing: 31.5px;
+}
+
