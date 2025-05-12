@@ -14,9 +14,9 @@ console.log('Current directory:', process.cwd());
 console.log('Script directory:', __dirname);
 console.log('Full script path:', __filename);
 
-// Set input and output paths
-const inputPath = path.resolve(process.cwd(), 'src/styles/theme.json');
-const outputDir = path.resolve(process.cwd(), 'src/styles/theme-files');
+// Set input and output paths (use path.join for cross-platform compatibility)
+const inputPath = path.join(process.cwd(), 'src', 'styles', 'theme.json');
+const outputDir = path.join(process.cwd(), 'src', 'styles', 'theme-files');
 
 // Verify input file exists
 if (!fs.existsSync(inputPath)) {
