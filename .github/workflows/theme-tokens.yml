@@ -25,11 +25,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}  # For PR or direct branch
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'  # Try an earlier Node version
+          node-version: '18'
           cache: 'npm'
       
       - name: Install only necessary dependencies
@@ -104,6 +106,13 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+          
+          # Get current branch name
+          BRANCH_NAME="${{ github.head_ref || github.ref_name }}"
+          echo "Current branch: $BRANCH_NAME"
+          
           git add src/styles/
           git commit -m "Auto-generate CSS files from theme tokens"
-          git push
+          
+          # Push explicitly to the current branch
+          git push origin HEAD:${BRANCH_NAME}
