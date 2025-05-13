@@ -1,0 +1,124 @@
+name: Clean Theme.json File
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_message:
+        description: 'Commit message for the cleaned theme.json'
+        default: 'Clean theme.json by removing unnecessary sections'
+        required: true
+
+jobs:
+  clean-theme-json:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Create theme cleaner script
+        run: |
+          cat > clean-theme.js << 'EOF'
+          import fs from 'fs';
+
+          async function cleanThemeJson() {
+            console.log('Starting theme.json cleanup...');
+            
+            try {
+              // Read the theme file
+              const themePath = 'src/styles/theme.json';
+              console.log(`Reading theme.json from ${themePath}...`);
+              const themeData = await fs.promises.readFile(themePath, 'utf8');
+              console.log(`Theme file read: ${themeData.length} bytes`);
+              
+              // Parse JSON
+              console.log('Parsing theme JSON...');
+              const theme = JSON.parse(themeData);
+              console.log('Successfully parsed theme JSON');
+              
+              // Create backup
+              await fs.promises.writeFile(`${themePath}.backup`, themeData);
+              console.log('Created backup of original theme.json');
+              
+              // Clean $themes array
+              if (theme.$themes && Array.isArray(theme.$themes)) {
+                console.log(`Cleaning $themes array (${theme.$themes.length} items)...`);
+                theme.$themes = [];
+              }
+              
+              // Remove $metadata section
+              if (theme.$metadata) {
+                console.log('Removing $metadata section...');
+                delete theme.$metadata;
+              }
+              
+              // Original size tracking
+              let originalKeyCount = Object.keys(theme).length;
+              console.log(`Original theme has ${originalKeyCount} top-level keys`);
+              
+              // Remove keys with "2x" in them
+              const keysToKeep = Object.keys(theme).filter(key => {
+                return !key.includes('2x');
+              });
+              
+              console.log(`Removing ${originalKeyCount - keysToKeep.length} top-level keys with "2x" in them`);
+              
+              // Create a new object with only the keys we want to keep
+              const cleanedTheme = {};
+              keysToKeep.forEach(key => {
+                cleanedTheme[key] = theme[key];
+              });
+              
+              // Remove Device sections
+              const finalKeys = Object.keys(cleanedTheme).filter(key => {
+                return !key.startsWith('Device/');
+              });
+              
+              console.log(`Removing ${Object.keys(cleanedTheme).length - finalKeys.length} top-level Device keys`);
+              
+              // Create the final cleaned object
+              const finalTheme = {};
+              finalKeys.forEach(key => {
+                finalTheme[key] = cleanedTheme[key];
+              });
+              
+              // Write the cleaned file
+              const cleanedJson = JSON.stringify(finalTheme, null, 2);
+              await fs.promises.writeFile(themePath, cleanedJson);
+              
+              // Log results
+              console.log('Theme cleanup completed successfully');
+              console.log(`Original size: ${themeData.length} bytes`);
+              console.log(`New size: ${cleanedJson.length} bytes`);
+              console.log(`Reduction: ${Math.round((1 - cleanedJson.length / themeData.length) * 100)}%`);
+              console.log(`Original keys: ${originalKeyCount}`);
+              console.log(`New keys: ${Object.keys(finalTheme).length}`);
+              
+            } catch (error) {
+              console.error('Error cleaning theme.json:', error);
+              process.exit(1);
+            }
+          }
+
+          // Run the cleaner
+          cleanThemeJson();
+          EOF
+      
+      - name: Run theme cleaner
+        run: |
+          node clean-theme.js
+      
+      - name: Verify file size
+        run: |
+          ls -la src/styles/theme.json
+          ls -la src/styles/theme.json.backup
+      
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git add src/styles/theme.json
+          git commit -m "${{ github.event.inputs.commit_message }}"
+          git push
