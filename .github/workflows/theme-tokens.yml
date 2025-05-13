@@ -1,0 +1,82 @@
+name: Theme Tokens Conversion
+
+on:
+  pull_request:
+    paths:
+      - 'src/styles/theme.json'
+      - 'src/styles/JsonToCssSplit.js'
+      - 'src/styles/convert-theme-tokens.js'
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/styles/theme.json'
+      - 'src/styles/JsonToCssSplit.js'
+      - 'src/styles/convert-theme-tokens.js'
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Commit message'
+        required: false
+        default: 'Manual theme token generation'
+
+jobs:
+  convert-tokens:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Clean theme.json file
+        run: |
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+            const themePath = path.join(process.cwd(), 'src', 'styles', 'theme.json');
+            
+            try {
+              // Read the theme file
+              const themeData = JSON.parse(fs.readFileSync(themePath, 'utf8'));
+              
+              // Clean the $themes array if it exists
+              if (themeData.$themes && Array.isArray(themeData.$themes)) {
+                themeData.$themes = [];
+                console.log('Cleaned $themes array in theme.json');
+              } else {
+                console.log('No $themes array found or already empty');
+              }
+              
+              // Write the cleaned file back
+              fs.writeFileSync(themePath, JSON.stringify(themeData, null, 2));
+              console.log('Wrote cleaned theme.json file');
+            } catch (error) {
+              console.error('Error processing theme.json:', error);
+              process.exit(1);
+            }
+          "
+      
+      - name: Convert theme tokens
+        run: node src/styles/convert-theme-tokens.js
+      
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --quiet src/styles/theme-files || echo "changes=true" >> $GITHUB_OUTPUT
+      
+      - name: Commit changes if needed
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add src/styles/theme-files/
+          git commit -m "Auto-generate theme token CSS files"
+          git push
