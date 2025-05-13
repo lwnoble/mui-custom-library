@@ -37882,10 +37882,6 @@
       "value": "false",
       "type": "boolean"
     },
-    "NoLicense": {
-      "value": "false",
-      "type": "boolean"
-    },
     "Name": {
       "value": "Lise",
       "type": "text"
@@ -94947,7 +94943,6 @@
         "Surface-Style": "348841372c99f34135431ca44a369741e8e73b17",
         "AdminAccess": "99b12e85d00e2a0e21f17879a9fcdf847196d4ed",
         "LIbraryBlocked": "bf50b0ca9a5070312f7ed7f15b80c04214fa79a4",
-        "NoLicense": "bba87a25b5da5c8d16dd797a41d50e72eaeaa1ea",
         "HoverOverlay": "f04ea98a46f018ff3f7e6dee5193a70493c29377",
         "FocusOverlay": "d62d16d6bc03733f0e9f4457a29d9d2be2c4489d"
       },
