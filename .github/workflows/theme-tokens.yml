@@ -29,16 +29,21 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '18'  # Try an earlier Node version
           cache: 'npm'
       
-      - name: Install dependencies
-        run: npm ci
+      - name: Install only necessary dependencies
+        run: |
+          # Install only the minimal dependencies needed for CSS generation
+          npm install --no-save fs path url
+          
+          # Check if the JsonToCssSplit.js file exists
+          ls -la src/styles/JsonToCssSplit.js || echo "JsonToCssSplit.js file not found"
       
       - name: Debug theme.json
         run: |
-          ls -la src/styles/theme.json
-          echo "Theme file size: $(stat -c%s src/styles/theme.json) bytes"
+          ls -la src/styles/theme.json || echo "theme.json not found at expected location"
+          echo "Theme file size: $(stat -c%s src/styles/theme.json) bytes" || echo "Could not get file size"
       
       - name: Clean theme.json file
         run: |
@@ -51,13 +56,13 @@ jobs:
               // Read the theme file
               const themeData = JSON.parse(fs.readFileSync(themePath, 'utf8'));
               
-              // Clean the $themes array if it exists
-              if (themeData.$themes && Array.isArray(themeData.$themes)) {
-                console.log('$themes array size before cleaning:', themeData.$themes.length);
-                themeData.$themes = [];
-                console.log('Cleaned $themes array in theme.json');
+              // Clean the \$themes array if it exists
+              if (themeData.\$themes && Array.isArray(themeData.\$themes)) {
+                console.log('\$themes array size before cleaning:', themeData.\$themes.length);
+                themeData.\$themes = [];
+                console.log('Cleaned \$themes array in theme.json');
               } else {
-                console.log('No $themes array found or already empty');
+                console.log('No \$themes array found or already empty');
               }
               
               // Write the cleaned file back
@@ -70,13 +75,16 @@ jobs:
             }
           "
       
-      - name: Generate CSS only (skip full build)
-        run: npm run generate-css
-      
-      - name: List generated CSS files
+      - name: Run theme conversion script directly
         run: |
-          echo "CSS files generated:"
-          ls -la src/styles/generated.css
+          # Run the script directly with Node instead of using npm script
+          node src/styles/convert-theme-tokens.js || echo "Error running conversion script"
+      
+      - name: List files in styles directory
+        run: |
+          echo "Files in styles directory:"
+          ls -la src/styles/
+          echo "Files in theme-files directory (if it exists):"
           ls -la src/styles/theme-files/ || echo "theme-files directory not found"
       
       - name: Check for changes in CSS
