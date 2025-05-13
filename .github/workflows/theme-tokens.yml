@@ -4,15 +4,11 @@ on:
   pull_request:
     paths:
       - 'src/styles/theme.json'
-      - 'src/styles/JsonToCssSplit.js'
-      - 'src/styles/convert-theme-tokens.js'
   push:
     branches:
       - main
     paths:
       - 'src/styles/theme.json'
-      - 'src/styles/JsonToCssSplit.js'
-      - 'src/styles/convert-theme-tokens.js'
   workflow_dispatch:
     inputs:
       message:
@@ -39,6 +35,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
+      - name: Debug theme.json
+        run: |
+          ls -la src/styles/theme.json
+          echo "Theme file size: $(stat -c%s src/styles/theme.json) bytes"
+      
       - name: Clean theme.json file
         run: |
           node -e "
@@ -52,6 +53,7 @@ jobs:
               
               // Clean the $themes array if it exists
               if (themeData.$themes && Array.isArray(themeData.$themes)) {
+                console.log('$themes array size before cleaning:', themeData.$themes.length);
                 themeData.$themes = [];
                 console.log('Cleaned $themes array in theme.json');
               } else {
@@ -61,26 +63,39 @@ jobs:
               // Write the cleaned file back
               fs.writeFileSync(themePath, JSON.stringify(themeData, null, 2));
               console.log('Wrote cleaned theme.json file');
+              console.log('New file size:', fs.statSync(themePath).size, 'bytes');
             } catch (error) {
               console.error('Error processing theme.json:', error);
               process.exit(1);
             }
           "
       
-      - name: Convert theme tokens
-        run: node src/styles/convert-theme-tokens.js
+      - name: Generate CSS only (skip full build)
+        run: npm run generate-css
       
-      - name: Check for changes
-        id: git-check
+      - name: List generated CSS files
         run: |
-          git diff --quiet src/styles/theme-files || echo "changes=true" >> $GITHUB_OUTPUT
+          echo "CSS files generated:"
+          ls -la src/styles/generated.css
+          ls -la src/styles/theme-files/ || echo "theme-files directory not found"
+      
+      - name: Check for changes in CSS
+        id: css-check
+        run: |
+          git diff --name-status src/styles/
+          changes=$(git status --porcelain src/styles/)
+          if [ -n "$changes" ]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in CSS files"
+          else
+            echo "No changes detected in CSS files"
+          fi
       
       - name: Commit changes if needed
-        if: steps.git-check.outputs.changes == 'true'
+        if: steps.css-check.outputs.changes == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add src/styles/theme-files/
-          git add src/styles/theme.json
-          git commit -m "Auto-generate theme token CSS files and clean theme.json"
+          git add src/styles/
+          git commit -m "Auto-generate CSS files from theme tokens"
           git push
