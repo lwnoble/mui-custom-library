@@ -1,19 +1,20 @@
 :root, ::after, ::before {
  /* System Variables */
  --Min-Target: min(min(var(--Desktop-Target), var(--PlatformTarget)), var(--Cognitive-Target));
- --Button-Height: var(--Sizing-Sizing-4);
- --Button-Minimum-Width: var(--Sizing-Sizing-8);
- --Button-Border-Radius: var(--Sizing-Sizing-4);
- --Button-Focus-Radius: var(--Focus-Focus-4);
- --Button-Horizontal-Padding: var(--Sizing-Sizing-1);
- --Button-Horizontal-Padding-With-Icon: var(--Sizing-Sizing-Half);
- --Button-Small-Height: var(--Sizing-Sizing-3);
- --Button-Small-Horizontal-Padding: var(--Sizing-Sizing-1);
- --Button-Small-Horizontal-Padding-With-Icon: var(--Sizing-Sizing-Half);
- --Button-Border: 2px;
- --Breakpoints-Small: 480px;
+ --Button-Height: {Sizing.Sizing-4};
+ --Button-Minimum-Width: {Sizing.Sizing-8};
+ --Button-Border-Radius: {Sizing.Sizing-1};
+ --Button-Focus-Radius: {Focus.Focus-1};
+ --Button-Horizontal-Padding: {Sizing.Sizing-1};
+ --Button-Horizontal-Padding-With-Icon: {Sizing.Sizing-Half};
+ --Button-Small-Height: {Sizing.Sizing-3};
+ --Button-Small-Horizontal-Padding: {Sizing.Sizing-1};
+ --Button-Small-Horizontal-Padding-With-Icon: {Sizing.Sizing-Half};
+ --Button-Border: {Border.Standard};
+ --Button-Overlay-Radius: {HoverOverlay.Overlay-1};
  --Breakpoints-Medium: 768px;
  --Breakpoints-Large: 992px;
+ --Breakpoints-Small: 480px;
  --Breakpoints-Extra-Large: 1280px;
  --Breakpoints-Extra-Small: 320px;
  --Breakpoints-Extra-Extra-Large: 1440px;
