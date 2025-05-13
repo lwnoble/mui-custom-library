@@ -37874,10 +37874,6 @@
       "value": "#00000000",
       "type": "color"
     },
-    "AdminAccess": {
-      "value": "false",
-      "type": "boolean"
-    },
     "Name": {
       "value": "Lise",
       "type": "text"
@@ -94937,7 +94933,6 @@
         "Name": "ae82b70a1500e6ffe4b4d9a184e5edf001800f3e",
         "Color-Theory": "8a20ed495a7af3844e1ddca894c2030470591c4a",
         "Surface-Style": "348841372c99f34135431ca44a369741e8e73b17",
-        "AdminAccess": "99b12e85d00e2a0e21f17879a9fcdf847196d4ed",
         "HoverOverlay": "f04ea98a46f018ff3f7e6dee5193a70493c29377",
         "FocusOverlay": "d62d16d6bc03733f0e9f4457a29d9d2be2c4489d"
       },
