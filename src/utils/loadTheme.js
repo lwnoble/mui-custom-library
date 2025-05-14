@@ -1,4 +1,4 @@
-// File: src/utils/loadTheme.js
+// src/utils/loadTheme.js
 /**
  * Helper function to load the theme in non-React environments
  * @param {Object} options - Theme options
@@ -20,4 +20,4 @@ const loadTheme = ({ mode = 'aa-light', platform = 'desktop' }) => {
     }
   };
   
-  export default loadTheme;
+  module.exports = loadTheme;

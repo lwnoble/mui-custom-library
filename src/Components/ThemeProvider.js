@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+// src/Components/ThemeProvider.js
+const React = require('react');
+const { useEffect, useState } = React;
+const PropTypes = require('prop-types');
 
 /**
  * ThemeProvider handles loading the appropriate CSS theme files
@@ -37,10 +39,10 @@ const ThemeProvider = ({
     }
   }, [mode, platform, onChange]);
   
-  return (
-    <>
-      {children}
-    </>
+  return React.createElement(
+    React.Fragment,
+    null,
+    children
   );
 };
 
@@ -55,4 +57,4 @@ ThemeProvider.propTypes = {
   onChange: PropTypes.func
 };
 
-export default ThemeProvider;
+module.exports = ThemeProvider;

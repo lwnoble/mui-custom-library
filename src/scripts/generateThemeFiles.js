@@ -1,14 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { 
-  convertJsonFileToCssFiles,
-  generateLoaderScript 
-} from '../utils/JsonToCssSplit.js';
-
-// Get the current file's directory
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// src/scripts/generateThemeFiles.js
+const fs = require('fs');
+const path = require('path');
+const JsonToCssSplit = require('../utils/JsonToCssSplit.cjs');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -26,10 +19,10 @@ async function main() {
     }
     
     // Convert JSON to multiple CSS files
-    const results = await convertJsonFileToCssFiles(inputJsonPath, outputCssDir);
+    const results = await JsonToCssSplit.convertJsonFileToCssFiles(inputJsonPath, outputCssDir);
     
     // Generate the loader script
-    const loaderScriptPath = await generateLoaderScript(outputCssDir, results);
+    const loaderScriptPath = await JsonToCssSplit.generateLoaderScript(outputCssDir, results);
     
     console.log(`Successfully generated CSS files in ${outputCssDir}`);
     console.log(`Generated loader script: ${loaderScriptPath}`);

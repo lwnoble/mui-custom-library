@@ -1,6 +1,9 @@
-// src/lib.js - Library entry point
-// Export components
-export { default as ThemeProvider } from './Components/ThemeProvider';
-export { default as loadTheme } from './utils/loadTheme';
+// src/lib.js (CommonJS version)
+const ThemeProvider = require('./Components/ThemeProvider');
+const loadTheme = require('./utils/loadTheme');
 
-// Add other component exports here
+// Export the components and utilities
+module.exports = {
+  ThemeProvider,
+  loadTheme
+};
