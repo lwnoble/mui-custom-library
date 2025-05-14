@@ -1,4 +1,4 @@
-name: Generate Theme Tokens (Manual)
+name: Generate CSS from Theme (Manual)
 
 on:
   workflow_dispatch:
@@ -6,10 +6,15 @@ on:
       message:
         description: 'Commit message'
         required: false
-        default: 'Manual theme token generation'
+        default: 'Manual theme CSS generation'
+
+# Add this section
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  convert-tokens:
+  generate-css:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -24,19 +29,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
-      - name: Convert theme tokens
-        run: node src/styles/convert-theme-tokens.js
+      - name: Generate CSS from theme.json
+        run: node src/utils/JsonToCssSplit.js src/styles/theme.json src/styles/generated
       
       - name: Check for changes
         id: git-check
         run: |
-          git diff --quiet src/styles/theme-files || echo "changes=true" >> $GITHUB_OUTPUT
+          git diff --quiet src/styles/generated || echo "changes=true" >> $GITHUB_OUTPUT
       
       - name: Commit changes if needed
         if: steps.git-check.outputs.changes == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add src/styles/theme-files/
+          git add src/styles/generated/
           git commit -m "${{ github.event.inputs.message }}"
           git push

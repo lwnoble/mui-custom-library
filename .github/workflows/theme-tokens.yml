@@ -17,6 +17,11 @@ on:
         type: boolean
         default: true
 
+# Add this section
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true 
+
 jobs:
   convert-tokens:
     runs-on: ubuntu-latest
