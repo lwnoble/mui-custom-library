@@ -1,0 +1,42 @@
+name: Generate Theme Tokens (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Commit message'
+        required: false
+        default: 'Manual theme token generation'
+
+jobs:
+  convert-tokens:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Convert theme tokens
+        run: node src/styles/convert-theme-tokens.js
+      
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --quiet src/styles/theme-files || echo "changes=true" >> $GITHUB_OUTPUT
+      
+      - name: Commit changes if needed
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add src/styles/theme-files/
+          git commit -m "${{ github.event.inputs.message }}"
+          git push
