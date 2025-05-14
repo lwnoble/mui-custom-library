@@ -97,101 +97,32 @@ function convertSystemToCss(jsonContent) {
 }
 
 /**
- * Extract the root variables from the background content
+ * Extract all mode variables from the background content
  * @param {Object} bgContent - The background content object
  * @returns {Array} - Array of CSS variable declarations
  */
-function extractRootVariables(bgContent) {
+function extractModeVariables(bgContent) {
     const variables = [];
     
-    // Add Dropdown colors
-    for (let i = 1; i <= 5; i++) {
-      const key = `Dropdown-Color-${i}`;
-      if (bgContent[key] && bgContent[key].value) {
-        variables.push(`  --${key}: ${bgContent[key].value};\n`);
-      }
-    }
-    
-    // Add Surface variables
-    const surfaceKeys = ['Surface', 'Surface-Dim', 'Surface-Bright', 'Surface-Quiet', 
-                        'Surface-Dim-Quiet', 'Surface-Bright-Quiet'];
-    surfaceKeys.forEach(key => {
-      if (bgContent[key] && bgContent[key].value) {
-        variables.push(`  --${key}: ${bgContent[key].value};\n`);
-      }
-    });
-    
-    // Add Container variables
-    const containerKeys = ['Container', 'Container-Low', 'Container-Lowest', 'Container-High', 
-                          'Container-Highest', 'Container-Quiet', 'Container-Low-Quiet', 
-                          'Container-Lowest-Quiet', 'Container-High-Quiet', 'Container-Highest-Quiet'];
-    containerKeys.forEach(key => {
-      if (bgContent[key] && bgContent[key].value) {
-        // Special case for Container-Quiet to match your desired output
+    // Process all properties in the background content
+    for (const [key, valueObj] of Object.entries(bgContent)) {
+      if (valueObj && valueObj.value !== undefined) {
+        let varName = key;
+        let value = valueObj.value;
+        
+        // Special case for Container-Quiet
         if (key === 'Container-Quiet') {
-          variables.push(`  --Container-On-Quiet: ${bgContent[key].value};\n`);
-        } else {
-          variables.push(`  --${key}: ${bgContent[key].value};\n`);
+          varName = 'Container-On-Quiet';
         }
-      }
-    });
-    
-    return variables;
-  }
-  
-  /**
-   * Extract the surface-specific variables
-   * @param {Object} bgContent - The background content object
-   * @returns {Array} - Array of CSS variable declarations
-   */
-  function extractSurfaceVariables(bgContent) {
-    const variables = [];
-    
-    // Map JSON keys to CSS variable names
-    const mappings = {
-      'Surface-Icon-Primary': 'Icon-Primary',
-      'Surface-Icon-Secondary': 'Icon-Secondary',
-      'Surface-Icon-Tertiary': 'Icon-Tertiary',
-      'Surface-Icon-Success': 'Icon-Success',
-      'Surface-Icon-Error': 'Icon-Error',
-      'Surface-Icon-Warning': 'Icon-Warning',
-      'Surface-Icon-Info': 'Icon-Info',
-      'Surface-Border': 'Surface-Border',
-      'On-Surface': 'On-Color',
-      'Surface-Button': 'Button',
-      'Surface-On-Button': 'On-Button',
-      'Surface-Button-Half': 'Button-Half',
-      'Surface-Hotlink': 'Hotlink',
-      'Surface-Icon-BG': 'Icon-BG',
-      'Surface-Message-Padding': 'Message-Padding'
-    };
-    
-    // Add mapped variables
-    Object.entries(mappings).forEach(([jsonKey, cssVar]) => {
-      if (bgContent[jsonKey] && bgContent[jsonKey].value !== undefined) {
-        // Special case for message padding
-        if (jsonKey === 'Surface-Message-Padding') {
-          variables.push(`  --${cssVar}: ${bgContent[jsonKey].value || 0};\n`);
-        } else if (jsonKey === 'Surface-Button-Half' || jsonKey === 'Surface-Icon-BG') {
-          // Don't add backticks for these values
-          variables.push(`  --${cssVar}: ${bgContent[jsonKey].value};\n`);
-        } else {
-          variables.push(`  --${cssVar}: ${bgContent[jsonKey].value};\n`);
+        
+        // Handle boolean underline values
+        if (key === 'Surface-Hotlink-Default-Underline' || key === 'Surface-Hotlink-Hover-Underline') {
+          value = valueObj.value.toString() === 'true' ? 'underline' : 'none';
+          varName = key.replace('Surface-', '');
         }
+        
+        variables.push(`  --${varName}: ${value};\n`);
       }
-    });
-    
-    // Handle boolean underline values
-    if (bgContent['Surface-Hotlink-Default-Underline'] && 
-        bgContent['Surface-Hotlink-Default-Underline'].value !== undefined) {
-      const value = bgContent['Surface-Hotlink-Default-Underline'].value.toString() === 'true' ? 'underline' : 'none';
-      variables.push(`  --Hotlink-Default-Underline: ${value};\n`);
-    }
-    
-    if (bgContent['Surface-Hotlink-Hover-Underline'] && 
-        bgContent['Surface-Hotlink-Hover-Underline'].value !== undefined) {
-      const value = bgContent['Surface-Hotlink-Hover-Underline'].value.toString() === 'true' ? 'underline' : 'none';
-      variables.push(`  --Hotlink-Hover-Underline: ${value};\n`);
     }
     
     return variables;
@@ -277,6 +208,66 @@ function extractPlatformVariables(platformContent, platformName) {
   }
   
   /**
+   * Process surface containers JSON structure into CSS
+   * @param {Object} jsonContent - The complete JSON content
+   * @returns {string} - Generated CSS for surface containers
+   */
+  function processSurfaceContainers(jsonContent) {
+    let css = `/**
+ * Surface and Container variables
+ * Generated by JsonToCss
+ */\n\n`;
+    
+    // Process each surface/container entry
+    for (const [key, content] of Object.entries(jsonContent)) {
+      if (key.startsWith('Surface and Containers/')) {
+        // Extract the container name (e.g., Surface, Surface-Dim, etc.)
+        const containerName = key.split('/')[1];
+        
+        // Get the label value if available, otherwise use the container name
+        const labelValue = content['SurfaceContainer-Label'] && content['SurfaceContainer-Label'].value 
+          ? content['SurfaceContainer-Label'].value 
+          : containerName;
+        
+        // Create the CSS selector, default is without value
+        if (containerName === 'Surface') {
+          css += `[data-surfaceContainer] {\n`;
+        } else {
+          css += `[data-surfaceContainer="${labelValue}"] {\n`;
+        }
+        
+        // Process all properties
+        for (const [propName, propObj] of Object.entries(content)) {
+          // Skip the label property as it's used for the selector
+          if (propName === 'SurfaceContainer-Label') {
+            continue;
+          }
+          
+          if (propObj.value !== undefined) {
+            // Handle different value types
+            let value = propObj.value;
+            
+            // Convert reference format {Something} to var(--Something)
+            if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+              value = `var(--${value.substring(1, value.length - 1)})`;
+            } else if (typeof value === 'number') {
+              value = `${value}px`;
+            } else if (typeof value === 'boolean') {
+              value = value ? 'true' : 'false';
+            }
+            
+            css += `--${propName}: ${value};\n`;
+          }
+        }
+        
+        css += `}\n\n`;
+      }
+    }
+    
+    return css;
+  }
+
+  /**
    * Convert the given JSON content to multiple CSS files with a base file
    * @param {Object} jsonContent - The parsed JSON content
    * @param {string} outputDir - The directory to save output files
@@ -289,6 +280,7 @@ function extractPlatformVariables(platformContent, platformName) {
       platforms: [],
       cognitive: [],
       sizingSpacing: [],
+      surfaceContainers: null,
       system: null
     };
     
@@ -335,6 +327,19 @@ function extractPlatformVariables(platformContent, platformName) {
       };
     }
     
+    // Process surface containers
+    if (Object.keys(jsonContent).some(key => key.startsWith('Surface and Containers/'))) {
+      const surfaceContainersCSS = processSurfaceContainers(jsonContent);
+      const surfaceContainersFilename = 'surface-containers.css';
+      const surfaceContainersFilePath = path.join(outputDir, surfaceContainersFilename);
+      
+      await fs.promises.writeFile(surfaceContainersFilePath, surfaceContainersCSS, 'utf8');
+      results.surfaceContainers = {
+        file: surfaceContainersFilename,
+        path: surfaceContainersFilePath
+      };
+    }
+    
     // Process each mode
     for (const [modeName, modeContent] of Object.entries(jsonContent)) {
       if (modeName.startsWith('Modes/')) {
@@ -342,32 +347,25 @@ function extractPlatformVariables(platformContent, platformName) {
         const mode = modeName.split('/')[1];
         let css = '';
         
-        // Process backgrounds
+        // Process backgrounds - simplified approach with a single selector
         if (modeContent.Backgrounds) {
+          css += `/* ${mode} mode variables */\n`;
+          css += `[data-mode="${mode}"] {\n`;
+          
+          // Combine all background variables into one flat list
           for (const [bgName, bgContent] of Object.entries(modeContent.Backgrounds)) {
-            const bgNameLower = bgName.toLowerCase();
-            
-            // Create the root background variables
-            const rootVars = extractRootVariables(bgContent);
-            if (rootVars.length > 0) {
-              css += `/* ${mode} mode specific backgrounds */\n`;
-              css += `[data-mode="${mode}"] [data-background="${bgNameLower}"] {\n`;
-              rootVars.forEach(variable => {
-                css += variable;
-              });
-              css += '}\n\n';
-            }
-            
-            // Create the surface component variables
-            const surfaceVars = extractSurfaceVariables(bgContent);
-            if (surfaceVars.length > 0) {
-              css += `[data-mode="${mode}"] [data-background="${bgNameLower}"] [data-compnent="surface"] {\n`;
-              surfaceVars.forEach(variable => {
-                css += variable;
-              });
-              css += '}\n\n';
-            }
+            const variables = extractModeVariables(bgContent);
+            variables.forEach(variable => {
+              css += variable;
+            });
           }
+          
+          css += '}\n\n';
+        }
+        
+        // Process mode targets if present
+        if (modeContent['Mode-Target']) {
+          css += processModeTarget(modeContent['Mode-Target'], mode);
         }
         
         // Process charts
@@ -384,6 +382,11 @@ function extractPlatformVariables(platformContent, platformName) {
             
             css += `}\n\n`;
           }
+        }
+        
+        // Process paragraph spacing if present
+        if (modeContent['Mode-Paragraph-Spacing']) {
+          css += processParagraphSpacing(modeContent['Mode-Paragraph-Spacing'], mode);
         }
         
         // Save mode-specific CSS to a file
@@ -427,9 +430,6 @@ function extractPlatformVariables(platformContent, platformName) {
       }
     }
     
-    return results;
-
-
     // Add sizing and spacing section
     const sizingSpacingCSS = processSizingSpacing(jsonContent);
     if (sizingSpacingCSS) {
@@ -444,7 +444,7 @@ function extractPlatformVariables(platformContent, platformName) {
     }
 
     return results;
-    }
+  }
 
   /**
  * Main function to convert a JSON file to multiple CSS files
@@ -469,6 +469,10 @@ async function convertJsonFileToCssFiles(inputPath, outputDir) {
       
       console.log(`- ${results.modes.length} mode files`);
       console.log(`- ${results.platforms.length} platform files`);
+      
+      if (results.sizingSpacing) {
+        console.log(`- sizing-spacing.css (sizing and spacing variables)`);
+      }
       
       return results;
     } catch (error) {
@@ -553,6 +557,12 @@ async function convertJsonFileToCssFiles(inputPath, outputDir) {
         
         // Load system CSS
         await this.loadStylesheet('system.css', 'theme-system');
+        
+        // Load sizing and spacing CSS
+        await this.loadStylesheet('sizing-spacing.css', 'theme-sizing-spacing');
+        
+        // Load surface containers CSS
+        await this.loadStylesheet('surface-containers.css', 'theme-surface-containers');
         
         this.initialized = true;
       } catch (err) {
@@ -686,12 +696,13 @@ function processSizingSpacing(jsonContent) {
 export { 
     convertFontFamilyReference,
     convertSystemToCss,
-    extractRootVariables,
-    extractSurfaceVariables,
+    extractModeVariables,
     extractChartVariables,
     extractPlatformVariables,
+    processParagraphSpacing,
+    processModeTarget,
+    processSurfaceContainers,
     convertToCssFiles, 
     convertJsonFileToCssFiles,
     generateLoaderScript
-    
   };
