@@ -13,15 +13,9 @@
     "prepare": "npm run generate-css && npm run build:lib",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:lib": "npx babel src/lib.js src/Components src/utils --out-dir dist --copy-files",
+    "build:lib": "npx babel src/lib.js src/Components src/utils --out-dir dist --copy-files --config-file ./babel.config.cjs",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
-  "babel": {
-    "presets": [
-      "@babel/preset-env",
-      "@babel/preset-react"
-    ]
   },
   "keywords": [
     "react",
@@ -34,7 +28,7 @@
   "license": "MIT",
   "dependencies": {
     "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
+    "@emotion/styled": "^11.14.0", 
     "@mui/icons-material": "^7.0.2",
     "@mui/material": "^7.0.2",
     "prop-types": "^15.8.1"
@@ -44,9 +38,9 @@
     "react-dom": "^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.27.2",
-    "@babel/core": "^7.27.1",
-    "@babel/preset-env": "^7.27.2",
-    "@babel/preset-react": "^7.27.1"
+    "@babel/cli": "^7.21.0",
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "@babel/preset-react": "^7.18.6"
   }
 }
