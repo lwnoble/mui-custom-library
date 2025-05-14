@@ -108,31 +108,35 @@ function convertSystemToCss(jsonContent) {
 function extractModeVariables(bgContent) {
   const variables = [];
   
-  // Process all properties in the background content
-  // Skip the "Surface-" prefixed properties as they are handled in surface-containers.css
+  // Process only non-surface/container specific properties
   for (const [key, valueObj] of Object.entries(bgContent)) {
     if (valueObj && valueObj.value !== undefined) {
+      // Include only Surface, Container, Quiet, and Dropdown properties
       // Skip all icon, button, hotlink, border and other surface-related properties
-      if (key.startsWith('Surface-') || 
-          key.startsWith('Icon-') || 
-          key.startsWith('Button') || 
-          key.includes('Hotlink') || 
-          key === 'Border' || 
-          key === 'On-Color' ||
-          key === 'On-Button' || 
-          key === 'Message-Padding') {
-        continue;
+      if ((key.startsWith('Surface') && 
+           !key.includes('Icon') && 
+           !key.includes('Button') && 
+           !key.includes('Hotlink') && 
+           !key.includes('Border') && 
+           !key.includes('Message')) || 
+          (key.startsWith('Container') && 
+           !key.includes('Icon') && 
+           !key.includes('Button') && 
+           !key.includes('Hotlink') && 
+           !key.includes('Border') && 
+           !key.includes('Message')) || 
+          key.startsWith('Dropdown-Color-')) {
+        
+        let varName = key;
+        let value = valueObj.value;
+        
+        // Special case for Container-Quiet
+        if (key === 'Container-Quiet') {
+          varName = 'Container-On-Quiet';
+        }
+        
+        variables.push(`  --${varName}: ${value};\n`);
       }
-      
-      let varName = key;
-      let value = valueObj.value;
-      
-      // Special case for Container-Quiet
-      if (key === 'Container-Quiet') {
-        varName = 'Container-On-Quiet';
-      }
-      
-      variables.push(`  --${varName}: ${value};\n`);
     }
   }
   
@@ -143,13 +147,20 @@ function extractModeVariables(bgContent) {
  * Process mode target JSON structure into CSS
  * @param {Object} modeTarget - The mode target object
  * @param {string} mode - The mode name (e.g., "AA-light")
+ * @param {boolean} isDefaultMode - Whether this is the default mode (AA-light)
  * @returns {string} - Generated CSS for mode targets
  */
-function processModeTarget(modeTarget, mode) {
+function processModeTarget(modeTarget, mode, isDefaultMode = false) {
   let css = '';
   
   css += `/* ${mode} mode targets */\n`;
-  css += `[data-mode="${mode}"] {\n`;
+  
+  // For AA-light, use just [data-mode] without a value
+  if (isDefaultMode) {
+    css += `[data-mode] {\n`;
+  } else {
+    css += `[data-mode="${mode}"] {\n`;
+  }
   
   // Process all target values
   for (const [platform, valueObj] of Object.entries(modeTarget)) {
@@ -176,15 +187,22 @@ function processModeTarget(modeTarget, mode) {
  * Process paragraph spacing JSON structure into CSS
  * @param {Object} paragraphSpacing - The paragraph spacing object
  * @param {string} mode - The mode name (e.g., "AA-light")
+ * @param {boolean} isDefaultMode - Whether this is the default mode (AA-light)
  * @returns {string} - Generated CSS for paragraph spacing
  */
-function processParagraphSpacing(paragraphSpacing, mode) {
+function processParagraphSpacing(paragraphSpacing, mode, isDefaultMode = false) {
   let css = '';
   
   // Process each spacing type (Default, 2x, etc.)
   for (const [spacingType, spacingValues] of Object.entries(paragraphSpacing)) {
     css += `/* ${mode} mode paragraph spacing - ${spacingType} */\n`;
-    css += `[data-mode="${mode}"] [paragraph-spacing="${spacingType}"] {\n`;
+    
+    // For AA-light, use just [data-mode] without a value
+    if (isDefaultMode) {
+      css += `[data-mode] [paragraph-spacing="${spacingType}"] {\n`;
+    } else {
+      css += `[data-mode="${mode}"] [paragraph-spacing="${spacingType}"] {\n`;
+    }
     
     // Process all spacing values
     for (const [key, valueObj] of Object.entries(spacingValues)) {
@@ -466,32 +484,68 @@ async function convertToCssFiles(jsonContent, outputDir) {
       const mode = modeName.split('/')[1];
       let css = '';
       
-      // Process backgrounds - simplified approach with a single selector
+      // Process backgrounds with separate selectors per background type
       if (modeContent.Backgrounds) {
-        css += `/* ${mode} mode variables */\n`;
-        css += `[data-mode="${mode}"] {\n`;
+        // Determine the selector based on whether it's the default mode (AA-light)
+        const isDefaultMode = mode === 'AA-light';
         
-        // Combine all background variables into one flat list
-        for (const [bgName, bgContent] of Object.entries(modeContent.Backgrounds)) {
-          const variables = extractModeVariables(bgContent);
+        // Process default background (no specific background attribute)
+        if (modeContent.Backgrounds.Default) {
+          css += `/* ${mode} mode specific backgrounds */\n`;
+          // For AA-light, use just [data-mode] without a value
+          if (isDefaultMode) {
+            css += `[data-mode] [data-background] {\n`;
+          } else {
+            css += `[data-mode="${mode}"] [data-background] {\n`;
+          }
+          
+          const variables = extractModeVariables(modeContent.Backgrounds.Default);
           variables.forEach(variable => {
             css += variable;
           });
+          
+          css += '}\n\n';
         }
         
-        css += '}\n\n';
+        // Process other named backgrounds
+        for (const [bgName, bgContent] of Object.entries(modeContent.Backgrounds)) {
+          if (bgName !== 'Default') {
+            const bgNameLower = bgName.toLowerCase();
+            
+            css += `/* ${mode} mode specific backgrounds */\n`;
+            // For AA-light, use just [data-mode] without a value
+            if (isDefaultMode) {
+              css += `[data-mode] [data-background="${bgNameLower}"] {\n`;
+            } else {
+              css += `[data-mode="${mode}"] [data-background="${bgNameLower}"] {\n`;
+            }
+            
+            const variables = extractModeVariables(bgContent);
+            variables.forEach(variable => {
+              css += variable;
+            });
+            
+            css += '}\n\n';
+          }
+        }
       }
       
       // Process mode targets if present
       if (modeContent['Mode-Target']) {
-        css += processModeTarget(modeContent['Mode-Target'], mode);
+        css += processModeTarget(modeContent['Mode-Target'], mode, mode === 'AA-light');
       }
       
       // Process charts
       if (modeContent.Charts) {
         for (const [chartType, chartContent] of Object.entries(modeContent.Charts)) {
           css += `/* ${mode} mode ${chartType} chart */\n`;
-          css += `[data-mode="${mode}"] [charts="${chartType}"] {\n`;
+          
+          // For AA-light, use just [data-mode] without a value
+          if (mode === 'AA-light') {
+            css += `[data-mode] [charts="${chartType}"] {\n`;
+          } else {
+            css += `[data-mode="${mode}"] [charts="${chartType}"] {\n`;
+          }
           
           // Extract chart color variables
           const chartVars = extractChartVariables(chartContent);
@@ -505,7 +559,7 @@ async function convertToCssFiles(jsonContent, outputDir) {
       
       // Process paragraph spacing if present
       if (modeContent['Mode-Paragraph-Spacing']) {
-        css += processParagraphSpacing(modeContent['Mode-Paragraph-Spacing'], mode);
+        css += processParagraphSpacing(modeContent['Mode-Paragraph-Spacing'], mode, mode === 'AA-light');
       }
       
       // Save mode-specific CSS to a file
@@ -518,7 +572,6 @@ async function convertToCssFiles(jsonContent, outputDir) {
         file: modeFilename,
         path: modeFilePath
       });
-      
     } else if (modeName.startsWith('Platform/')) {
       // Get the platform name (e.g., Desktop from Platform/Desktop)
       const platform = modeName.split('/')[1];
@@ -563,45 +616,6 @@ async function convertToCssFiles(jsonContent, outputDir) {
   }
   
   return results;
-}
-
-/**
- * Main function to convert a JSON file to multiple CSS files
- * @param {string} inputPath - Path to the input JSON file
- * @param {string} outputDir - Path for the output directory
- */
-async function convertJsonFileToCssFiles(inputPath, outputDir) {
-  try {
-    // Read the JSON file
-    const data = await fs.promises.readFile(inputPath, 'utf8');
-    const jsonContent = JSON.parse(data);
-    
-    // Transform to multiple CSS files
-    const results = await convertToCssFiles(jsonContent, outputDir);
-    
-    console.log(`Successfully generated CSS files in ${outputDir}`);
-    console.log(`- base.css (common styles)`);
-    
-    if (results.system) {
-      console.log(`- system.css (system tokens)`);
-    }
-    
-    if (results.surfaceContainers) {
-      console.log(`- surface-containers.css (surface containers)`);
-    }
-    
-    if (results.sizingSpacing) {
-      console.log(`- sizing-spacing.css (sizing and spacing)`);
-    }
-    
-    console.log(`- ${results.modes.length} mode files`);
-    console.log(`- ${results.platforms.length} platform files`);
-    
-    return results;
-  } catch (error) {
-    console.error('Error converting JSON to CSS files:', error);
-    process.exit(1);
-  }
 }
 
 /**
@@ -753,6 +767,45 @@ document.addEventListener('DOMContentLoaded', () => {
   return loaderPath;
 }
 
+/**
+ * Main function to convert a JSON file to multiple CSS files
+ * @param {string} inputPath - Path to the input JSON file
+ * @param {string} outputDir - Path for the output directory
+ */
+async function convertJsonFileToCssFiles(inputPath, outputDir) {
+  try {
+    // Read the JSON file
+    const data = await fs.promises.readFile(inputPath, 'utf8');
+    const jsonContent = JSON.parse(data);
+    
+    // Transform to multiple CSS files
+    const results = await convertToCssFiles(jsonContent, outputDir);
+    
+    console.log(`Successfully generated CSS files in ${outputDir}`);
+    console.log(`- base.css (common styles)`);
+    
+    if (results.system) {
+      console.log(`- system.css (system tokens)`);
+    }
+    
+    if (results.surfaceContainers) {
+      console.log(`- surface-containers.css (surface containers)`);
+    }
+    
+    if (results.sizingSpacing) {
+      console.log(`- sizing-spacing.css (sizing and spacing)`);
+    }
+    
+    console.log(`- ${results.modes.length} mode files`);
+    console.log(`- ${results.platforms.length} platform files`);
+    
+    return results;
+  } catch (error) {
+    console.error('Error converting JSON to CSS files:', error);
+    process.exit(1);
+  }
+}
+
 // Handle command line arguments
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   if (process.argv.length < 4) {
@@ -784,7 +837,5 @@ export {
   processModeTarget,
   processSurfaceContainers,
   processSizingSpacing,
-  convertToCssFiles, 
-  convertJsonFileToCssFiles,
-  generateLoaderScript
+  convertToCssFiles
 };
