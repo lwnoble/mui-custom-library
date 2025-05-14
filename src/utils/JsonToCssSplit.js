@@ -103,85 +103,155 @@ function convertSystemToCss(jsonContent) {
 /**
  * Extract all mode variables from the background content
  * @param {Object} bgContent - The background content object
+ * @param {string} mode - The mode name (e.g., "AA-dark")
+ * @param {string} backgroundType - The background type (e.g., "Default", "Primary")
  * @returns {Array} - Array of CSS variable declarations
  */
-function extractModeVariables(bgContent) {
-  const variables = [];
-  
-  // Process only non-surface/container specific properties
-  for (const [key, valueObj] of Object.entries(bgContent)) {
-    if (valueObj && valueObj.value !== undefined) {
-      // Include only Surface, Container, Quiet, and Dropdown properties
-      // Skip all icon, button, hotlink, border and other surface-related properties
-      if ((key.startsWith('Surface') && 
-           !key.includes('Icon') && 
-           !key.includes('Button') && 
-           !key.includes('Hotlink') && 
-           !key.includes('Border') && 
-           !key.includes('Message')) || 
-          (key.startsWith('Container') && 
-           !key.includes('Icon') && 
-           !key.includes('Button') && 
-           !key.includes('Hotlink') && 
-           !key.includes('Border') && 
-           !key.includes('Message')) || 
-          key.startsWith('Dropdown-Color-')) {
-        
-        let varName = key;
-        let value = valueObj.value;
-        
-        // Special case for Container-Quiet
-        if (key === 'Container-Quiet') {
-          varName = 'Container-On-Quiet';
+function extractModeVariables(bgContent, mode, backgroundType = 'default') {
+    const variables = [];
+    
+    // Mapping of special transformations for certain keys
+    const keyTransformations = {
+      'Surface-Quiet': 'Surface-Quiet',
+      'Surface-Dim-Quiet': 'Surface-Dim-Quiet',
+      'Surface-Bright-Quiet': 'Surface-Bright-Quiet',
+      'Container-Quiet': 'Container-On-Quiet', // Special handling for this key
+      'Container-Low-Quiet': 'Container-Low-Quiet',
+      'Container-Lowest-Quiet': 'Container-Lowest-Quiet',
+      'Container-High-Quiet': 'Container-High-Quiet',
+      'Container-Highest-Quiet': 'Container-Highest-Quiet',
+      'Dropdown-Color-1': 'Dropdown-Color-1',
+      'Dropdown-Color-2': 'Dropdown-Color-2',
+      'Dropdown-Color-3': 'Dropdown-Color-3',
+      'Dropdown-Color-4': 'Dropdown-Color-4',
+      'Dropdown-Color-5': 'Dropdown-Color-5'
+    };
+    
+    const surfaceKeys = [
+      'Surface', 'Surface-Dim', 'Surface-Bright', 
+      'Surface-Quiet', 'Surface-Dim-Quiet', 'Surface-Bright-Quiet'
+    ];
+    
+    const containerKeys = [
+      'Container', 'Container-Low', 'Container-Lowest', 
+      'Container-High', 'Container-Highest', 
+      'Container-On-Quiet', 'Container-Low-Quiet', 
+      'Container-Lowest-Quiet', 'Container-High-Quiet', 
+      'Container-Highest-Quiet'
+    ];
+    
+    const dropdownKeys = [
+      'Dropdown-Color-1', 'Dropdown-Color-2', 'Dropdown-Color-3', 
+      'Dropdown-Color-4', 'Dropdown-Color-5'
+    ];
+    
+    // Process each key and check its value
+    for (const [key, valueObj] of Object.entries(bgContent)) {
+      if (valueObj && valueObj.value !== undefined) {
+        // Check if the key is in our predefined lists or transformations
+        if (keyTransformations[key] || 
+            surfaceKeys.includes(key) || 
+            containerKeys.includes(key) || 
+            dropdownKeys.includes(key)) {
+          
+          // Use the transformed key if exists, otherwise use original
+          const transformedKey = keyTransformations[key] || key;
+          const value = valueObj.value;
+          
+          // Special handling for boolean values (for underline properties)
+          if (typeof value === 'boolean') {
+            variables.push(`  --${transformedKey}: ${value ? 'true' : 'false'};\n`);
+          } else {
+            // Wrap color values in quotes to ensure they're treated as strings
+            const cssValue = typeof value === 'string' ? `"${value}"` : value;
+            variables.push(`  --${transformedKey}: ${cssValue};\n`);
+          }
         }
-        
-        variables.push(`  --${varName}: ${value};\n`);
       }
     }
+    
+    return variables;
+  }
+
+  /**
+ * Process each background in the mode
+ * @param {Object} backgrounds - The backgrounds object
+ * @param {string} mode - The mode name
+ * @returns {string} - Generated CSS for backgrounds
+ */
+function processBackgrounds(backgrounds, mode) {
+    let css = '';
+    
+    // Process default background
+    if (backgrounds.Default) {
+      css += `/* ${mode} mode specific backgrounds */\n`;
+      css += `[data-mode="${mode}"] [data-background] {\n`;
+      
+      const variables = extractModeVariables(backgrounds.Default, mode);
+      variables.forEach(variable => {
+        css += variable;
+      });
+      
+      css += '}\n\n';
+    }
+    
+    // Process other named backgrounds
+    for (const [bgName, bgContent] of Object.entries(backgrounds)) {
+      if (bgName !== 'Default') {
+        const bgNameLower = bgName.toLowerCase();
+        
+        css += `/* ${mode} mode specific backgrounds */\n`;
+        css += `[data-mode="${mode}"] [data-background="${bgNameLower}"] {\n`;
+        
+        const variables = extractModeVariables(bgContent, mode, bgNameLower);
+        variables.forEach(variable => {
+          css += variable;
+        });
+        
+        css += '}\n\n';
+      }
+    }
+    
+    return css;
   }
   
-  return variables;
-}
-
 /**
  * Process mode target JSON structure into CSS
  * @param {Object} modeTarget - The mode target object
- * @param {string} mode - The mode name (e.g., "AA-light")
+ * @param {string} mode - The mode name (e.g., "AA-dark")
  * @param {boolean} isDefaultMode - Whether this is the default mode (AA-light)
  * @returns {string} - Generated CSS for mode targets
  */
 function processModeTarget(modeTarget, mode, isDefaultMode = false) {
-  let css = '';
-  
-  css += `/* ${mode} mode targets */\n`;
-  
-  // For AA-light, use just [data-mode] without a value
-  if (isDefaultMode) {
-    css += `[data-mode] {\n`;
-  } else {
-    css += `[data-mode="${mode}"] {\n`;
-  }
-  
-  // Process all target values
-  for (const [platform, valueObj] of Object.entries(modeTarget)) {
-    if (valueObj.value !== undefined) {
-      // Convert reference format {Desktop-Target}
-      // to CSS variable format --Desktop-Target
-      let value = valueObj.value;
-      if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-        value = `var(--${value.substring(1, value.length - 1)})`;
-      } else if (typeof value === 'number') {
-        value = `${value}px`;
+    let css = `/* ${mode} mode targets */\n`;
+    
+    // Determine the appropriate selector
+    const selector = isDefaultMode ? `[data-mode]` : `[data-mode="${mode}"]`;
+    
+    css += `${selector} {\n`;
+    
+    // Process all target values
+    for (const [platform, valueObj] of Object.entries(modeTarget)) {
+      if (valueObj.value !== undefined) {
+        // Convert reference format {Desktop-Target}
+        // to CSS variable format --Desktop-Target
+        let value = valueObj.value;
+        if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+          // Remove braces and convert dot notation to variable notation
+          value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
+        } else if (typeof value === 'number') {
+          value = `${value}px`;
+        }
+        
+        css += `  --Mode-Target-${platform}: ${value};\n`;
       }
-      
-      css += `  --Mode-Target-${platform}: ${value};\n`;
     }
+    
+    css += '}\n\n';
+    
+    return css;
   }
   
-  css += '}\n\n';
-  
-  return css;
-}
 
 /**
  * Process paragraph spacing JSON structure into CSS
@@ -837,5 +907,6 @@ export {
   processModeTarget,
   processSurfaceContainers,
   processSizingSpacing,
-  convertToCssFiles
-};
+  convertToCssFiles,
+  processBackgrounds 
+ };
