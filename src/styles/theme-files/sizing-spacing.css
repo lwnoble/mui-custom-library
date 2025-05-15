@@ -1,0 +1,172 @@
+/* Default sizing and spacing */
+[data-sizing-spacing] {
+  --Sizing-1: 8px;
+  --Sizing-2: 16px;
+  --Sizing-3: 24px;
+  --Sizing-4: 32px;
+  --Sizing-5: 40px;
+  --Sizing-6: 48px;
+  --Sizing-7: 56px;
+  --Sizing-8: 64px;
+  --Sizing-9: 72px;
+  --Sizing-10: 80px;
+  --Sizing-Half: 4px;
+  --Sizing-Quarter: 2px;
+  --Spacing-1: 8px;
+  --Spacing-2: 16px;
+  --Spacing-3: 24px;
+  --Spacing-4: 32px;
+  --Spacing-5: 40px;
+  --Spacing-6: 48px;
+  --Spacing-7: 56px;
+  --Spacing-8: 64px;
+  --Spacing-9: 72px;
+  --Spacing-10: 80px;
+  --Spacing-Half: 4px;
+  --Spacing-Quarter: 2px;
+  --Sizing-20: 160px;
+  --Sizing-30: 240px;
+  --Sizing-40: 320px;
+  --Sizing-One-And-Half: 12px;
+  --Negative-Size-1: -8px;
+  --Negative-Size-2: -16px;
+  --Negative-Half: -4px;
+  --Negative-Quarter: -2px;
+  --Sizing-24: 192px;
+  --Spacing-One-And-Half: 12px;
+  --Sizing-50: 400px;
+  --Negative-Size-Half: -4px;
+  --Negative-Size-Quarter: -2px;
+  --Spacing-11: 88px;
+  --Spacing-12: 96px;
+}
+
+/* Expanded sizing and spacing */
+[data-sizing-spacing="expanded"] {
+  --Sizing-1: 8px;
+  --Sizing-2: 16px;
+  --Sizing-3: 24px;
+  --Sizing-4: 32px;
+  --Sizing-5: 40px;
+  --Sizing-6: 48px;
+  --Sizing-7: 56px;
+  --Sizing-8: 64px;
+  --Sizing-9: 72px;
+  --Sizing-10: 80px;
+  --Sizing-Half: 4px;
+  --Sizing-Quarter: 2px;
+  --Spacing-1: 12px;
+  --Spacing-2: 24px;
+  --Spacing-3: 36px;
+  --Spacing-4: 48px;
+  --Spacing-5: 60px;
+  --Spacing-6: 72px;
+  --Spacing-7: 84px;
+  --Spacing-8: 96px;
+  --Spacing-9: 108px;
+  --Spacing-10: 120px;
+  --Spacing-Half: 6px;
+  --Spacing-Quarter: 3px;
+  --Sizing-20: 160px;
+  --Sizing-30: 240px;
+  --Sizing-40: 320px;
+  --Sizing-One-And-Half: 12px;
+  --Negative-Size-1: -8px;
+  --Negative-Size-2: -16px;
+  --Negative-Half: -4px;
+  --Negative-Quarter: -2px;
+  --Sizing-24: 192px;
+  --Spacing-One-And-Half: 18px;
+  --Sizing-50: 400px;
+  --Negative-Size-Half: -4px;
+  --Negative-Size-Quarter: -2px;
+  --Spacing-11: 132px;
+  --Spacing-12: 144px;
+}
+
+/* Reduced sizing and spacing */
+[data-sizing-spacing="reduced"] {
+  --Sizing-1: 8px;
+  --Sizing-2: 16px;
+  --Sizing-3: 24px;
+  --Sizing-4: 32px;
+  --Sizing-5: 40px;
+  --Sizing-6: 48px;
+  --Sizing-7: 56px;
+  --Sizing-8: 64px;
+  --Sizing-9: 72px;
+  --Sizing-10: 80px;
+  --Sizing-Half: 4px;
+  --Sizing-Quarter: 2px;
+  --Spacing-1: 4px;
+  --Spacing-2: 8px;
+  --Spacing-3: 12px;
+  --Spacing-4: 16px;
+  --Spacing-5: 20px;
+  --Spacing-6: 24px;
+  --Spacing-7: 28px;
+  --Spacing-8: 32px;
+  --Spacing-9: 36px;
+  --Spacing-10: 40px;
+  --Spacing-Half: 2px;
+  --Spacing-Quarter: 1px;
+  --Sizing-20: 160px;
+  --Sizing-30: 240px;
+  --Sizing-40: 320px;
+  --Sizing-One-And-Half: 12px;
+  --Negative-Size-1: -8px;
+  --Negative-Size-2: -16px;
+  --Negative-Half: -4px;
+  --Negative-Quarter: -2px;
+  --Sizing-24: 192px;
+  --Spacing-One-And-Half: 6px;
+  --Sizing-50: 400px;
+  --Negative-Size-Half: -4px;
+  --Negative-Size-Quarter: -2px;
+  --Spacing-11: 44px;
+  --Spacing-12: 48px;
+}
+
+/* Standard sizing and spacing */
+[data-sizing-spacing="standard"] {
+  --Sizing-1: 8px;
+  --Sizing-2: 16px;
+  --Sizing-3: 24px;
+  --Sizing-4: 32px;
+  --Sizing-5: 40px;
+  --Sizing-6: 48px;
+  --Sizing-7: 56px;
+  --Sizing-8: 64px;
+  --Sizing-9: 72px;
+  --Sizing-10: 80px;
+  --Sizing-Half: 4px;
+  --Sizing-Quarter: 2px;
+  --Spacing-1: 8px;
+  --Spacing-2: 16px;
+  --Spacing-3: 24px;
+  --Spacing-4: 32px;
+  --Spacing-5: 40px;
+  --Spacing-6: 48px;
+  --Spacing-7: 56px;
+  --Spacing-8: 64px;
+  --Spacing-9: 72px;
+  --Spacing-10: 80px;
+  --Spacing-Half: 4px;
+  --Spacing-Quarter: 2px;
+  --Sizing-20: 160px;
+  --Sizing-30: 240px;
+  --Sizing-40: 320px;
+  --Sizing-One-And-Half: 12px;
+  --Negative-Size-1: -8px;
+  --Negative-Size-2: -16px;
+  --Negative-Half: -4px;
+  --Negative-Quarter: -2px;
+  --Sizing-24: 192px;
+  --Spacing-One-And-Half: 12px;
+  --Sizing-50: 400px;
+  --Negative-Size-Half: -4px;
+  --Negative-Size-Quarter: -2px;
+  --Spacing-11: 88px;
+  --Spacing-12: 96px;
+}
+
