@@ -12,14 +12,14 @@ on:
       - 'src/styles/theme.json'
   workflow_dispatch:
     inputs:
-      force_update:
-        description: 'Force update CSS files even if no changes detected'
-        type: boolean
-        default: true
+      message:
+        description: 'Commit message for manual CSS generation'
+        required: false
+        default: 'Manual theme CSS generation'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true 
+  cancel-in-progress: true
 
 jobs:
   convert-tokens:
@@ -37,6 +37,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
       
       - name: Create output directory
         run: mkdir -p src/styles/theme-files
@@ -71,12 +75,11 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
+          # Use custom commit message for manual dispatch, otherwise use default
+          COMMIT_MESSAGE="${{ github.event.inputs.message || 'Update theme CSS files using JsonToCssSplit' }}"
+          
           # Check if there are any changes
           if [[ -n "$(git status --porcelain src/styles/theme-files)" ]]; then
             echo "Changes detected in theme-files"
             git add src/styles/theme-files/
-            git commit -m "Update theme CSS files using JsonToCssSplit" || echo "Nothing to commit"
-            git push || echo "Nothing to push"
-          else
-            echo "No changes detected in theme-files"
-          fi
+            git commit -m "$COMMIT_MESSAGE" || echo "Nothing
