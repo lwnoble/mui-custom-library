@@ -532,21 +532,12 @@
   --Chart-Grid-Color: rgba(0,0,0,0.15);
 }
 
-/* AA-light mode paragraph spacing - Default */
-[data-mode] [paragraph-spacing="Default"] {
+/* AA-light mode paragraph spacing */
+[data-mode] {
   --Body-Medium: var(--Cognitive-Default-Body-Medium-AA-Paragraph-Spacing);
   --Body-Small: var(--Cognitive-Default-Body-Small-AA-Paragraph-Spacing);
   --Body-Large: var(--Cognitive-Default-Body-Large-AA-Paragraph-Spacing);
   --Legal: var(--Cognitive-Default-Legal-Standard-AA-Paragraph-Spacing);
   --Caption: var(--Cognitive-Default-Captions-Standard-AA-Paragraph-Spacing);
-}
-
-/* AA-light mode paragraph spacing - 2x */
-[data-mode] [paragraph-spacing="2x"] {
-  --Body-Small: var(--Cognitive-2x-Body-Small-AA-Paragraph-Spacing);
-  --Body-Medium: var(--Cognitive-2x-Body-Medium-AA-Paragraph-Spacing);
-  --Body-Large: var(--Cognitive-2x-Body-Small-AA-Paragraph-Spacing);
-  --Legal: var(--Cognitive-2x-Legal-Standard-AA-Paragraph-Spacing);
-  --Caption: var(--Cognitive-2x-Captions-Standard-AA-Paragraph-Spacing);
 }
 
