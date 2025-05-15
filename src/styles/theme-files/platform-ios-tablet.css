@@ -1,4 +1,9 @@
 /* IOS-Tablet platform specific typography */
 [data-platform="IOS-Tablet"] {
+  --Android: none;
+  --IOS: none;
+  --Desktop: none;
+  --Platform-Font-Families-Standard: var(--Cognitive-Font-Families-Standard);
+  --Platform-Font-Families-Decorative: var(--Cognitive-Font-Families-Decorative);
 }
 
