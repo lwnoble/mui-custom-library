@@ -1,5 +1,10 @@
 /* AA-light mode specific backgrounds */
 [data-mode="AA-light"] [data-background="default"] {
+  --Dropdown-Color-1: #91ada6b3;
+  --Dropdown-Color-2: #91ada68a;
+  --Dropdown-Color-3: #91ada661;
+  --Dropdown-Color-4: #91ada652;
+  --Dropdown-Color-5: #91ada633;
   --Surface: #f2f6f5;
   --Surface-Dim: #e9edec;
   --Surface-Bright: #f3f6f6;
@@ -16,11 +21,6 @@
   --Container-Lowest-Quiet: #5f7875;
   --Container-High-Quiet: #58726f;
   --Container-Highest-Quiet: #546f6d;
-  --Dropdown-Color-1: #91ada6b3;
-  --Dropdown-Color-2: #91ada68a;
-  --Dropdown-Color-3: #91ada661;
-  --Dropdown-Color-4: #91ada652;
-  --Dropdown-Color-5: #91ada633;
 }
 
 [data-mode="AA-light"] [data-background="default"] [data-compnent="surface"] {
@@ -45,6 +45,11 @@
 
 /* AA-light mode specific backgrounds */
 [data-mode="AA-light"] [data-background="primary"] {
+  --Dropdown-Color-1: #20312fb3;
+  --Dropdown-Color-2: #20312f8a;
+  --Dropdown-Color-3: #20312f61;
+  --Dropdown-Color-4: #20312f52;
+  --Dropdown-Color-5: #20312f33;
   --Surface: #2e4e4b;
   --Surface-Dim: #2e4d4a;
   --Surface-Bright: #30504d;
@@ -61,11 +66,6 @@
   --Container-Lowest-Quiet: #617977;
   --Container-High-Quiet: #556f6d;
   --Container-Highest-Quiet: #506b68;
-  --Dropdown-Color-1: #20312fb3;
-  --Dropdown-Color-2: #20312f8a;
-  --Dropdown-Color-3: #20312f61;
-  --Dropdown-Color-4: #20312f52;
-  --Dropdown-Color-5: #20312f33;
 }
 
 [data-mode="AA-light"] [data-background="primary"] [data-compnent="surface"] {
@@ -90,6 +90,11 @@
 
 /* AA-light mode specific backgrounds */
 [data-mode="AA-light"] [data-background="primary-light"] {
+  --Dropdown-Color-1: #29403db3;
+  --Dropdown-Color-2: #29403d8a;
+  --Dropdown-Color-3: #29403d61;
+  --Dropdown-Color-4: #29403d52;
+  --Dropdown-Color-5: #29403d33;
   --Surface: #3b6661;
   --Surface-Dim: #3a6560;
   --Surface-Bright: #3d6863;
@@ -106,11 +111,6 @@
   --Container-Lowest-Quiet: #5f7875;
   --Container-High-Quiet: #55706d;
   --Container-Highest-Quiet: #526d6b;
-  --Dropdown-Color-1: #29403db3;
-  --Dropdown-Color-2: #29403d8a;
-  --Dropdown-Color-3: #29403d61;
-  --Dropdown-Color-4: #29403d52;
-  --Dropdown-Color-5: #29403d33;
 }
 
 [data-mode="AA-light"] [data-background="primary-light"] [data-compnent="surface"] {
@@ -135,6 +135,11 @@
 
 /* AA-light mode specific backgrounds */
 [data-mode="AA-light"] [data-background="primary-dark"] {
+  --Dropdown-Color-1: #172221b3;
+  --Dropdown-Color-2: #1722218a;
+  --Dropdown-Color-3: #17222161;
+  --Dropdown-Color-4: #17222152;
+  --Dropdown-Color-5: #17222133;
   --Surface: #213734;
   --Surface-Dim: #213633;
   --Surface-Bright: #233936;
@@ -151,11 +156,6 @@
   --Container-Lowest-Quiet: #617977;
   --Container-High-Quiet: #536d6b;
   --Container-Highest-Quiet: #506a68;
-  --Dropdown-Color-1: #172221b3;
-  --Dropdown-Color-2: #1722218a;
-  --Dropdown-Color-3: #17222161;
-  --Dropdown-Color-4: #17222152;
-  --Dropdown-Color-5: #17222133;
 }
 
 [data-mode="AA-light"] [data-background="primary-dark"] [data-compnent="surface"] {
@@ -180,6 +180,11 @@
 
 /* AA-light mode specific backgrounds */
 [data-mode="AA-light"] [data-background="secondary"] {
+  --Dropdown-Color-1: #8b392bb3;
+  --Dropdown-Color-2: #8b392b8a;
+  --Dropdown-Color-3: #8b392b61;
+  --Dropdown-Color-4: #8b392b52;
+  --Dropdown-Color-5: #8b392b33;
   --Surface: #d85640;
   --Surface-Dim: #d6553f;
   --Surface-Bright: #da5842;
@@ -196,11 +201,6 @@
   --Container-Lowest-Quiet: #a0665c;
   --Container-High-Quiet: #9b5b51;
   --Container-Highest-Quiet: #99584e;
-  --Dropdown-Color-1: #8b392bb3;
-  --Dropdown-Color-2: #8b392b8a;
-  --Dropdown-Color-3: #8b392b61;
-  --Dropdown-Color-4: #8b392b52;
-  --Dropdown-Color-5: #8b392b33;
 }
 
 [data-mode="AA-light"] [data-background="secondary"] [data-compnent="surface"] {
@@ -225,6 +225,11 @@
 
 /* AA-light mode specific backgrounds */
 [data-mode="AA-light"] [data-background="secondary-light"] {
+  --Dropdown-Color-1: #a54432b3;
+  --Dropdown-Color-2: #a544328a;
+  --Dropdown-Color-3: #a5443261;
+  --Dropdown-Color-4: #a5443252;
+  --Dropdown-Color-5: #a5443233;
   --Surface: #e17c6a;
   --Surface-Dim: #df7b69;
   --Surface-Bright: #e37e6c;
@@ -241,11 +246,6 @@
   --Container-Lowest-Quiet: #a0665c;
   --Container-High-Quiet: #9d5e54;
   --Container-Highest-Quiet: #9b5c51;
-  --Dropdown-Color-1: #a54432b3;
-  --Dropdown-Color-2: #a544328a;
-  --Dropdown-Color-3: #a5443261;
-  --Dropdown-Color-4: #a5443252;
-  --Dropdown-Color-5: #a5443233;
 }
 
 [data-mode="AA-light"] [data-background="secondary-light"] [data-compnent="surface"] {
@@ -270,6 +270,11 @@
 
 /* AA-light mode specific backgrounds */
 [data-mode="AA-light"] [data-background="secondary-dark"] {
+  --Dropdown-Color-1: #20312fb3;
+  --Dropdown-Color-2: #20312f8a;
+  --Dropdown-Color-3: #20312f61;
+  --Dropdown-Color-4: #20312f52;
+  --Dropdown-Color-5: #20312f33;
   --Surface: #2e4e4b;
   --Surface-Dim: #2e4d4a;
   --Surface-Bright: #30504d;
@@ -286,11 +291,6 @@
   --Container-Lowest-Quiet: #617977;
   --Container-High-Quiet: #556f6d;
   --Container-Highest-Quiet: #506b68;
-  --Dropdown-Color-1: #20312fb3;
-  --Dropdown-Color-2: #20312f8a;
-  --Dropdown-Color-3: #20312f61;
-  --Dropdown-Color-4: #20312f52;
-  --Dropdown-Color-5: #20312f33;
 }
 
 [data-mode="AA-light"] [data-background="secondary-dark"] [data-compnent="surface"] {
@@ -315,6 +315,11 @@
 
 /* AA-light mode specific backgrounds */
 [data-mode="AA-light"] [data-background="tertiary"] {
+  --Dropdown-Color-1: #93804ab3;
+  --Dropdown-Color-2: #93804a8a;
+  --Dropdown-Color-3: #93804a61;
+  --Dropdown-Color-4: #93804a52;
+  --Dropdown-Color-5: #93804a33;
   --Surface: #cdbb87;
   --Surface-Dim: #c9b784;
   --Surface-Bright: #cebc88;
@@ -331,11 +336,6 @@
   --Container-Lowest-Quiet: #7f7452;
   --Container-High-Quiet: #7c714d;
   --Container-Highest-Quiet: #7a6f4a;
-  --Dropdown-Color-1: #93804ab3;
-  --Dropdown-Color-2: #93804a8a;
-  --Dropdown-Color-3: #93804a61;
-  --Dropdown-Color-4: #93804a52;
-  --Dropdown-Color-5: #93804a33;
 }
 
 [data-mode="AA-light"] [data-background="tertiary"] [data-compnent="surface"] {
@@ -360,6 +360,11 @@
 
 /* AA-light mode specific backgrounds */
 [data-mode="AA-light"] [data-background="tertiary-light"] {
+  --Dropdown-Color-1: #a99354b3;
+  --Dropdown-Color-2: #a993548a;
+  --Dropdown-Color-3: #a9935461;
+  --Dropdown-Color-4: #a9935452;
+  --Dropdown-Color-5: #a9935433;
   --Surface: #dccfa9;
   --Surface-Dim: #d8cba6;
   --Surface-Bright: #ddd0aa;
@@ -376,11 +381,6 @@
   --Container-Lowest-Quiet: #7f7452;
   --Container-High-Quiet: #7e7350;
   --Container-Highest-Quiet: #7c714d;
-  --Dropdown-Color-1: #a99354b3;
-  --Dropdown-Color-2: #a993548a;
-  --Dropdown-Color-3: #a9935461;
-  --Dropdown-Color-4: #a9935452;
-  --Dropdown-Color-5: #a9935433;
 }
 
 [data-mode="AA-light"] [data-background="tertiary-light"] [data-compnent="surface"] {
@@ -405,6 +405,11 @@
 
 /* AA-light mode specific backgrounds */
 [data-mode="AA-light"] [data-background="tertiary-dark"] {
+  --Dropdown-Color-1: #7e6e40b3;
+  --Dropdown-Color-2: #7e6e408a;
+  --Dropdown-Color-3: #7e6e4061;
+  --Dropdown-Color-4: #7e6e4052;
+  --Dropdown-Color-5: #7e6e4033;
   --Surface: #bfa865;
   --Surface-Dim: #bda664;
   --Surface-Bright: #c1aa67;
@@ -421,11 +426,6 @@
   --Container-Lowest-Quiet: #7f7452;
   --Container-High-Quiet: #7a6f4a;
   --Container-Highest-Quiet: #7a6e49;
-  --Dropdown-Color-1: #7e6e40b3;
-  --Dropdown-Color-2: #7e6e408a;
-  --Dropdown-Color-3: #7e6e4061;
-  --Dropdown-Color-4: #7e6e4052;
-  --Dropdown-Color-5: #7e6e4033;
 }
 
 [data-mode="AA-light"] [data-background="tertiary-dark"] [data-compnent="surface"] {
@@ -450,6 +450,11 @@
 
 /* AA-light mode specific backgrounds */
 [data-mode="AA-light"] [data-background="white"] {
+  --Dropdown-Color-1: #a6a6a6b3;
+  --Dropdown-Color-2: #a6a6a68a;
+  --Dropdown-Color-3: #a6a6a661;
+  --Dropdown-Color-4: #a6a6a652;
+  --Dropdown-Color-5: #a6a6a633;
   --Surface: #ffffff;
   --Surface-Dim: #f9f9f9;
   --Surface-Bright: #ffffff;
@@ -466,11 +471,6 @@
   --Container-Lowest-Quiet: #567b77;
   --Container-High-Quiet: #4d746f;
   --Container-Highest-Quiet: #4a726e;
-  --Dropdown-Color-1: #a6a6a6b3;
-  --Dropdown-Color-2: #a6a6a68a;
-  --Dropdown-Color-3: #a6a6a661;
-  --Dropdown-Color-4: #a6a6a652;
-  --Dropdown-Color-5: #a6a6a633;
 }
 
 [data-mode="AA-light"] [data-background="white"] [data-compnent="surface"] {
@@ -495,6 +495,11 @@
 
 /* AA-light mode specific backgrounds */
 [data-mode="AA-light"] [data-background="grey"] {
+  --Dropdown-Color-1: #a3a3a3b3;
+  --Dropdown-Color-2: #a3a3a38a;
+  --Dropdown-Color-3: #a3a3a361;
+  --Dropdown-Color-4: #a3a3a352;
+  --Dropdown-Color-5: #a3a3a333;
   --Surface: #fafafa;
   --Surface-Dim: #f4f4f4;
   --Surface-Bright: #ffffff;
@@ -511,11 +516,6 @@
   --Container-Lowest-Quiet: #567b77;
   --Container-High-Quiet: #4d746f;
   --Container-Highest-Quiet: #4a726e;
-  --Dropdown-Color-1: #a3a3a3b3;
-  --Dropdown-Color-2: #a3a3a38a;
-  --Dropdown-Color-3: #a3a3a361;
-  --Dropdown-Color-4: #a3a3a352;
-  --Dropdown-Color-5: #a3a3a333;
 }
 
 [data-mode="AA-light"] [data-background="grey"] [data-compnent="surface"] {
@@ -540,6 +540,11 @@
 
 /* AA-light mode specific backgrounds */
 [data-mode="AA-light"] [data-background="black"] {
+  --Dropdown-Color-1: #0c0c0cb3;
+  --Dropdown-Color-2: #0c0c0c8a;
+  --Dropdown-Color-3: #0c0c0c61;
+  --Dropdown-Color-4: #0c0c0c52;
+  --Dropdown-Color-5: #0c0c0c33;
   --Surface: #121212;
   --Surface-Dim: #121212;
   --Surface-Bright: #1a1a1a;
@@ -556,11 +561,6 @@
   --Container-Lowest-Quiet: #567b77;
   --Container-High-Quiet: #4d746f;
   --Container-Highest-Quiet: #4a726e;
-  --Dropdown-Color-1: #0c0c0cb3;
-  --Dropdown-Color-2: #0c0c0c8a;
-  --Dropdown-Color-3: #0c0c0c61;
-  --Dropdown-Color-4: #0c0c0c52;
-  --Dropdown-Color-5: #0c0c0c33;
 }
 
 [data-mode="AA-light"] [data-background="black"] [data-compnent="surface"] {
