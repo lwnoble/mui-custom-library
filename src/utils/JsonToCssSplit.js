@@ -310,88 +310,138 @@ function extractPlatformVariables(platformContent, platformName) {
     // Add platform visibility variables
     const platforms = ['Android', 'IOS', 'Desktop'];
     platforms.forEach(platform => {
-      variables.push(`  --${platform}: ${platform.toLowerCase() === platformName.toLowerCase() ? 'block' : 'none'};\n`);
+      // Check if the platform exists in the content and has a boolean value
+      const platformValue = platformContent[platform] && platformContent[platform].value;
+      variables.push(`  --${platform}: ${platformValue === 'true' ? 'block' : 'none'};\n`);
     });
     
-    // Check if there's a Default section
-    if (platformContent['Default']) {
-      // Process additional platform-specific properties from Default section
-      const additionalProps = ['Target', 'Container-Padding'];
-      additionalProps.forEach(prop => {
-        if (platformContent['Default'][prop]) {
-          let value = platformContent['Default'][prop].value;
-          
-          // Convert number values to pixels
-          if (typeof value === 'number') {
-            value = `${value}px`;
-          }
-          
-          // Convert reference values
-          if (typeof value === 'string' && value.startsWith('{') && value.endsWith(')')) {
-            // Remove braces and convert to CSS variable
-            value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
-          }
-          
-          variables.push(`  --Platform-${prop.replace('-', '')}${prop === 'Target' ? '' : '-Padding'}: ${value};\n`);
-        }
-      });
+    // Determine the correct section to process platform-specific variables
+    const defaultContent = platformContent['Platform-Default'] || platformContent['Default'] || platformContent;
+    
+    // Process Font-Families
+    let standardFontFamily = 'var(--Congnitive-Font-Families-Standard)';
+    let decorativeFontFamily = 'var(--Congnitive-Font-Families-Decorative)';
+    
+    if (defaultContent['Platform-Font-Families'] || defaultContent['Font-Families']) {
+      const fontFamilies = defaultContent['Platform-Font-Families'] || defaultContent['Font-Families'];
+      
+      if (fontFamilies.Standard) {
+        standardFontFamily = convertFontFamilyReference(fontFamilies.Standard.value);
+      }
+      
+      if (fontFamilies.Decorative) {
+        decorativeFontFamily = convertFontFamilyReference(fontFamilies.Decorative.value);
+      }
     }
     
-    // Process Font-Families (use Cognitive defaults if not specified)
-    if (platformContent['Default'] && platformContent['Default']['Font-Families']) {
-      Object.entries(platformContent['Default']['Font-Families']).forEach(([fontFamilyName, fontFamily]) => {
-        // Replace references to system variables
-        let value = fontFamily.value;
-        
-        // If no specific value, use Cognitive default
-        if (!value) {
-          value = `{Cognitive-Font-Families-${fontFamilyName}}`;
-        }
-        
-        value = convertFontFamilyReference(value);
-        
-        variables.push(`  --Platform-Font-Families-${fontFamilyName}: ${value};\n`);
-      });
-    } else {
-      // If no Font-Families specified, use Cognitive defaults
-      variables.push(`  --Platform-Font-Families-Standard: var(--Cognitive-Font-Families-Standard);\n`);
-      variables.push(`  --Platform-Font-Families-Decorative: var(--Cognitive-Font-Families-Decorative);\n`);
+    variables.push(`  --Platform-Font-Families-Standard: ${standardFontFamily};\n`);
+    variables.push(`  --Platform-Font-Families-Decorative: ${decorativeFontFamily};\n`);
+    
+    // Process Target if exists
+    if (platformContent.Target || defaultContent.Target) {
+      const targetValue = (platformContent.Target || defaultContent.Target).value;
+      variables.push(`  --Platform-Target: ${targetValue}px;\n`);
     }
     
-    // Process Default section typography
-    if (platformContent['Default'] && platformContent['Default']['Body']) {
-      Object.entries(platformContent['Default']['Body']).forEach(([typeName, typeProps]) => {
-        Object.entries(typeProps).forEach(([propName, propObj]) => {
-          let value = propObj.value;
-          
-          // Skip if value is undefined
-          if (value === undefined) {
-            // For Character-Spacing and Paragraph-Spacing that might be missing, 
-            // add a default value of 0
-            if (propName === 'Character-Spacing' || propName === 'Paragraph-Spacing') {
-              value = 0;
-            } else {
-              return;
+    // Process Container Padding if exists
+    if (platformContent['Container-Padding'] || defaultContent['Container-Padding']) {
+      const paddingValue = (platformContent['Container-Padding'] || defaultContent['Container-Padding']).value;
+      variables.push(`  --Platform-Container-Padding: var(--${paddingValue.replace(/[{}]/g, '').replace(/\./g, '-')});\n`);
+    }
+    
+    // No need to process full typography in this function as it will be handled separately
+    
+    return variables;
+  }
+
+  function extractCognitiveVariables(cognitiveContent) {
+    const variables = [];
+    
+    // Add Cognitive Font Families
+    if (cognitiveContent['Congnitive-Font-Families']) {
+      const fontFamilies = cognitiveContent['Congnitive-Font-Families'];
+      variables.push(`  --Congnitive-Font-Families-Standard: "${fontFamilies.Standard.value}";\n`);
+      variables.push(`  --Congnitive-Font-Families-Decorative: "${fontFamilies.Decorative.value}";\n`);
+    }
+    
+    // Process Cognitive Default section
+    const defaultContent = cognitiveContent['Cognitive-Default'];
+    
+    // Define sections to process
+    const sections = [
+      'Body', 'Buttons', 'Captions', 'Subtitles', 'Legal', 
+      'Labels', 'Overline', 'Display', 'Headers', 'Number'
+    ];
+    
+    sections.forEach(section => {
+      if (defaultContent[section]) {
+        Object.entries(defaultContent[section]).forEach(([typeName, typeProps]) => {
+          Object.entries(typeProps).forEach(([propName, propObj]) => {
+            // Skip if value is undefined
+            if (propObj.value === undefined) return;
+            
+            // Handle font family references
+            let value = propObj.value;
+            if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+              // Remove braces and convert to CSS variable reference
+              value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
             }
-          }
-          
-          // Format the value based on property type
-          if (propName === 'Font-Family') {
-            value = convertFontFamilyReference(value);
-          } else if (propName.includes('Font-Size') || 
-                     propName.includes('Line-Height') || 
-                     propName.includes('Paragraph-Spacing')) {
-            // Add 'px' suffix to numeric values that should have units
-            value = `${value}px`;
-          }
-          
-          variables.push(`  --Platform-Body-${typeName}-${propName}: ${value};\n`);
+            
+            // Format numeric values
+            if (typeof value === 'number') {
+              value = `${value}px`;
+            }
+            
+            // Create variable name
+            const variableName = `--Cognitive-${section}-${typeName.replace('-', '')}-${propName}`;
+            
+            variables.push(`  ${variableName}: ${value};\n`);
+          });
         });
+      }
+    });
+    
+    // Process Spacing values
+    if (cognitiveContent['Cognitive-Default']?.Spacing) {
+      Object.entries(cognitiveContent['Cognitive-Default'].Spacing).forEach(([spacingName, spacingObj]) => {
+        // Skip entries without a value
+        if (spacingObj.value === undefined) return;
+        
+        // Convert reference or use direct value
+        let value = spacingObj.value;
+        if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+          value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
+        }
+        
+        // Create spacing variable
+        variables.push(`  --Cognitive-Spacing-${spacingName}: ${value};\n`);
       });
+    }
+    
+    // Add Target if exists
+    if (cognitiveContent['Cognitive-Default']?.Target) {
+      const targetValue = cognitiveContent['Cognitive-Default'].Target.value;
+      variables.push(`  --Cognitive-Target: var(--Platform-Default-Target);\n`);
     }
     
     return variables;
   }
+  
+  // In your convertToCssFiles function, add:
+  if (jsonContent['Cognitive/None']) {
+    const cognitiveCss = `[data-platform] {\n${
+      extractCognitiveVariables(jsonContent['Cognitive/None']).join('')
+    }}\n`;
+    
+    const cognitiveFilename = 'cognitive.css';
+    const cognitiveFilePath = path.join(outputDir, cognitiveFilename);
+    
+    await fs.promises.writeFile(cognitiveFilePath, cognitiveCss, 'utf8');
+    results.cognitive = {
+      file: cognitiveFilename,
+      path: cognitiveFilePath
+    };
+  }  
 
 /**
  * Process surface containers JSON structure into CSS
