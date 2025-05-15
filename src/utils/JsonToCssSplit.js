@@ -110,29 +110,13 @@ function convertSystemToCss(jsonContent) {
 function extractModeVariables(bgContent, mode, backgroundType = 'default') {
     const variables = [];
     
-    // Mapping of special transformations for certain keys
-    const keyTransformations = {
-      'Surface-Quiet': 'Surface-Quiet',
-      'Surface-Dim-Quiet': 'Surface-Dim-Quiet',
-      'Surface-Bright-Quiet': 'Surface-Bright-Quiet',
-      'Container-Quiet': 'Container-On-Quiet', // Special handling for this key
-      'Container-Low-Quiet': 'Container-Low-Quiet',
-      'Container-Lowest-Quiet': 'Container-Lowest-Quiet',
-      'Container-High-Quiet': 'Container-High-Quiet',
-      'Container-Highest-Quiet': 'Container-Highest-Quiet',
-      'Dropdown-Color-1': 'Dropdown-Color-1',
-      'Dropdown-Color-2': 'Dropdown-Color-2',
-      'Dropdown-Color-3': 'Dropdown-Color-3',
-      'Dropdown-Color-4': 'Dropdown-Color-4',
-      'Dropdown-Color-5': 'Dropdown-Color-5'
-    };
-    
-    const surfaceKeys = [
+    // Define properties in the desired order
+    const surfaceProps = [
       'Surface', 'Surface-Dim', 'Surface-Bright', 
       'Surface-Quiet', 'Surface-Dim-Quiet', 'Surface-Bright-Quiet'
     ];
     
-    const containerKeys = [
+    const containerProps = [
       'Container', 'Container-Low', 'Container-Lowest', 
       'Container-High', 'Container-Highest', 
       'Container-On-Quiet', 'Container-Low-Quiet', 
@@ -140,35 +124,35 @@ function extractModeVariables(bgContent, mode, backgroundType = 'default') {
       'Container-Highest-Quiet'
     ];
     
-    const dropdownKeys = [
+    const dropdownProps = [
       'Dropdown-Color-1', 'Dropdown-Color-2', 'Dropdown-Color-3', 
       'Dropdown-Color-4', 'Dropdown-Color-5'
     ];
     
-    // Process each key and check its value
-    for (const [key, valueObj] of Object.entries(bgContent)) {
-      if (valueObj && valueObj.value !== undefined) {
-        // Check if the key is in our predefined lists or transformations
-        if (keyTransformations[key] || 
-            surfaceKeys.includes(key) || 
-            containerKeys.includes(key) || 
-            dropdownKeys.includes(key)) {
-          
-          // Use the transformed key if exists, otherwise use original
-          const transformedKey = keyTransformations[key] || key;
-          const value = valueObj.value;
-          
-          // Special handling for boolean values (for underline properties)
-          if (typeof value === 'boolean') {
-            variables.push(`  --${transformedKey}: ${value ? 'true' : 'false'};\n`);
-          } else {
-            // Wrap color values in quotes to ensure they're treated as strings
-            const cssValue = typeof value === 'string' ? `"${value}"` : value;
-            variables.push(`  --${transformedKey}: ${cssValue};\n`);
-          }
-        }
+    // Process surface properties
+    surfaceProps.forEach(prop => {
+      const fullProp = prop.includes('Surface-') ? prop : `Surface-${prop}`;
+      if (bgContent[fullProp] && bgContent[fullProp].value !== undefined) {
+        variables.push(`  --${prop}: ${bgContent[fullProp].value};\n`);
       }
-    }
+    });
+    
+    // Process container properties
+    containerProps.forEach(prop => {
+      const fullProp = prop.replace('On-Quiet', '-Quiet');
+      if (bgContent[fullProp] && bgContent[fullProp].value !== undefined) {
+        // Special handling for Container-Quiet
+        const variableName = prop === 'Container-On-Quiet' ? 'Container-Quiet' : prop;
+        variables.push(`  --${prop}: ${bgContent[fullProp].value};\n`);
+      }
+    });
+    
+    // Process dropdown colors
+    dropdownProps.forEach(prop => {
+      if (bgContent[prop] && bgContent[prop].value !== undefined) {
+        variables.push(`  --${prop}: ${bgContent[prop].value};\n`);
+      }
+    });
     
     return variables;
   }
@@ -179,7 +163,7 @@ function extractModeVariables(bgContent, mode, backgroundType = 'default') {
  * @param {string} mode - The mode name
  * @returns {string} - Generated CSS for backgrounds
  */
-function processBackgrounds(backgrounds, mode) {
+  function processBackgrounds(backgrounds, mode) {
     let css = '';
     
     // Process default background
