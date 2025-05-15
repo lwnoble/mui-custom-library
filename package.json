@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "files": [
     "dist",
-    "src/styles/generated"
+    "src/styles/theme-files"
   ],
   "scripts": {
     "generate-css": "node src/utils/JsonToCssSplit.js src/styles/theme.json src/styles/theme-files",

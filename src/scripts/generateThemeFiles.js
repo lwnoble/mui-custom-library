@@ -6,7 +6,7 @@ const JsonToCssSplit = require('../utils/JsonToCssSplit.cjs');
 // Parse command line arguments
 const args = process.argv.slice(2);
 const inputJsonPath = args[0] || path.join(__dirname, '../styles/theme.json');
-const outputCssDir = args[1] || path.join(__dirname, '../styles/generated');
+const outputCssDir = args[1] || path.join(__dirname, '../styles/theme-files');
 
 async function main() {
   try {
