@@ -38,73 +38,13 @@ jobs:
         with:
           node-version: '18'
       
-      - name: Verify theme.json
-        run: |
-          echo "Contents of theme.json:"
-          cat src/styles/theme.json
-          echo "Size of theme.json:"
-          ls -l src/styles/theme.json
+      - name: Create output directory
+        run: mkdir -p src/styles/theme-files
       
-      - name: Create theme processor
+      - name: Generate CSS from theme.json
         run: |
-          cat > process-theme.js << 'EOF'
-          import fs from 'fs';
-          import path from 'path';
-
-          async function processTheme() {
-            try {
-              // Read the original theme file
-              const themePath = 'src/styles/theme.json';
-              console.log(`Reading theme file from ${themePath}...`);
-              
-              // Check if file exists
-              if (!fs.existsSync(themePath)) {
-                console.error(`ERROR: Theme file not found at ${themePath}`);
-                process.exit(1);
-              }
-
-              const themeData = await fs.promises.readFile(themePath, 'utf8');
-              console.log(`Theme file read: ${themeData.length} bytes`);
-              
-              // Parse the theme JSON
-              console.log('Parsing theme JSON...');
-              const theme = JSON.parse(themeData);
-              console.log('Theme parsed successfully');
-              
-              // Create output directory
-              const outputDir = 'src/styles/theme-files';
-              console.log(`Ensuring output directory exists: ${outputDir}`);
-              
-              if (!fs.existsSync(outputDir)) {
-                fs.mkdirSync(outputDir, { recursive: true });
-                console.log(`Created output directory: ${outputDir}`);
-              }
-              
-              // Detailed logging about theme processing
-              const modeKeys = Object.keys(theme).filter(key => key.startsWith('Modes/'));
-              console.log(`Found ${modeKeys.length} mode keys`);
-              modeKeys.forEach(key => console.log(`Processing mode: ${key}`));
-              
-              const platformKeys = Object.keys(theme).filter(key => key.startsWith('Platform/'));
-              console.log(`Found ${platformKeys.length} platform keys`);
-              platformKeys.forEach(key => console.log(`Processing platform: ${key}`));
-              
-              // Additional processing steps...
-              console.log('Theme processing completed successfully');
-              
-            } catch (error) {
-              console.error('FATAL ERROR during theme processing:', error);
-              process.exit(1);
-            }
-          }
-          
-          // Run the processing
-          processTheme();
-          EOF
-      
-      - name: Run theme processor
-        run: |
-          node process-theme.js
+          echo "Running JsonToCssSplit.js"
+          node src/utils/JsonToCssSplit.js src/styles/theme.json src/styles/theme-files
       
       - name: Check generated files
         run: |
@@ -135,7 +75,7 @@ jobs:
           if [[ -n "$(git status --porcelain src/styles/theme-files)" ]]; then
             echo "Changes detected in theme-files"
             git add src/styles/theme-files/
-            git commit -m "Generate theme CSS files with custom processor" || echo "Nothing to commit"
+            git commit -m "Update theme CSS files using JsonToCssSplit" || echo "Nothing to commit"
             git push || echo "Nothing to push"
           else
             echo "No changes detected in theme-files"
