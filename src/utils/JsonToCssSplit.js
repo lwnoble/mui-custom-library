@@ -305,25 +305,62 @@ function extractChartVariables(chartContent) {
 * @returns {Array} - Array of CSS variable declarations
 */
 function extractPlatformVariables(platformContent, platformName) {
-  const variables = [];
-  
-  // Process Font-Families
-  if (platformContent['Font-Families']) {
-    Object.entries(platformContent['Font-Families']).forEach(([fontFamilyName, fontFamily]) => {
-      // Replace references to system variables
-      let value = fontFamily.value;
-      value = convertFontFamilyReference(value);
-      
-      variables.push(`  --Platform-Font-Families-${fontFamilyName}: ${value};\n`);
+    const variables = [];
+    
+    // Add platform visibility variables
+    const platforms = ['Android', 'IOS', 'Desktop'];
+    platforms.forEach(platform => {
+      variables.push(`  --${platform}: ${platform.toLowerCase() === platformName.toLowerCase() ? 'block' : 'none'};\n`);
     });
-  }
-  
-  // Process Default section (contains typography)
-  if (platformContent['Default']) {
-    // Process Body typography
-    if (platformContent['Default']['Body']) {
+    
+    // Check if there's a Default section
+    if (platformContent['Default']) {
+      // Process additional platform-specific properties from Default section
+      const additionalProps = ['Target', 'Container-Padding'];
+      additionalProps.forEach(prop => {
+        if (platformContent['Default'][prop]) {
+          let value = platformContent['Default'][prop].value;
+          
+          // Convert number values to pixels
+          if (typeof value === 'number') {
+            value = `${value}px`;
+          }
+          
+          // Convert reference values
+          if (typeof value === 'string' && value.startsWith('{') && value.endsWith(')')) {
+            // Remove braces and convert to CSS variable
+            value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
+          }
+          
+          variables.push(`  --Platform-${prop.replace('-', '')}${prop === 'Target' ? '' : '-Padding'}: ${value};\n`);
+        }
+      });
+    }
+    
+    // Process Font-Families (use Cognitive defaults if not specified)
+    if (platformContent['Default'] && platformContent['Default']['Font-Families']) {
+      Object.entries(platformContent['Default']['Font-Families']).forEach(([fontFamilyName, fontFamily]) => {
+        // Replace references to system variables
+        let value = fontFamily.value;
+        
+        // If no specific value, use Cognitive default
+        if (!value) {
+          value = `{Cognitive-Font-Families-${fontFamilyName}}`;
+        }
+        
+        value = convertFontFamilyReference(value);
+        
+        variables.push(`  --Platform-Font-Families-${fontFamilyName}: ${value};\n`);
+      });
+    } else {
+      // If no Font-Families specified, use Cognitive defaults
+      variables.push(`  --Platform-Font-Families-Standard: var(--Cognitive-Font-Families-Standard);\n`);
+      variables.push(`  --Platform-Font-Families-Decorative: var(--Cognitive-Font-Families-Decorative);\n`);
+    }
+    
+    // Process Default section typography
+    if (platformContent['Default'] && platformContent['Default']['Body']) {
       Object.entries(platformContent['Default']['Body']).forEach(([typeName, typeProps]) => {
-        // For each typography style (e.g., "Small", "Medium", etc.)
         Object.entries(typeProps).forEach(([propName, propObj]) => {
           let value = propObj.value;
           
@@ -353,11 +390,8 @@ function extractPlatformVariables(platformContent, platformName) {
       });
     }
     
-    // Additional typography sections would be processed similarly
+    return variables;
   }
-  
-  return variables;
-}
 
 /**
  * Process surface containers JSON structure into CSS
