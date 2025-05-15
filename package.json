@@ -9,7 +9,7 @@
     "src/styles/theme-files"
   ],
   "scripts": {
-    "generate-css": "node src/utils/JsonToCssSplit.js src/styles/theme.json src/styles/theme-files",
+    "generate-css": "node src/utils/convert-theme-tokens.js",
     "prepare": "npm run generate-css && npm run build:lib",
     "start": "react-scripts start",
     "build": "react-scripts build",
