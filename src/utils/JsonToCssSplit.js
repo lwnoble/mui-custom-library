@@ -245,40 +245,40 @@ function processModeTarget(modeTarget, mode, isDefaultMode = false) {
  * @returns {string} - Generated CSS for paragraph spacing
  */
 function processParagraphSpacing(paragraphSpacing, mode, isDefaultMode = false) {
-  let css = '';
-  
-  // Process each spacing type (Default, 2x, etc.)
-  for (const [spacingType, spacingValues] of Object.entries(paragraphSpacing)) {
-    css += `/* ${mode} mode paragraph spacing - ${spacingType} */\n`;
+    let css = '';
     
-    // For AA-light, use just [data-mode] without a value
-    if (isDefaultMode) {
-      css += `[data-mode] [paragraph-spacing="${spacingType}"] {\n`;
-    } else {
-      css += `[data-mode="${mode}"] [paragraph-spacing="${spacingType}"] {\n`;
-    }
-    
-    // Process all spacing values
-    for (const [key, valueObj] of Object.entries(spacingValues)) {
-      if (valueObj.value !== undefined) {
-        // Convert reference format {Cognitive-Default.Body.Medium.AA-Paragraph-Spacing}
-        // to CSS variable format --Cognitive-Default-Body-Medium-AA-Paragraph-Spacing
-        let value = valueObj.value;
-        if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-          value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
-        } else if (typeof value === 'number') {
-          value = `${value}px`;
-        }
-        
-        css += `  --${key}: ${value};\n`;
+    // Only process the Default section, ignoring 2x
+    if (paragraphSpacing.Default) {
+      css += `/* ${mode} mode paragraph spacing */\n`;
+      
+      // For AA-light, use just [data-mode] without a value
+      if (isDefaultMode) {
+        css += `[data-mode] {\n`;
+      } else {
+        css += `[data-mode="${mode}"] {\n`;
       }
+      
+      // Process all spacing values from the Default section
+      for (const [key, valueObj] of Object.entries(paragraphSpacing.Default)) {
+        if (valueObj.value !== undefined) {
+          // Convert reference format {Cognitive-Default.Body.Medium.AA-Paragraph-Spacing}
+          // to CSS variable format --Cognitive-Default-Body-Medium-AA-Paragraph-Spacing
+          let value = valueObj.value;
+          if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+            value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
+          } else if (typeof value === 'number') {
+            value = `${value}px`;
+          }
+          
+          css += `  --${key}: ${value};\n`;
+        }
+      }
+      
+      css += '}\n\n';
     }
     
-    css += '}\n\n';
+    return css;
   }
-  
-  return css;
-}
 
 /**
  * Extract chart-specific variables
