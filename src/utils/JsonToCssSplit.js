@@ -549,6 +549,8 @@ function processSizingSpacing(jsonContent) {
  * @returns {Object} - Object with information about generated files
  */
 async function convertToCssFiles(jsonContent, outputDir) {
+    console.log(`Attempting to create output directory: ${outputDir}`);
+    
   const results = {
     base: null,
     modes: [],
@@ -560,8 +562,15 @@ async function convertToCssFiles(jsonContent, outputDir) {
   };
   
   // Create the output directory if it doesn't exist
+  // Create the output directory if it doesn't exist
   if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
+    try {
+      fs.mkdirSync(outputDir, { recursive: true });
+      console.log(`Successfully created output directory: ${outputDir}`);
+    } catch (mkdirError) {
+      console.error(`Error creating output directory: ${mkdirError}`);
+      throw mkdirError;
+    }
   }
   
   // Extract common variables for the base CSS file
@@ -583,7 +592,10 @@ async function convertToCssFiles(jsonContent, outputDir) {
   // Save base CSS file
   const baseFilename = 'base.css';
   const baseFilePath = path.join(outputDir, baseFilename);
-  await fs.promises.writeFile(baseFilePath, baseCSS, 'utf8');
+  await fs.promises.writeFile(baseFilePath, baseCSS, 'utf8')
+    .then(() => console.log(`Successfully wrote ${baseFilename}`))
+    .catch(err => console.error(`Error writing ${baseFilename}:`, err));
+
   results.base = {
     file: baseFilename,
     path: baseFilePath
