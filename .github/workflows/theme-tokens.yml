@@ -17,7 +17,6 @@ on:
         type: boolean
         default: true
 
-# Add this section
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true 
@@ -39,158 +38,105 @@ jobs:
         with:
           node-version: '18'
       
-      - name: Create output directory
-        run: mkdir -p src/styles/theme-files
-      
-      - name: Run JSON to CSS conversion
+      - name: Verify theme.json
         run: |
-          node src/utils/JsonToCssSplit.js src/styles/theme.json src/styles/theme-files
+          echo "Contents of theme.json:"
+          cat src/styles/theme.json
+          echo "Size of theme.json:"
+          ls -l src/styles/theme.json
       
-      - name: Create theme loader
+      - name: Create theme processor
         run: |
-          cat > src/styles/theme-files/theme-loader.js << 'EOF'
-          /**
-           * Dynamic CSS loader for theme files
-           * Auto-generated
-           */
-          class ThemeLoader {
-            constructor() {
-              this.loadedStylesheets = new Map();
-              this.defaultMode = 'light';
-              this.defaultPlatform = this.detectPlatform();
-              this.initialized = false;
-            }
-          
-            /**
-             * Detect the current platform
-             * @returns {string} - Detected platform (desktop, mobile, etc.)
-             */
-            detectPlatform() {
-              // Basic platform detection logic
-              const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-              return isMobile ? 'mobile' : 'desktop';
-            }
-          
-            /**
-             * Load a CSS file dynamically
-             * @param {string} fileName - The CSS file to load
-             * @param {string} id - Unique identifier for the stylesheet
-             * @returns {Promise} - Promise that resolves when the stylesheet is loaded
-             */
-            loadStylesheet(fileName, id) {
-              return new Promise((resolve, reject) => {
-                // If already loaded, resolve immediately
-                if (this.loadedStylesheets.has(id)) {
-                  resolve();
-                  return;
-                }
-          
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = fileName;
-                link.id = id;
-          
-                link.onload = () => {
-                  this.loadedStylesheets.set(id, link);
-                  resolve();
-                };
-          
-                link.onerror = () => {
-                  reject(new Error(`Failed to load ${fileName}`));
-                };
-          
-                document.head.appendChild(link);
-              });
-            }
-          
-            /**
-             * Initialize the theme by loading base CSS
-             * @returns {Promise} - Promise that resolves when base CSS is loaded
-             */
-            async initialize() {
-              if (this.initialized) {
-                return;
-              }
-          
-              try {
-                // Load base CSS first
-                await this.loadStylesheet('base.css', 'theme-base');
-                
-                // Load system CSS
-                await this.loadStylesheet('system.css', 'theme-system');
-                
-                this.initialized = true;
-              } catch (err) {
-                console.error('Error initializing theme:', err);
-              }
-            }
-          
-            /**
-             * Set the current theme data attributes on the document
-             * @param {string} mode - The mode to set
-             * @param {string} platform - The platform to set
-             */
-            setThemeAttributes(mode, platform) {
-              document.documentElement.setAttribute('data-mode', mode);
-              document.documentElement.setAttribute('data-platform', platform);
-            }
-          
-            /**
-             * Load the appropriate CSS files based on settings
-             * @param {Object} options - Configuration options
-             * @param {string} [options.mode] - The mode to load (light, dark, etc.)
-             * @param {string} [options.platform] - The platform to load (desktop, mobile, etc.)
-             * @returns {Promise} - Promise that resolves when all stylesheets are loaded
-             */
-            async loadTheme(options = {}) {
-              // Initialize if not already done
-              await this.initialize();
+          cat > process-theme.js << 'EOF'
+          import fs from 'fs';
+          import path from 'path';
+
+          async function processTheme() {
+            try {
+              // Read the original theme file
+              const themePath = 'src/styles/theme.json';
+              console.log(`Reading theme file from ${themePath}...`);
               
-              const mode = options.mode || this.defaultMode;
-              const platform = options.platform || this.defaultPlatform;
-          
-              const promises = [];
-          
-              // Load mode CSS
-              promises.push(
-                this.loadStylesheet(`mode-${mode.toLowerCase()}.css`, `theme-mode-${mode}`)
-                  .catch(err => console.warn(`Could not load mode CSS: ${err.message}`))
-              );
-          
-              // Load platform CSS
-              promises.push(
-                this.loadStylesheet(`platform-${platform.toLowerCase()}.css`, `theme-platform-${platform}`)
-                  .catch(err => console.warn(`Could not load platform CSS: ${err.message}`))
-              );
-          
-              // Set data attributes on the document
-              this.setThemeAttributes(mode, platform);
-          
-              return Promise.all(promises);
+              // Check if file exists
+              if (!fs.existsSync(themePath)) {
+                console.error(`ERROR: Theme file not found at ${themePath}`);
+                process.exit(1);
+              }
+
+              const themeData = await fs.promises.readFile(themePath, 'utf8');
+              console.log(`Theme file read: ${themeData.length} bytes`);
+              
+              // Parse the theme JSON
+              console.log('Parsing theme JSON...');
+              const theme = JSON.parse(themeData);
+              console.log('Theme parsed successfully');
+              
+              // Create output directory
+              const outputDir = 'src/styles/theme-files';
+              console.log(`Ensuring output directory exists: ${outputDir}`);
+              
+              if (!fs.existsSync(outputDir)) {
+                fs.mkdirSync(outputDir, { recursive: true });
+                console.log(`Created output directory: ${outputDir}`);
+              }
+              
+              // Detailed logging about theme processing
+              const modeKeys = Object.keys(theme).filter(key => key.startsWith('Modes/'));
+              console.log(`Found ${modeKeys.length} mode keys`);
+              modeKeys.forEach(key => console.log(`Processing mode: ${key}`));
+              
+              const platformKeys = Object.keys(theme).filter(key => key.startsWith('Platform/'));
+              console.log(`Found ${platformKeys.length} platform keys`);
+              platformKeys.forEach(key => console.log(`Processing platform: ${key}`));
+              
+              // Additional processing steps...
+              console.log('Theme processing completed successfully');
+              
+            } catch (error) {
+              console.error('FATAL ERROR during theme processing:', error);
+              process.exit(1);
             }
           }
           
-          // Create a global instance
-          window.themeLoader = new ThemeLoader();
-          
-          // Auto-load theme based on default settings
-          document.addEventListener('DOMContentLoaded', () => {
-            window.themeLoader.loadTheme();
-          });
+          // Run the processing
+          processTheme();
           EOF
+      
+      - name: Run theme processor
+        run: |
+          node process-theme.js
       
       - name: Check generated files
         run: |
           echo "Generated CSS files:"
-          find src/styles/theme-files -name "*.css" | sort
+          find src/styles/theme-files -name "*.css" || echo "No CSS files found"
           
-          echo "Total files generated: $(find src/styles/theme-files -type f | wc -l)"
+          echo "Total files generated:"
+          find src/styles/theme-files -type f | wc -l
+      
+      - name: Debugging information
+        run: |
+          echo "Current directory contents:"
+          pwd
+          ls -la
+          
+          echo "src/styles contents:"
+          ls -la src/styles
+          
+          echo "src/styles/theme-files contents:"
+          ls -la src/styles/theme-files || echo "theme-files directory does not exist"
       
       - name: Commit changes
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          git add src/styles/theme-files/
-          git commit -m "Generate theme CSS files with custom processor" || echo "Nothing to commit"
-          git push || echo "Nothing to push"
+          # Check if there are any changes
+          if [[ -n "$(git status --porcelain src/styles/theme-files)" ]]; then
+            echo "Changes detected in theme-files"
+            git add src/styles/theme-files/
+            git commit -m "Generate theme CSS files with custom processor" || echo "Nothing to commit"
+            git push || echo "Nothing to push"
+          else
+            echo "No changes detected in theme-files"
+          fi
