@@ -9,11 +9,7 @@
     "src/styles/theme-files"
   ],
   "scripts": {
-<<<<<<< HEAD
-    "generate-css": "node src/utils/convert-theme-tokens.js",
-=======
    "generate-css": "node src/utils/convert-theme-tokens.js",
->>>>>>> 38be700 (Update generate-css script to use convert-theme-tokens.js instead of jsonToCss.js)
     "prepare": "npm run generate-css",  
     "build:lib": "echo 'Build lib script placeholder'",
     "convert-tokens": "node utils/convert-theme-tokens.js",
