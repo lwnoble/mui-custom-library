@@ -1,4 +1,9 @@
 /* Android platform specific typography */
 [data-platform="Android"] {
+  --Android: block;
+  --IOS: none;
+  --Desktop: none;
+  --Platform-Font-Families-Standard: var(--Cognitive-Font-Families-Standard);
+  --Platform-Font-Families-Decorative: var(--Cognitive-Font-Families-Decorative);
 }
 

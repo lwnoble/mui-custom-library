@@ -243,7 +243,7 @@
   --Cognitive-Number-Medium-Character-Spacing: 0;
   --Cognitive-Number-Medium-Paragraph-Spacing: 0px;
   --Cognitive-Number-Medium-SR-Character-Spacing: 3.36;
-  --Cognitive-Target: var(--Platform-Target);
+  --Cognitive-Target: 48px;
   --Cognitive-Label: ADHD;
 }
 
