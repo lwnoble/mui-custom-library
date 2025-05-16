@@ -1,9 +1,0 @@
-/* Desktop platform specific typography */
-[data-platform="Desktop"] {
-  --Android: none;
-  --IOS: none;
-  --Desktop: block;
-  --Platform-Font-Families-Standard: var(--Cognitive-Font-Families-Standard);
-  --Platform-Font-Families-Decorative: var(--Cognitive-Font-Families-Decorative);
-}
-
