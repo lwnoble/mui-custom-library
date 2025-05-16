@@ -7,19 +7,15 @@ on:
   push:
     branches:
       - main
-      - tokens-update  # Added tokens-update branch
+      - tokens-update
     paths:
       - 'src/styles/theme.json'
   workflow_dispatch:
     inputs:
       message:
-        description: 'Commit message for CSS generation'
+        description: 'Commit message'
         required: false
-        default: 'Update theme CSS files'
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+        default: 'Manual theme token generation'
 
 jobs:
   convert-tokens:
@@ -30,21 +26,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref_name }}
-          
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
-          
+      
       - name: Install dependencies
         run: npm ci
-          
-      - name: Create output directory
-        run: mkdir -p src/styles/theme-files
-          
+      
+      # Fix: Correctly escape dollar signs in JavaScript strings
       - name: Clean theme.json file
         run: |
           node -e "
@@ -56,18 +48,18 @@ jobs:
               // Read the theme file
               const themeData = JSON.parse(fs.readFileSync(themePath, 'utf8'));
               
-              // Clean the $themes array if it exists
-              if (themeData.$themes && Array.isArray(themeData.$themes)) {
-                themeData.$themes = [];
-                console.log('Cleaned $themes array in theme.json');
+              // Clean the \$themes array if it exists
+              if (themeData.\$themes && Array.isArray(themeData.\$themes)) {
+                themeData.\$themes = [];
+                console.log('Cleaned \$themes array in theme.json');
               } else {
-                console.log('No $themes array found or already empty');
+                console.log('No \$themes array found or already empty');
               }
               
-              // Remove $metadata section if it exists
-              if (themeData.$metadata) {
-                delete themeData.$metadata;
-                console.log('Removed $metadata section from theme.json');
+              // Remove \$metadata section if it exists
+              if (themeData.\$metadata) {
+                delete themeData.\$metadata;
+                console.log('Removed \$metadata section from theme.json');
               }
               
               // Write the cleaned file back
@@ -79,34 +71,20 @@ jobs:
             }
           "
       
+      - name: Create output directory
+        run: mkdir -p src/styles/theme-files
+      
+      # Use the original convert-theme-tokens.js script
       - name: Convert theme tokens
         run: |
           echo "Running convert-theme-tokens.js..."
-          
-          # Check if the script exists in src/styles/ first
-          if [ -f "src/styles/convert-theme-tokens.js" ]; then
-            node src/styles/convert-theme-tokens.js
-          # Otherwise try src/utils/ location
-          elif [ -f "src/utils/convert-theme-tokens.js" ]; then
-            node src/utils/convert-theme-tokens.js
-          else
-            echo "Error: Could not find convert-theme-tokens.js in src/styles/ or src/utils/"
-            exit 1
-          fi
+          node src/utils/convert-theme-tokens.js
       
       - name: Check for changes
         id: git-check
         run: |
           git diff --quiet src/styles/theme-files || echo "changes=true" >> $GITHUB_OUTPUT
-          
-      - name: Check generated files
-        run: |
-          echo "Generated CSS files:"
-          find src/styles/theme-files -name "*.css" || echo "No CSS files found"
-          
-          echo "Total files generated:"
-          find src/styles/theme-files -type f | wc -l
-          
+      
       - name: Commit changes if needed
         if: steps.git-check.outputs.changes == 'true'
         run: |
@@ -120,17 +98,3 @@ jobs:
           git add src/styles/theme.json
           git commit -m "$COMMIT_MESSAGE"
           git push
-      
-      - name: Output summary
-        run: |
-          echo "## Theme Token Conversion Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- Branch: $(git branch --show-current)" >> $GITHUB_STEP_SUMMARY
-          echo "- Commit: $(git rev-parse HEAD)" >> $GITHUB_STEP_SUMMARY
-          
-          if [ "${{ steps.git-check.outputs.changes }}" == "true" ]; then
-            echo "- Status: ✅ Changes detected and committed" >> $GITHUB_STEP_SUMMARY
-            echo "- Generated files: $(find src/styles/theme-files -type f | wc -l)" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- Status: ℹ️ No changes detected" >> $GITHUB_STEP_SUMMARY
-          fi
