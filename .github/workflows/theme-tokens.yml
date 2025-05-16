@@ -15,7 +15,7 @@ on:
       message:
         description: 'Commit message'
         required: false
-        default: 'Manual theme token generation'
+        default: 'Update theme CSS files'
 
 jobs:
   convert-tokens:
@@ -26,17 +26,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '18'
           cache: 'npm'
-      
+          
       - name: Install dependencies
         run: npm ci
-      
-      # Fix: Correctly escape dollar signs in JavaScript strings
+          
       - name: Clean theme.json file
         run: |
           node -e "
@@ -74,19 +75,67 @@ jobs:
       - name: Create output directory
         run: mkdir -p src/styles/theme-files
       
-      # Use the original convert-theme-tokens.js script
+      - name: Fix JsonToCssSplit.js if needed
+        run: |
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+            
+            try {
+              const filePath = path.join(process.cwd(), 'src', 'utils', 'JsonToCssSplit.js');
+              console.log('Checking JsonToCssSplit.js for issues...');
+              
+              // Read the file
+              const fileContent = fs.readFileSync(filePath, 'utf8');
+              
+              // Check for duplicate function definitions
+              const convertSystemToCssMatches = fileContent.match(/function convertSystemToCss/g);
+              if (convertSystemToCssMatches && convertSystemToCssMatches.length > 1) {
+                console.log('WARNING: Multiple definitions of convertSystemToCss found. Removing duplicates...');
+                
+                // Keep only the first occurrence
+                let newContent = fileContent;
+                
+                const functionPattern = /function\\s+convertSystemToCss\\s*\\(\\s*jsonContent\\s*\\)\\s*\\{[\\s\\S]*?(?=\\n\\})\\n\\}/g;
+                const matches = [...fileContent.matchAll(new RegExp(functionPattern, 'g'))];
+                
+                if (matches.length > 1) {
+                  console.log(`Found ${matches.length} occurrences of convertSystemToCss`);
+                  
+                  // Keep only the first occurrence
+                  for (let i = 1; i < matches.length; i++) {
+                    const match = matches[i][0];
+                    newContent = newContent.replace(match, '// Duplicate function removed');
+                  }
+                  
+                  // Write the fixed content
+                  fs.writeFileSync(filePath, newContent);
+                  console.log('Duplicate function definitions removed');
+                }
+              } else {
+                console.log('No duplicate functions found in JsonToCssSplit.js');
+              }
+              
+            } catch (error) {
+              console.error(`Error checking JsonToCssSplit.js: ${error.message}`);
+              // Don't exit - continue with the workflow even if this check fails
+            }
+          "
+      
       - name: Convert theme tokens
         run: |
           echo "Running convert-theme-tokens.js..."
           node src/utils/convert-theme-tokens.js
       
-      - name: Check for changes
-        id: git-check
+      - name: Check generated files
         run: |
-          git diff --quiet src/styles/theme-files || echo "changes=true" >> $GITHUB_OUTPUT
+          echo "Generated CSS files:"
+          find src/styles/theme-files -type f | sort
+          
+          echo "Content of theme-files directory:"
+          ls -la src/styles/theme-files/
       
-      - name: Commit changes if needed
-        if: steps.git-check.outputs.changes == 'true'
+      - name: Commit changes
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
@@ -94,7 +143,15 @@ jobs:
           # Use custom commit message for manual dispatch, otherwise use default
           COMMIT_MESSAGE="${{ github.event.inputs.message || 'Update theme CSS files' }}"
           
+          # Add all files in theme-files directory
           git add src/styles/theme-files/
           git add src/styles/theme.json
-          git commit -m "$COMMIT_MESSAGE"
-          git push
+          
+          # Check if there are any changes
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "Changes detected"
+            git commit -m "$COMMIT_MESSAGE"
+            git push
+          else
+            echo "No changes detected"
+          fi
