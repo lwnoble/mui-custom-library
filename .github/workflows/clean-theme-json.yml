@@ -1,0 +1,256 @@
+name: Clean Theme.json and Remove Unnecessary Files
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_message:
+        description: 'Commit message for the changes'
+        default: 'Clean theme.json and remove unnecessary files'
+        required: true
+
+jobs:
+  clean-and-remove:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      # Step 1: Clean theme.json
+      - name: Create theme cleaner script
+        run: |
+          cat > clean-theme.js << 'EOF'
+          import fs from 'fs';
+
+          async function cleanThemeJson() {
+            console.log('Starting theme.json cleanup...');
+            
+            try {
+              // Read the theme file
+              const themePath = 'src/styles/theme.json';
+              console.log(`Reading theme.json from ${themePath}...`);
+              const themeData = await fs.promises.readFile(themePath, 'utf8');
+              console.log(`Theme file read: ${themeData.length} bytes`);
+              
+              // Parse JSON
+              console.log('Parsing theme JSON...');
+              const theme = JSON.parse(themeData);
+              console.log('Successfully parsed theme JSON');
+              
+              // Create backup
+              await fs.promises.writeFile(`${themePath}.backup`, themeData);
+              console.log('Created backup of original theme.json');
+              
+              // Clean $themes array
+              if (theme.$themes && Array.isArray(theme.$themes)) {
+                console.log(`Cleaning $themes array (${theme.$themes.length} items)...`);
+                theme.$themes = [];
+              }
+              
+              // Remove $metadata section
+              if (theme.$metadata) {
+                console.log('Removing $metadata section...');
+                delete theme.$metadata;
+              }
+              
+              // Original size tracking
+              let originalKeyCount = Object.keys(theme).length;
+              console.log(`Original theme has ${originalKeyCount} top-level keys`);
+              
+              // Remove keys with "2x" in them
+              const keysToKeep = Object.keys(theme).filter(key => {
+                return !key.includes('2x');
+              });
+              
+              console.log(`Removing ${originalKeyCount - keysToKeep.length} top-level keys with "2x" in them`);
+              
+              // Create a new object with only the keys we want to keep
+              const cleanedTheme = {};
+              keysToKeep.forEach(key => {
+                cleanedTheme[key] = theme[key];
+              });
+              
+              // Remove Device sections
+              const finalKeys = Object.keys(cleanedTheme).filter(key => {
+                return !key.startsWith('Device/');
+              });
+              
+              console.log(`Removing ${Object.keys(cleanedTheme).length - finalKeys.length} top-level Device keys`);
+              
+              // Create the final cleaned object
+              const finalTheme = {};
+              finalKeys.forEach(key => {
+                finalTheme[key] = cleanedTheme[key];
+              });
+              
+              // Write the cleaned file
+              const cleanedJson = JSON.stringify(finalTheme, null, 2);
+              await fs.promises.writeFile(themePath, cleanedJson);
+              
+              // Log results
+              console.log('Theme cleanup completed successfully');
+              console.log(`Original size: ${themeData.length} bytes`);
+              console.log(`New size: ${cleanedJson.length} bytes`);
+              console.log(`Reduction: ${Math.round((1 - cleanedJson.length / themeData.length) * 100)}%`);
+              console.log(`Original keys: ${originalKeyCount}`);
+              console.log(`New keys: ${Object.keys(finalTheme).length}`);
+              
+            } catch (error) {
+              console.error('Error cleaning theme.json:', error);
+              process.exit(1);
+            }
+          }
+
+          // Run the cleaner
+          cleanThemeJson();
+          EOF
+      
+      - name: Run theme cleaner
+        run: |
+          node clean-theme.js
+      
+      - name: Verify theme.json file size
+        run: |
+          ls -la src/styles/theme.json
+          ls -la src/styles/theme.json.backup
+          
+      # Step 2: Remove unnecessary files and update package.json
+      - name: Create file removal script
+        run: |
+          cat > remove-files.js << 'EOF'
+          import fs from 'fs';
+          import path from 'path';
+          import { fileURLToPath } from 'url';
+
+          // Get the directory of the current script
+          const __filename = fileURLToPath(import.meta.url);
+          const __dirname = path.dirname(__filename);
+          const rootDir = path.resolve(__dirname);
+
+          // Files to remove
+          const filesToRemove = [
+            path.join(rootDir, 'src', 'utils', 'jsonToCss.js'),
+            path.join(rootDir, 'src', 'styles', 'generated.css')
+          ];
+
+          // Update package.json
+          async function updatePackageJson() {
+            const packageJsonPath = path.join(rootDir, 'package.json');
+            
+            try {
+              console.log(`Reading package.json from ${packageJsonPath}`);
+              const packageJsonData = await fs.promises.readFile(packageJsonPath, 'utf8');
+              const packageJson = JSON.parse(packageJsonData);
+              
+              // Update the scripts section - make generate-css use convert-theme-tokens.js
+              if (packageJson.scripts) {
+                const oldScript = packageJson.scripts['generate-css'];
+                packageJson.scripts['generate-css'] = "node src/utils/convert-theme-tokens.js";
+                console.log(`Updated generate-css script in package.json from "${oldScript}" to "node src/utils/convert-theme-tokens.js"`);
+              }
+              
+              // Write the updated package.json
+              await fs.promises.writeFile(
+                packageJsonPath, 
+                JSON.stringify(packageJson, null, 2) + '\n',
+                'utf8'
+              );
+              
+              console.log('Updated package.json successfully');
+            } catch (error) {
+              console.error('Error updating package.json:', error);
+              throw error;
+            }
+          }
+
+          // Remove unnecessary files
+          async function removeFiles() {
+            for (const filePath of filesToRemove) {
+              try {
+                if (fs.existsSync(filePath)) {
+                  await fs.promises.unlink(filePath);
+                  console.log(`Removed file: ${filePath}`);
+                } else {
+                  console.log(`File does not exist: ${filePath}`);
+                }
+              } catch (error) {
+                console.error(`Error removing file ${filePath}:`, error);
+              }
+            }
+          }
+
+          // Main function
+          async function main() {
+            try {
+              await removeFiles();
+              await updatePackageJson();
+              console.log('Cleanup completed successfully');
+            } catch (error) {
+              console.error('Error during cleanup:', error);
+              process.exit(1);
+            }
+          }
+
+          // Run the main function
+          main();
+          EOF
+      
+      - name: Run file removal script
+        run: |
+          node remove-files.js
+      
+      - name: Verify removed files
+        run: |
+          echo "Checking for removed files:"
+          ls -la src/utils/jsonToCss.js 2>/dev/null || echo "jsonToCss.js has been removed"
+          ls -la src/styles/generated.css 2>/dev/null || echo "generated.css has been removed"
+          
+          echo "Updated package.json:"
+          grep "generate-css" package.json
+      
+      # Step 3: Generate CSS files using the correct script
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm ci
+          
+      - name: Create output directory
+        run: mkdir -p src/styles/theme-files
+          
+      - name: Generate CSS from theme.json
+        run: |
+          echo "Running convert-theme-tokens.js"
+          node src/utils/convert-theme-tokens.js
+          
+      - name: Check generated files
+        run: |
+          echo "Generated CSS files:"
+          find src/styles/theme-files -name "*.css" || echo "No CSS files found"
+          
+          echo "Total files generated:"
+          find src/styles/theme-files -type f | wc -l
+      
+      # Step 4: Commit all changes
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Add all changes: cleaned theme.json, removed files, and new CSS files
+          git add src/styles/theme.json
+          git add package.json
+          git add -u src/utils/jsonToCss.js src/styles/generated.css
+          git add src/styles/theme-files/
+          
+          # Check if there are any changes
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "Changes detected"
+            git commit -m "${{ github.event.inputs.commit_message }}"
+            git push
+          else
+            echo "No changes detected"
+          fi

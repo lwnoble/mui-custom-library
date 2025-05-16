@@ -13,9 +13,13 @@ on:
   workflow_dispatch:
     inputs:
       message:
-        description: 'Commit message'
+        description: 'Commit message for CSS generation'
         required: false
-        default: 'Manual theme token generation'
+        default: 'Update theme CSS files'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   convert-tokens:
@@ -26,16 +30,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '18'
           cache: 'npm'
-      
+          
       - name: Install dependencies
         run: npm ci
-      
+          
+      - name: Create output directory
+        run: mkdir -p src/styles/theme-files
+          
       - name: Clean theme.json file
         run: |
           node -e "
@@ -70,9 +79,6 @@ jobs:
             }
           "
       
-      - name: Create output directory
-        run: mkdir -p src/styles/theme-files
-      
       - name: Convert theme tokens
         run: |
           echo "Running convert-theme-tokens.js..."
@@ -92,15 +98,27 @@ jobs:
         id: git-check
         run: |
           git diff --quiet src/styles/theme-files || echo "changes=true" >> $GITHUB_OUTPUT
-      
+          
+      - name: Check generated files
+        run: |
+          echo "Generated CSS files:"
+          find src/styles/theme-files -name "*.css" || echo "No CSS files found"
+          
+          echo "Total files generated:"
+          find src/styles/theme-files -type f | wc -l
+          
       - name: Commit changes if needed
         if: steps.git-check.outputs.changes == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+          
+          # Use custom commit message for manual dispatch, otherwise use default
+          COMMIT_MESSAGE="${{ github.event.inputs.message || 'Update theme CSS files' }}"
+          
           git add src/styles/theme-files/
           git add src/styles/theme.json
-          git commit -m "Auto-generate theme token CSS files and clean theme.json"
+          git commit -m "$COMMIT_MESSAGE"
           git push
       
       - name: Output summary

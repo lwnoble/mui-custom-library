@@ -1,24 +1,28 @@
+// webpack.config.js
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 module.exports = {
-  entry: './src/index.js',
+  mode: isProduction ? 'production' : 'development',
+  entry: isProduction ? './src/lib.js' : './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/'
+    filename: 'index.js',
+    library: isProduction ? {
+      name: 'CustomMuiLibrary',
+      type: 'umd',
+    } : undefined,
+    globalObject: 'this',
+    clean: true
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env', '@babel/preset-react']
-          }
-        }
+        use: 'babel-loader'
       },
       {
         test: /\.css$/,
@@ -29,10 +33,19 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx']
   },
+  externals: isProduction ? {
+    react: 'React',
+    'react-dom': 'ReactDOM',
+    '@mui/material': 'MuiMaterial',
+    '@emotion/react': 'emotionReact',
+    '@emotion/styled': 'emotionStyled'
+  } : {},
   plugins: [
-    new HtmlWebpackPlugin({
-      template: './public/index.html'
-    })
+    ...(isProduction ? [] : [
+      new HtmlWebpackPlugin({
+        template: './public/index.html'
+      })
+    ])
   ],
   devServer: {
     static: {

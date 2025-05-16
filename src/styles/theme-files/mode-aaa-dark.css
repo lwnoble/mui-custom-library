@@ -1,11 +1,5 @@
 /* AAA-dark mode specific backgrounds */
-[data-mode="AAA-dark"] [data-background="default"] {
-  --Dropdown-Color-1: #151a19b3;
-  --Dropdown-Color-2: #151a198a;
-  --Dropdown-Color-3: #151a1961;
-  --Dropdown-Color-4: #151a1952;
-  --Dropdown-Color-5: #151a1933;
-  --Surface: #1f2928;
+[data-mode="AAA-dark"] [data-background] {
   --Surface-Dim: #1b2221;
   --Surface-Bright: #293534;
   --Surface-Quiet: #b1b4b4;
@@ -16,41 +10,19 @@
   --Container-Lowest: #000000;
   --Container-High: #2c3938;
   --Container-Highest: #303d3c;
-  --Container-On-Quiet: #b1b4b4;
   --Container-Low-Quiet: #abadad;
   --Container-Lowest-Quiet: #999999;
   --Container-High-Quiet: #c4c8c7;
   --Container-Highest-Quiet: #cbcece;
-}
-
-[data-mode="AAA-dark"] [data-background="default"] [data-compnent="surface"] {
-  --Icon-Primary: #80aca7;
-  --Icon-Secondary: #e48c7c;
-  --Icon-Tertiary: #baa257;
-  --Icon-Success: #5ab75b;
-  --Icon-Error: #ed8688;
-  --Icon-Warning: #d19b09;
-  --Icon-Info: #358ac7;
-  --Surface-Border: #797f7e;
-  --On-Color: #ffffff;
-  --Button: #80aca7;
-  --On-Button: #324a47;
-  --Button-Half: #ffffff;
-  --Hotlink: #e0ebea;
-  --Icon-BG: #00000000;
-  --Message-Padding: 0;
-  --Hotlink-Default-Underline: underline;
-  --Hotlink-Hover-Underline: none;
+  --Dropdown-Color-1: #151a19b3;
+  --Dropdown-Color-2: #151a198a;
+  --Dropdown-Color-3: #151a1961;
+  --Dropdown-Color-4: #151a1952;
+  --Dropdown-Color-5: #151a1933;
 }
 
 /* AAA-dark mode specific backgrounds */
 [data-mode="AAA-dark"] [data-background="primary"] {
-  --Dropdown-Color-1: #0f1211b3;
-  --Dropdown-Color-2: #0f12118a;
-  --Dropdown-Color-3: #0f121161;
-  --Dropdown-Color-4: #0f121152;
-  --Dropdown-Color-5: #0f121133;
-  --Surface: #161c1b;
   --Surface-Dim: #141918;
   --Surface-Bright: #1d2524;
   --Surface-Quiet: #9baba9;
@@ -61,41 +33,19 @@
   --Container-Lowest: #000000;
   --Container-High: #212928;
   --Container-Highest: #252d2c;
-  --Container-On-Quiet: #94acaa;
   --Container-Low-Quiet: #92aaa7;
   --Container-Lowest-Quiet: #869b99;
   --Container-High-Quiet: #a0bab7;
   --Container-Highest-Quiet: #a3bebb;
-}
-
-[data-mode="AAA-dark"] [data-background="primary"] [data-compnent="surface"] {
-  --Icon-Primary: #59837f;
-  --Icon-Secondary: #b46254;
-  --Icon-Tertiary: #857027;
-  --Icon-Success: #1f832a;
-  --Icon-Error: #b45357;
-  --Icon-Warning: #9d6e00;
-  --Icon-Info: #286b9c;
-  --Surface-Border: #5d7471;
-  --On-Color: #98bcb8;
-  --Button: #59837f;
-  --On-Button: #e0ebea;
-  --Button-Half: #ffffff;
-  --Hotlink: #e0ebea;
-  --Icon-BG: #0a100f;
-  --Message-Padding: 0;
-  --Hotlink-Default-Underline: underline;
-  --Hotlink-Hover-Underline: none;
+  --Dropdown-Color-1: #0f1211b3;
+  --Dropdown-Color-2: #0f12118a;
+  --Dropdown-Color-3: #0f121161;
+  --Dropdown-Color-4: #0f121152;
+  --Dropdown-Color-5: #0f121133;
 }
 
 /* AAA-dark mode specific backgrounds */
 [data-mode="AAA-dark"] [data-background="primary-light"] {
-  --Dropdown-Color-1: #101514b3;
-  --Dropdown-Color-2: #1015148a;
-  --Dropdown-Color-3: #10151461;
-  --Dropdown-Color-4: #10151452;
-  --Dropdown-Color-5: #10151433;
-  --Surface: #182220;
   --Surface-Dim: #161d1c;
   --Surface-Bright: #202c2b;
   --Surface-Quiet: #9eafad;
@@ -106,41 +56,19 @@
   --Container-Lowest: #000000;
   --Container-High: #242f2e;
   --Container-Highest: #283332;
-  --Container-On-Quiet: #98b1ae;
   --Container-Low-Quiet: #94acaa;
   --Container-Lowest-Quiet: #869b99;
   --Container-High-Quiet: #a6c1be;
   --Container-Highest-Quiet: #abc6c3;
-}
-
-[data-mode="AAA-dark"] [data-background="primary-light"] [data-compnent="surface"] {
-  --Icon-Primary: #59837f;
-  --Icon-Secondary: #b46254;
-  --Icon-Tertiary: #857027;
-  --Icon-Success: #1f832a;
-  --Icon-Error: #b45357;
-  --Icon-Warning: #9d6e00;
-  --Icon-Info: #286b9c;
-  --Surface-Border: #667976;
-  --On-Color: #b0ccc9;
-  --Button: #59837f;
-  --On-Button: #e0ebea;
-  --Button-Half: #ffffff;
-  --Hotlink: #e0ebea;
-  --Icon-BG: #0a100f;
-  --Message-Padding: 0;
-  --Hotlink-Default-Underline: underline;
-  --Hotlink-Hover-Underline: none;
+  --Dropdown-Color-1: #101514b3;
+  --Dropdown-Color-2: #1015148a;
+  --Dropdown-Color-3: #10151461;
+  --Dropdown-Color-4: #10151452;
+  --Dropdown-Color-5: #10151433;
 }
 
 /* AAA-dark mode specific backgrounds */
 [data-mode="AAA-dark"] [data-background="primary-dark"] {
-  --Dropdown-Color-1: #0d0f0fb3;
-  --Dropdown-Color-2: #0d0f0f8a;
-  --Dropdown-Color-3: #0d0f0f61;
-  --Dropdown-Color-4: #0d0f0f52;
-  --Dropdown-Color-5: #0d0f0f33;
-  --Surface: #141717;
   --Surface-Dim: #131515;
   --Surface-Bright: #1b1f1f;
   --Surface-Quiet: #97a6a5;
@@ -151,41 +79,19 @@
   --Container-Lowest: #000000;
   --Container-High: #1f2323;
   --Container-Highest: #222727;
-  --Container-On-Quiet: #89aaa6;
   --Container-Low-Quiet: #88a8a4;
   --Container-Lowest-Quiet: #7e9c99;
   --Container-High-Quiet: #93b6b2;
   --Container-Highest-Quiet: #96b9b5;
-}
-
-[data-mode="AAA-dark"] [data-background="primary-dark"] [data-compnent="surface"] {
-  --Icon-Primary: #59837f;
-  --Icon-Secondary: #b46254;
-  --Icon-Tertiary: #857027;
-  --Icon-Success: #1f832a;
-  --Icon-Error: #b45357;
-  --Icon-Warning: #9d6e00;
-  --Icon-Info: #286b9c;
-  --Surface-Border: #5b706e;
-  --On-Color: #98bcb8;
-  --Button: #59837f;
-  --On-Button: #e0ebea;
-  --Button-Half: #ffffff;
-  --Hotlink: #e0ebea;
-  --Icon-BG: #0a100f;
-  --Message-Padding: 0;
-  --Hotlink-Default-Underline: underline;
-  --Hotlink-Hover-Underline: none;
+  --Dropdown-Color-1: #0d0f0fb3;
+  --Dropdown-Color-2: #0d0f0f8a;
+  --Dropdown-Color-3: #0d0f0f61;
+  --Dropdown-Color-4: #0d0f0f52;
+  --Dropdown-Color-5: #0d0f0f33;
 }
 
 /* AAA-dark mode specific backgrounds */
 [data-mode="AAA-dark"] [data-background="secondary"] {
-  --Dropdown-Color-1: #261513b3;
-  --Dropdown-Color-2: #2615138a;
-  --Dropdown-Color-3: #26151361;
-  --Dropdown-Color-4: #26151352;
-  --Dropdown-Color-5: #26151333;
-  --Surface: #3f1e19;
   --Surface-Dim: #331a17;
   --Surface-Bright: #4f2821;
   --Surface-Quiet: #d6aba3;
@@ -196,41 +102,19 @@
   --Container-Lowest: #000000;
   --Container-High: #532c25;
   --Container-Highest: #583029;
-  --Container-On-Quiet: #d6aba3;
   --Container-Low-Quiet: #cda49c;
   --Container-Lowest-Quiet: #af8f88;
   --Container-High-Quiet: #ebbeb5;
   --Container-Highest-Quiet: #f1c5bc;
-}
-
-[data-mode="AAA-dark"] [data-background="secondary"] [data-compnent="surface"] {
-  --Icon-Primary: #59837f;
-  --Icon-Secondary: #b46254;
-  --Icon-Tertiary: #857027;
-  --Icon-Success: #1f832a;
-  --Icon-Error: #b45357;
-  --Icon-Warning: #9d6e00;
-  --Icon-Info: #286b9c;
-  --Surface-Border: #9d756e;
-  --On-Color: #f3c6bd;
-  --Button: #e48c7c;
-  --On-Button: #65342c;
-  --Button-Half: #ffffff;
-  --Hotlink: #f8d9d3;
-  --Icon-BG: #f8d9d3;
-  --Message-Padding: 0;
-  --Hotlink-Default-Underline: underline;
-  --Hotlink-Hover-Underline: none;
+  --Dropdown-Color-1: #261513b3;
+  --Dropdown-Color-2: #2615138a;
+  --Dropdown-Color-3: #26151361;
+  --Dropdown-Color-4: #26151352;
+  --Dropdown-Color-5: #26151333;
 }
 
 /* AAA-dark mode specific backgrounds */
 [data-mode="AAA-dark"] [data-background="secondary-light"] {
-  --Dropdown-Color-1: #291b19b3;
-  --Dropdown-Color-2: #291b198a;
-  --Dropdown-Color-3: #291b1961;
-  --Dropdown-Color-4: #291b1952;
-  --Dropdown-Color-5: #291b1933;
-  --Surface: #422723;
   --Surface-Dim: #35211d;
   --Surface-Bright: #52332e;
   --Surface-Quiet: #deb3ab;
@@ -241,41 +125,19 @@
   --Container-Lowest: #000000;
   --Container-High: #563732;
   --Container-Highest: #5b3b35;
-  --Container-On-Quiet: #d4b5b0;
   --Container-Low-Quiet: #c9ada7;
   --Container-Lowest-Quiet: #a9948f;
   --Container-High-Quiet: #edcec8;
   --Container-Highest-Quiet: #f3d4ce;
-}
-
-[data-mode="AAA-dark"] [data-background="secondary-light"] [data-compnent="surface"] {
-  --Icon-Primary: #59837f;
-  --Icon-Secondary: #b46254;
-  --Icon-Tertiary: #857027;
-  --Icon-Success: #1f832a;
-  --Icon-Error: #b45357;
-  --Icon-Warning: #9d6e00;
-  --Icon-Info: #286b9c;
-  --Surface-Border: #a37e78;
-  --On-Color: #f3c6bd;
-  --Button: #e48c7c;
-  --On-Button: #65342c;
-  --Button-Half: #ffffff;
-  --Hotlink: #f8d9d3;
-  --Icon-BG: #f8d9d3;
-  --Message-Padding: 0;
-  --Hotlink-Default-Underline: underline;
-  --Hotlink-Hover-Underline: none;
+  --Dropdown-Color-1: #291b19b3;
+  --Dropdown-Color-2: #291b198a;
+  --Dropdown-Color-3: #291b1961;
+  --Dropdown-Color-4: #291b1952;
+  --Dropdown-Color-5: #291b1933;
 }
 
 /* AAA-dark mode specific backgrounds */
 [data-mode="AAA-dark"] [data-background="secondary-dark"] {
-  --Dropdown-Color-1: #0f1211b3;
-  --Dropdown-Color-2: #0f12118a;
-  --Dropdown-Color-3: #0f121161;
-  --Dropdown-Color-4: #0f121152;
-  --Dropdown-Color-5: #0f121133;
-  --Surface: #161c1b;
   --Surface-Dim: #141918;
   --Surface-Bright: #1d2524;
   --Surface-Quiet: #9baba9;
@@ -286,41 +148,19 @@
   --Container-Lowest: #000000;
   --Container-High: #212928;
   --Container-Highest: #252d2c;
-  --Container-On-Quiet: #94acaa;
   --Container-Low-Quiet: #92aaa7;
   --Container-Lowest-Quiet: #869b99;
   --Container-High-Quiet: #a0bab7;
   --Container-Highest-Quiet: #a3bebb;
-}
-
-[data-mode="AAA-dark"] [data-background="secondary-dark"] [data-compnent="surface"] {
-  --Icon-Primary: #59837f;
-  --Icon-Secondary: #b46254;
-  --Icon-Tertiary: #857027;
-  --Icon-Success: #1f832a;
-  --Icon-Error: #b45357;
-  --Icon-Warning: #9d6e00;
-  --Icon-Info: #286b9c;
-  --Surface-Border: #5d7471;
-  --On-Color: #98bcb8;
-  --Button: #59837f;
-  --On-Button: #e0ebea;
-  --Button-Half: #ffffff;
-  --Hotlink: #e0ebea;
-  --Icon-BG: #0a100f;
-  --Message-Padding: 0;
-  --Hotlink-Default-Underline: underline;
-  --Hotlink-Hover-Underline: none;
+  --Dropdown-Color-1: #0f1211b3;
+  --Dropdown-Color-2: #0f12118a;
+  --Dropdown-Color-3: #0f121161;
+  --Dropdown-Color-4: #0f121152;
+  --Dropdown-Color-5: #0f121133;
 }
 
 /* AAA-dark mode specific backgrounds */
 [data-mode="AAA-dark"] [data-background="tertiary"] {
-  --Dropdown-Color-1: #26241cb3;
-  --Dropdown-Color-2: #26241c8a;
-  --Dropdown-Color-3: #26241c61;
-  --Dropdown-Color-4: #26241c52;
-  --Dropdown-Color-5: #26241c33;
-  --Surface: #3c382a;
   --Surface-Dim: #312d23;
   --Surface-Bright: #4b4636;
   --Surface-Quiet: #d4cbad;
@@ -331,41 +171,19 @@
   --Container-Lowest: #000000;
   --Container-High: #504a3a;
   --Container-Highest: #544f3e;
-  --Container-On-Quiet: #d0cbbb;
   --Container-Low-Quiet: #c0bbad;
   --Container-Lowest-Quiet: #9a968c;
   --Container-High-Quiet: #ede8d8;
   --Container-Highest-Quiet: #f2eddd;
-}
-
-[data-mode="AAA-dark"] [data-background="tertiary"] [data-compnent="surface"] {
-  --Icon-Primary: #59837f;
-  --Icon-Secondary: #b46254;
-  --Icon-Tertiary: #857027;
-  --Icon-Success: #1f832a;
-  --Icon-Error: #b45357;
-  --Icon-Warning: #9d6e00;
-  --Icon-Info: #358ac7;
-  --Surface-Border: #9a9586;
-  --On-Color: #f0ebdb;
-  --Button: #baa257;
-  --On-Button: #4c4017;
-  --Button-Half: #ffffff;
-  --Hotlink: #f0ebdb;
-  --Icon-BG: #f0ebdb;
-  --Message-Padding: 0;
-  --Hotlink-Default-Underline: underline;
-  --Hotlink-Hover-Underline: none;
+  --Dropdown-Color-1: #26241cb3;
+  --Dropdown-Color-2: #26241c8a;
+  --Dropdown-Color-3: #26241c61;
+  --Dropdown-Color-4: #26241c52;
+  --Dropdown-Color-5: #26241c33;
 }
 
 /* AAA-dark mode specific backgrounds */
 [data-mode="AAA-dark"] [data-background="tertiary-light"] {
-  --Dropdown-Color-1: #282620b3;
-  --Dropdown-Color-2: #2826208a;
-  --Dropdown-Color-3: #28262061;
-  --Dropdown-Color-4: #28262052;
-  --Dropdown-Color-5: #28262033;
-  --Surface: #3f3b2f;
   --Surface-Dim: #333026;
   --Surface-Bright: #4d493b;
   --Surface-Quiet: #d8ceb0;
@@ -376,41 +194,19 @@
   --Container-Lowest: #000000;
   --Container-High: #524d3f;
   --Container-Highest: #565243;
-  --Container-On-Quiet: #d4cfbf;
   --Container-Low-Quiet: #c3beb0;
   --Container-Lowest-Quiet: #9a968c;
   --Container-High-Quiet: #f2eddd;
   --Container-Highest-Quiet: #f2eddd;
-}
-
-[data-mode="AAA-dark"] [data-background="tertiary-light"] [data-compnent="surface"] {
-  --Icon-Primary: #59837f;
-  --Icon-Secondary: #b46254;
-  --Icon-Tertiary: #857027;
-  --Icon-Success: #1f832a;
-  --Icon-Error: #b45357;
-  --Icon-Warning: #9d6e00;
-  --Icon-Info: #358ac7;
-  --Surface-Border: #9d988a;
-  --On-Color: #f0ebdb;
-  --Button: #baa257;
-  --On-Button: #4c4017;
-  --Button-Half: #ffffff;
-  --Hotlink: #f0ebdb;
-  --Icon-BG: #f0ebdb;
-  --Message-Padding: 0;
-  --Hotlink-Default-Underline: underline;
-  --Hotlink-Hover-Underline: none;
+  --Dropdown-Color-1: #282620b3;
+  --Dropdown-Color-2: #2826208a;
+  --Dropdown-Color-3: #28262061;
+  --Dropdown-Color-4: #28262052;
+  --Dropdown-Color-5: #28262033;
 }
 
 /* AAA-dark mode specific backgrounds */
 [data-mode="AAA-dark"] [data-background="tertiary-dark"] {
-  --Dropdown-Color-1: #221f15b3;
-  --Dropdown-Color-2: #221f158a;
-  --Dropdown-Color-3: #221f1561;
-  --Dropdown-Color-4: #221f1552;
-  --Dropdown-Color-5: #221f1533;
-  --Surface: #37311e;
   --Surface-Dim: #2d281a;
   --Surface-Bright: #453e28;
   --Surface-Quiet: #c9c0a3;
@@ -421,41 +217,19 @@
   --Container-Lowest: #000000;
   --Container-High: #4a422b;
   --Container-Highest: #4e462f;
-  --Container-On-Quiet: #c5c0b0;
   --Container-Low-Quiet: #bbb6a7;
   --Container-Lowest-Quiet: #9a968c;
   --Container-High-Quiet: #dfdac9;
   --Container-Highest-Quiet: #e6e1d1;
-}
-
-[data-mode="AAA-dark"] [data-background="tertiary-dark"] [data-compnent="surface"] {
-  --Icon-Primary: #59837f;
-  --Icon-Secondary: #b46254;
-  --Icon-Tertiary: #857027;
-  --Icon-Success: #1f832a;
-  --Icon-Error: #b45357;
-  --Icon-Warning: #9d6e00;
-  --Icon-Info: #358ac7;
-  --Surface-Border: #948c72;
-  --On-Color: #e3d9ba;
-  --Button: #baa257;
-  --On-Button: #4c4017;
-  --Button-Half: #ffffff;
-  --Hotlink: #f0ebdb;
-  --Icon-BG: #f0ebdb;
-  --Message-Padding: 0;
-  --Hotlink-Default-Underline: underline;
-  --Hotlink-Hover-Underline: none;
+  --Dropdown-Color-1: #221f15b3;
+  --Dropdown-Color-2: #221f158a;
+  --Dropdown-Color-3: #221f1561;
+  --Dropdown-Color-4: #221f1552;
+  --Dropdown-Color-5: #221f1533;
 }
 
 /* AAA-dark mode specific backgrounds */
 [data-mode="AAA-dark"] [data-background="white"] {
-  --Dropdown-Color-1: #303030b3;
-  --Dropdown-Color-2: #3030308a;
-  --Dropdown-Color-3: #30303061;
-  --Dropdown-Color-4: #30303052;
-  --Dropdown-Color-5: #30303033;
-  --Surface: #4a4a4a;
   --Surface-Dim: #3c3c3c;
   --Surface-Bright: #5b5b5b;
   --Surface-Quiet: #dfe9e8;
@@ -466,41 +240,19 @@
   --Container-Lowest: #000000;
   --Container-High: #5f5f5f;
   --Container-Highest: #636363;
-  --Container-On-Quiet: #dfe9e8;
   --Container-Low-Quiet: #c9d2d2;
   --Container-Lowest-Quiet: #929998;
   --Container-High-Quiet: #e1eceb;
   --Container-Highest-Quiet: #e1eceb;
-}
-
-[data-mode="AAA-dark"] [data-background="white"] [data-compnent="surface"] {
-  --Icon-Primary: #59837f;
-  --Icon-Secondary: #b46254;
-  --Icon-Tertiary: #857027;
-  --Icon-Success: #1f832a;
-  --Icon-Error: #b45357;
-  --Icon-Warning: #9d6e00;
-  --Icon-Info: #286b9c;
-  --Surface-Border: #aab1b0;
-  --On-Color: #e0ebea;
-  --Button: #98bcb8;
-  --On-Button: #324a47;
-  --Button-Half: #ffffff;
-  --Hotlink: #e0ebea;
-  --Icon-BG: #e0ebea;
-  --Message-Padding: 0;
-  --Hotlink-Default-Underline: underline;
-  --Hotlink-Hover-Underline: none;
+  --Dropdown-Color-1: #303030b3;
+  --Dropdown-Color-2: #3030308a;
+  --Dropdown-Color-3: #30303061;
+  --Dropdown-Color-4: #30303052;
+  --Dropdown-Color-5: #30303033;
 }
 
 /* AAA-dark mode specific backgrounds */
 [data-mode="AAA-dark"] [data-background="grey"] {
-  --Dropdown-Color-1: #1a1a1ab3;
-  --Dropdown-Color-2: #1a1a1a8a;
-  --Dropdown-Color-3: #1a1a1a61;
-  --Dropdown-Color-4: #1a1a1a52;
-  --Dropdown-Color-5: #1a1a1a33;
-  --Surface: #282828;
   --Surface-Dim: #222222;
   --Surface-Bright: #343434;
   --Surface-Quiet: #a8b7b6;
@@ -511,41 +263,19 @@
   --Container-Lowest: #000000;
   --Container-High: #383838;
   --Container-Highest: #3c3c3c;
-  --Container-On-Quiet: #a8b7b6;
   --Container-Low-Quiet: #a3b2b1;
   --Container-Lowest-Quiet: #8c9998;
   --Container-High-Quiet: #bccecc;
   --Container-Highest-Quiet: #c2d5d3;
-}
-
-[data-mode="AAA-dark"] [data-background="grey"] [data-compnent="surface"] {
-  --Icon-Primary: #59837f;
-  --Icon-Secondary: #b46254;
-  --Icon-Tertiary: #857027;
-  --Icon-Success: #1f832a;
-  --Icon-Error: #b45357;
-  --Icon-Warning: #9d6e00;
-  --Icon-Info: #286b9c;
-  --Surface-Border: #738281;
-  --On-Color: #b0ccc9;
-  --Button: #80aca7;
-  --On-Button: #324a47;
-  --Button-Half: #ffffff;
-  --Hotlink: #e0ebea;
-  --Icon-BG: #e0ebea;
-  --Message-Padding: 0;
-  --Hotlink-Default-Underline: underline;
-  --Hotlink-Hover-Underline: none;
+  --Dropdown-Color-1: #1a1a1ab3;
+  --Dropdown-Color-2: #1a1a1a8a;
+  --Dropdown-Color-3: #1a1a1a61;
+  --Dropdown-Color-4: #1a1a1a52;
+  --Dropdown-Color-5: #1a1a1a33;
 }
 
 /* AAA-dark mode specific backgrounds */
 [data-mode="AAA-dark"] [data-background="black"] {
-  --Dropdown-Color-1: #151a19b3;
-  --Dropdown-Color-2: #151a198a;
-  --Dropdown-Color-3: #151a1961;
-  --Dropdown-Color-4: #151a1952;
-  --Dropdown-Color-5: #151a1933;
-  --Surface: #1f2928;
   --Surface-Dim: #1b2221;
   --Surface-Bright: #293534;
   --Surface-Quiet: #a6b7b6;
@@ -556,31 +286,23 @@
   --Container-Lowest: #000000;
   --Container-High: #2c3938;
   --Container-Highest: #303d3c;
-  --Container-On-Quiet: #a6b7b6;
   --Container-Low-Quiet: #a0b0af;
   --Container-Lowest-Quiet: #8c9998;
   --Container-High-Quiet: #b8cbc9;
   --Container-Highest-Quiet: #bfd2d0;
+  --Dropdown-Color-1: #151a19b3;
+  --Dropdown-Color-2: #151a198a;
+  --Dropdown-Color-3: #151a1961;
+  --Dropdown-Color-4: #151a1952;
+  --Dropdown-Color-5: #151a1933;
 }
 
-[data-mode="AAA-dark"] [data-background="black"] [data-compnent="surface"] {
-  --Icon-Primary: #80aca7;
-  --Icon-Secondary: #e48c7c;
-  --Icon-Tertiary: #baa257;
-  --Icon-Success: #5ab75b;
-  --Icon-Error: #ed8688;
-  --Icon-Warning: #d19b09;
-  --Icon-Info: #358ac7;
-  --Surface-Border: #6f8381;
-  --On-Color: #b0ccc9;
-  --Button: #80aca7;
-  --On-Button: #ffffff;
-  --Button-Half: #ffffff;
-  --Hotlink: #e0ebea;
-  --Icon-BG: #00000000;
-  --Message-Padding: 0;
-  --Hotlink-Default-Underline: underline;
-  --Hotlink-Hover-Underline: none;
+/* AAA-dark mode targets */
+[data-mode="AAA-dark"] {
+  --Mode-Target-Desktop: 48px;
+  --Mode-Target-Android: 48px;
+  --Mode-Target-IOS-Mobile: 48px;
+  --Mode-Target-IOS-Tablet: 48px;
 }
 
 /* AAA-dark mode Red-Weak chart */
@@ -808,5 +530,14 @@
   --Chart-Background: #121212;
   --Chart-Axis-Color: rgba(255,255,255,0.75);
   --Chart-Grid-Color: rgba(255,255,255,0.15);
+}
+
+/* AAA-dark mode paragraph spacing */
+[data-mode="AAA-dark"] {
+  --Body-Medium: var(--Cognitive-Default-Body-Medium-AAA-Paragraph-Spacing);
+  --Body-Small: var(--Cognitive-Default-Body-Small-AAA-Paragraph-Spacing);
+  --Body-Large: var(--Cognitive-Default-Body-Large-AAA-Paragraph-Spacing);
+  --Legal: var(--Cognitive-2x-Legal-Standard-AAA-Paragraph-Spacing);
+  --Caption: var(--Cognitive-Default-Captions-Standard-AAA-Paragraph-Spacing);
 }
 
