@@ -4,15 +4,12 @@ on:
   pull_request:
     paths:
       - 'src/styles/theme.json'
-      - 'src/styles/JsonToCssSplit.js'
-      - 'src/styles/convert-theme-tokens.js'
   push:
     branches:
       - main
+      - tokens-update  # Added tokens-update branch
     paths:
       - 'src/styles/theme.json'
-      - 'src/styles/JsonToCssSplit.js'
-      - 'src/styles/convert-theme-tokens.js'
   workflow_dispatch:
     inputs:
       message:
@@ -58,6 +55,12 @@ jobs:
                 console.log('No $themes array found or already empty');
               }
               
+              // Remove $metadata section if it exists
+              if (themeData.$metadata) {
+                delete themeData.$metadata;
+                console.log('Removed $metadata section from theme.json');
+              }
+              
               // Write the cleaned file back
               fs.writeFileSync(themePath, JSON.stringify(themeData, null, 2));
               console.log('Wrote cleaned theme.json file');
@@ -67,8 +70,23 @@ jobs:
             }
           "
       
+      - name: Create output directory
+        run: mkdir -p src/styles/theme-files
+      
       - name: Convert theme tokens
-        run: node src/styles/convert-theme-tokens.js
+        run: |
+          echo "Running convert-theme-tokens.js..."
+          
+          # Check if the script exists in src/styles/ first
+          if [ -f "src/styles/convert-theme-tokens.js" ]; then
+            node src/styles/convert-theme-tokens.js
+          # Otherwise try src/utils/ location
+          elif [ -f "src/utils/convert-theme-tokens.js" ]; then
+            node src/utils/convert-theme-tokens.js
+          else
+            echo "Error: Could not find convert-theme-tokens.js in src/styles/ or src/utils/"
+            exit 1
+          fi
       
       - name: Check for changes
         id: git-check
@@ -84,3 +102,17 @@ jobs:
           git add src/styles/theme.json
           git commit -m "Auto-generate theme token CSS files and clean theme.json"
           git push
+      
+      - name: Output summary
+        run: |
+          echo "## Theme Token Conversion Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Branch: $(git branch --show-current)" >> $GITHUB_STEP_SUMMARY
+          echo "- Commit: $(git rev-parse HEAD)" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.git-check.outputs.changes }}" == "true" ]; then
+            echo "- Status: ✅ Changes detected and committed" >> $GITHUB_STEP_SUMMARY
+            echo "- Generated files: $(find src/styles/theme-files -type f | wc -l)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- Status: ℹ️ No changes detected" >> $GITHUB_STEP_SUMMARY
+          fi
