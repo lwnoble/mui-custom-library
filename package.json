@@ -9,20 +9,12 @@
     "src/styles/theme-files"
   ],
   "scripts": {
-<<<<<<< HEAD
     "generate-css": "node src/utils/jsonToCss.js src/styles/theme.json src/styles/generated.css",
     "prepare": "npm run generate-css",  
     "build:lib": "echo 'Build lib script placeholder'",
     "convert-tokens": "node utils/convert-theme-tokens.js",
     "start": "webpack serve --mode development",
     "build": "webpack --mode production",
-=======
-    "generate-css": "node src/utils/convert-theme-tokens.js",
-    "prepare": "npm run generate-css && npm run build:lib",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "build:lib": "npx babel src/lib.js src/Components src/utils --out-dir dist --copy-files --config-file ./babel.config.cjs",
->>>>>>> 20fa4ec36ffa5c1e5640d3be4a94e28b29819af5
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
