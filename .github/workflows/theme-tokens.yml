@@ -7,7 +7,7 @@ on:
   push:
     branches:
       - main
-      - tokens-update
+      - tokens-update  # Added tokens-update branch
     paths:
       - 'src/styles/theme.json'
   workflow_dispatch:
@@ -45,10 +45,59 @@ jobs:
       - name: Create output directory
         run: mkdir -p src/styles/theme-files
           
-      - name: Generate CSS from theme.json
+      - name: Clean theme.json file
         run: |
-          echo "Running convert-theme-tokens.js"
-          node src/utils/convert-theme-tokens.js
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+            const themePath = path.join(process.cwd(), 'src', 'styles', 'theme.json');
+            
+            try {
+              // Read the theme file
+              const themeData = JSON.parse(fs.readFileSync(themePath, 'utf8'));
+              
+              // Clean the $themes array if it exists
+              if (themeData.$themes && Array.isArray(themeData.$themes)) {
+                themeData.$themes = [];
+                console.log('Cleaned $themes array in theme.json');
+              } else {
+                console.log('No $themes array found or already empty');
+              }
+              
+              // Remove $metadata section if it exists
+              if (themeData.$metadata) {
+                delete themeData.$metadata;
+                console.log('Removed $metadata section from theme.json');
+              }
+              
+              // Write the cleaned file back
+              fs.writeFileSync(themePath, JSON.stringify(themeData, null, 2));
+              console.log('Wrote cleaned theme.json file');
+            } catch (error) {
+              console.error('Error processing theme.json:', error);
+              process.exit(1);
+            }
+          "
+      
+      - name: Convert theme tokens
+        run: |
+          echo "Running convert-theme-tokens.js..."
+          
+          # Check if the script exists in src/styles/ first
+          if [ -f "src/styles/convert-theme-tokens.js" ]; then
+            node src/styles/convert-theme-tokens.js
+          # Otherwise try src/utils/ location
+          elif [ -f "src/utils/convert-theme-tokens.js" ]; then
+            node src/utils/convert-theme-tokens.js
+          else
+            echo "Error: Could not find convert-theme-tokens.js in src/styles/ or src/utils/"
+            exit 1
+          fi
+      
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --quiet src/styles/theme-files || echo "changes=true" >> $GITHUB_OUTPUT
           
       - name: Check generated files
         run: |
@@ -58,7 +107,8 @@ jobs:
           echo "Total files generated:"
           find src/styles/theme-files -type f | wc -l
           
-      - name: Commit changes
+      - name: Commit changes if needed
+        if: steps.git-check.outputs.changes == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
@@ -66,12 +116,21 @@ jobs:
           # Use custom commit message for manual dispatch, otherwise use default
           COMMIT_MESSAGE="${{ github.event.inputs.message || 'Update theme CSS files' }}"
           
-          # Check if there are any changes
-          if [[ -n "$(git status --porcelain src/styles/theme-files)" ]]; then
-            echo "Changes detected in theme-files"
-            git add src/styles/theme-files/
-            git commit -m "$COMMIT_MESSAGE" || echo "Nothing to commit"
-            git push
+          git add src/styles/theme-files/
+          git add src/styles/theme.json
+          git commit -m "$COMMIT_MESSAGE"
+          git push
+      
+      - name: Output summary
+        run: |
+          echo "## Theme Token Conversion Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Branch: $(git branch --show-current)" >> $GITHUB_STEP_SUMMARY
+          echo "- Commit: $(git rev-parse HEAD)" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.git-check.outputs.changes }}" == "true" ]; then
+            echo "- Status: ✅ Changes detected and committed" >> $GITHUB_STEP_SUMMARY
+            echo "- Generated files: $(find src/styles/theme-files -type f | wc -l)" >> $GITHUB_STEP_SUMMARY
           else
-            echo "No changes detected in theme-files"
+            echo "- Status: ℹ️ No changes detected" >> $GITHUB_STEP_SUMMARY
           fi
