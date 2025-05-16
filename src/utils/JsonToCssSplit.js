@@ -310,13 +310,9 @@ function extractPlatformVariables(platformContent, platformName) {
     // Add platform visibility variables
     const platforms = ['Android', 'IOS', 'Desktop'];
     platforms.forEach(platform => {
-      // Check if the platform exists in the content and has a boolean value
       const platformValue = platformContent[platform] && platformContent[platform].value;
       variables.push(`  --${platform}: ${platformValue === 'true' ? 'block' : 'none'};\n`);
     });
-    
-    // Determine the correct section to process platform-specific variables
-    const defaultContent = platformContent['Platform-Default'] || platformContent['Default'] || platformContent;
     
     // Recursive function to flatten nested objects into CSS variables
     const processPlatformVariables = (obj, prefix = 'Platform') => {
@@ -352,6 +348,7 @@ function extractPlatformVariables(platformContent, platformName) {
     };
     
     // Start processing from the default content
+    const defaultContent = platformContent['Platform-Default'] || platformContent['Default'] || platformContent;
     processPlatformVariables(defaultContent);
     
     return variables;
