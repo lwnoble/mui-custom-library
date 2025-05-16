@@ -318,41 +318,44 @@ function extractPlatformVariables(platformContent, platformName) {
     // Determine the correct section to process platform-specific variables
     const defaultContent = platformContent['Platform-Default'] || platformContent['Default'] || platformContent;
     
-    // Process Font-Families
-    let standardFontFamily = 'var(--Congnitive-Font-Families-Standard)';
-    let decorativeFontFamily = 'var(--Congnitive-Font-Families-Decorative)';
-    
-    if (defaultContent['Platform-Font-Families'] || defaultContent['Font-Families']) {
-      const fontFamilies = defaultContent['Platform-Font-Families'] || defaultContent['Font-Families'];
-      
-      if (fontFamilies.Standard) {
-        standardFontFamily = convertFontFamilyReference(fontFamilies.Standard.value);
+    // Recursive function to flatten nested objects into CSS variables
+    const processPlatformVariables = (obj, prefix = 'Platform') => {
+      for (const [key, value] of Object.entries(obj)) {
+        // Skip non-object or null values
+        if (value === null || typeof value !== 'object') continue;
+        
+        // Handle reference values
+        if (value.value !== undefined) {
+          let cssValue = value.value;
+          
+          // Convert reference format {Something.Something} to var(--Something-Something)
+          if (typeof cssValue === 'string' && cssValue.startsWith('{') && cssValue.endsWith('}')) {
+            cssValue = cssValue.replace(/[{}]/g, '').replace(/\./g, '-');
+            cssValue = `var(--${cssValue})`;
+          }
+          
+          // Add px for numeric values
+          if (typeof cssValue === 'number') {
+            cssValue = `${cssValue}px`;
+          }
+          
+          // Create variable name, replacing dots and handling special cases
+          const variableName = `--${prefix}-${key.replace(/\./g, '-')}`;
+          variables.push(`  ${variableName}: ${cssValue};\n`);
+        }
+        
+        // Recursively process nested objects
+        if (typeof value === 'object' && value !== null) {
+          processPlatformVariables(value, `${prefix}-${key}`);
+        }
       }
-      
-      if (fontFamilies.Decorative) {
-        decorativeFontFamily = convertFontFamilyReference(fontFamilies.Decorative.value);
-      }
-    }
+    };
     
-    variables.push(`  --Platform-Font-Families-Standard: ${standardFontFamily};\n`);
-    variables.push(`  --Platform-Font-Families-Decorative: ${decorativeFontFamily};\n`);
-    
-    // Process Target if exists
-    if (platformContent.Target || defaultContent.Target) {
-      const targetValue = (platformContent.Target || defaultContent.Target).value;
-      variables.push(`  --Platform-Target: ${targetValue}px;\n`);
-    }
-    
-    // Process Container Padding if exists
-    if (platformContent['Container-Padding'] || defaultContent['Container-Padding']) {
-      const paddingValue = (platformContent['Container-Padding'] || defaultContent['Container-Padding']).value;
-      variables.push(`  --Platform-Container-Padding: var(--${paddingValue.replace(/[{}]/g, '').replace(/\./g, '-')});\n`);
-    }
-    
-    // No need to process full typography in this function as it will be handled separately
+    // Start processing from the default content
+    processPlatformVariables(defaultContent);
     
     return variables;
-  }
+}
 
   function extractCognitiveVariables(cognitiveContent) {
     const variables = [];
