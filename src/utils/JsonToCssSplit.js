@@ -163,15 +163,38 @@ function extractModeVariables(bgContent, mode, backgroundType = 'default') {
  * @param {string} mode - The mode name
  * @returns {string} - Generated CSS for backgrounds
  */
-  function processBackgrounds(backgrounds, mode) {
-    let css = '';
+/**
+ * Process each background in the mode
+ * @param {Object} backgrounds - The backgrounds object
+ * @param {string} mode - The mode name
+ * @returns {string} - Generated CSS for backgrounds
+ */
+function processBackgrounds(backgrounds, mode) {
+  let css = '';
+  
+  // Process default background
+  if (backgrounds.Default) {
+    css += `/* ${mode} mode default background */\n`;
+    css += `[data-mode="${mode}"] [data-background] {\n`;
     
-    // Process default background
-    if (backgrounds.Default) {
-      css += `/* ${mode} mode specific backgrounds */\n`;
-      css += `[data-mode="${mode}"] [data-background] {\n`;
+    const variables = extractModeVariables(backgrounds.Default, mode);
+    variables.forEach(variable => {
+      css += variable;
+    });
+    
+    css += '}\n\n';
+  }
+  
+  // Process other named backgrounds
+  for (const [bgName, bgContent] of Object.entries(backgrounds)) {
+    // Handle standard backgrounds
+    if (bgName !== 'Default' && !bgName.startsWith('StatusBar/')) {
+      const bgNameLower = bgName.toLowerCase();
       
-      const variables = extractModeVariables(backgrounds.Default, mode);
+      css += `/* ${mode} mode specific background */\n`;
+      css += `[data-mode="${mode}"] [data-background="${bgNameLower}"] {\n`;
+      
+      const variables = extractModeVariables(bgContent, mode, bgNameLower);
       variables.forEach(variable => {
         css += variable;
       });
@@ -179,24 +202,107 @@ function extractModeVariables(bgContent, mode, backgroundType = 'default') {
       css += '}\n\n';
     }
     
-    // Process other named backgrounds
-    for (const [bgName, bgContent] of Object.entries(backgrounds)) {
-      if (bgName !== 'Default') {
-        const bgNameLower = bgName.toLowerCase();
+    // Handle StatusBar backgrounds
+    if (bgName.startsWith('StatusBar/')) {
+      // Find which color/variant is set to "true"
+      for (const [colorKey, colorValue] of Object.entries(bgContent)) {
+        if (colorValue.value === 'true' && colorKey !== 'StatusBar-Label') {
+          const statusBarLabel = bgContent['StatusBar-Label'].value;
+          const colorLower = colorKey.toLowerCase();
+          
+          css += `/* ${mode} mode ${statusBarLabel} background */\n`;
+          css += `[data-mode="${mode}"] [data-background="${statusBarLabel}"],\n`;
+          css += `[data-mode="${mode}"] [data-background="${colorLower}"] {\n`;
+          
+          // You can add specific styles for these backgrounds here if needed
+          css += `  /* ${statusBarLabel} ${colorKey} background styles */\n`;
+          
+          css += '}\n\n';
+        }
+      }
+    }
+  }
+  
+  return css;
+}
+
+function processShadowLevels(shadowLevels) {
+    let css = '';
+    
+    // Generate Box Shadow Variables
+    css += `/* Box Shadow Variables */\n`;
+    css += `--Box-Shadow-0: none;\n`;
+    
+    // Process each Shadow Level
+    for (const [shadowKey, shadowContent] of Object.entries(shadowLevels)) {
+      if (shadowKey.startsWith('Shadow-Level/')) {
+        const level = shadowKey.split('/')[1];
         
-        css += `/* ${mode} mode specific backgrounds */\n`;
-        css += `[data-mode="${mode}"] [data-background="${bgNameLower}"] {\n`;
-        
-        const variables = extractModeVariables(bgContent, mode, bgNameLower);
-        variables.forEach(variable => {
-          css += variable;
-        });
-        
-        css += '}\n\n';
+        css += `--Box-Shadow-${level.replace('L-', '')}: ${generateBoxShadowValue(shadowContent, level)};\n`;
       }
     }
     
+    css += '\n';
+    
+    // Default shadow (no attribute)
+    css += `[data-shadow] {\n`;
+    css += `  --Box-Shadow: var(--Box-Shadow-0);\n`;
+    css += `}\n\n`;
+    
+    // Shadow Levels
+    for (let i = 1; i <= 5; i++) {
+      css += `[data-shadow="${i}"] {\n`;
+      css += `  --Box-Shadow: var(--Box-Shadow-${i});\n`;
+      css += `}\n\n`;
+    }
+    
+    // Specific Shadow Use Cases
+  // Specific Shadow Use Cases
+  const shadowUseCases = [
+    { selector: 'Buttons', level: '0' },
+    { selector: 'Buttons-Hover', level: '2' },
+    { selector: 'Buttons-Raised', level: '3' },
+    { selector: 'Buttons-Raised-Hover', level: '4' }
+  ];
+    
+    shadowUseCases.forEach(useCase => {
+      css += `[data-shadow="${useCase.selector}"] {\n`;
+      css += `  --Box-Shadow: var(--Box-Shadow-${useCase.level});\n`;
+      css += `}\n\n`;
+    });
+    
     return css;
+  }
+  
+  function generateBoxShadowValue(shadowLevel, level) {
+    let shadowValue = '';
+    
+    // Find and process drop shadows
+    const dropShadows = Object.keys(shadowLevel)
+      .filter(key => key.startsWith('Drop'));
+    
+    dropShadows.forEach((dropKey, index) => {
+      // External shadow
+      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Horizontal) `;
+      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Vertical) `;
+      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Blur) `;
+      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Spread) `;
+      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Color)`;
+      
+      // Inset shadow
+      shadowValue += `, inset var(--Inner-Shadows-Level-${level}-${dropKey}-Horizontal) `;
+      shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Vertical) `;
+      shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Blur) `;
+      shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Spread) `;
+      shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Color)`;
+      
+      // Add comma between drops, except for the last one
+      if (index < dropShadows.length - 1) {
+        shadowValue += ', ';
+      }
+    });
+    
+    return shadowValue;
   }
   
 /**
@@ -434,22 +540,6 @@ function extractPlatformVariables(platformContent, platformName) {
     
     return variables;
   }
-  
-  // In your convertToCssFiles function, add:
-  if (jsonContent['Cognitive/None']) {
-    const cognitiveCss = `[data-platform] {\n${
-      extractCognitiveVariables(jsonContent['Cognitive/None']).join('')
-    }}\n`;
-    
-    const cognitiveFilename = 'cognitive.css';
-    const cognitiveFilePath = path.join(outputDir, cognitiveFilename);
-    
-    await fs.promises.writeFile(cognitiveFilePath, cognitiveCss, 'utf8');
-    results.cognitive = {
-      file: cognitiveFilename,
-      path: cognitiveFilePath
-    };
-  }  
 
 /**
  * Process surface containers JSON structure into CSS
@@ -566,10 +656,10 @@ async function convertToCssFiles(jsonContent, outputDir) {
     cognitive: [],
     sizingSpacing: [],
     surfaceContainers: null,
-    system: null
+    system: null,
+    shadowLevels: null
   };
   
-  // Create the output directory if it doesn't exist
   // Create the output directory if it doesn't exist
   if (!fs.existsSync(outputDir)) {
     try {
@@ -634,7 +724,19 @@ async function convertToCssFiles(jsonContent, outputDir) {
       path: surfaceContainersFilePath
     };
   }
-  
+  // Process shadow levels
+  if (Object.keys(jsonContent).some(key => key.startsWith('Shadow-Level/'))) {
+    const shadowLevelsCSS = processShadowLevels(jsonContent);
+    const shadowLevelsFilename = 'shadow-levels.css';
+    const shadowLevelsFilePath = path.join(outputDir, shadowLevelsFilename);
+    
+    await fs.promises.writeFile(shadowLevelsFilePath, shadowLevelsCSS, 'utf8');
+    results.shadowLevels = {
+      file: shadowLevelsFilename,
+      path: shadowLevelsFilePath
+    };
+  }
+
   // Process each mode
   for (const [modeName, modeContent] of Object.entries(jsonContent)) {
     if (modeName.startsWith('Modes/')) {
@@ -773,6 +875,31 @@ async function convertToCssFiles(jsonContent, outputDir) {
     };
   }
   
+// Process cognitive variables for different profiles
+const cognitiveProfiles = [
+    'Cognitive/None', 
+    'Cognitive/ADHD', 
+    'Cognitive/Dyslexia'
+  ];
+
+  for (const profileKey of cognitiveProfiles) {
+    if (jsonContent[profileKey]) {
+      const cognitiveCss = `[data-cognitive-profile] {\n${
+        extractCognitiveVariables(jsonContent[profileKey]).join('')
+      }}\n`;
+      
+      const cognitiveFilename = `cognitive-${profileKey.split('/')[1].toLowerCase()}.css`;
+      const cognitiveFilePath = path.join(outputDir, cognitiveFilename);
+      
+      await fs.promises.writeFile(cognitiveFilePath, cognitiveCss, 'utf8');
+      results.cognitive.push({
+        profile: profileKey.split('/')[1],
+        file: cognitiveFilename,
+        path: cognitiveFilePath
+      });
+    }
+  }
+  
   return results;
 }
 
@@ -783,147 +910,233 @@ async function convertToCssFiles(jsonContent, outputDir) {
  * @returns {Promise<string>} - Path to the generated loader script
  */
 async function generateLoaderScript(outputDir, fileInfo) {
-  const loaderContent = `/**
- * Dynamic CSS loader for theme files
- * Auto-generated by JsonToCss
- */
-class ThemeLoader {
-  constructor() {
-    this.loadedStylesheets = new Map();
-    this.defaultMode = 'aa-light';
-    this.defaultPlatform = this.detectPlatform();
-    this.initialized = false;
-  }
-
-  /**
-   * Detect the current platform
-   * @returns {string} - Detected platform (desktop, mobile, etc.)
+    const loaderContent = `/**
+   * Dynamic CSS loader for theme files
+   * Auto-generated by JsonToCss
    */
-  detectPlatform() {
-    // Basic platform detection logic
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    return isMobile ? 'mobile' : 'desktop';
-  }
-
-  /**
-   * Load a CSS file dynamically
-   * @param {string} fileName - The CSS file to load
-   * @param {string} id - Unique identifier for the stylesheet
-   * @returns {Promise} - Promise that resolves when the stylesheet is loaded
-   */
-  loadStylesheet(fileName, id) {
-    return new Promise((resolve, reject) => {
-      // If already loaded, resolve immediately
-      if (this.loadedStylesheets.has(id)) {
-        resolve();
+  class ThemeLoader {
+    constructor() {
+      this.loadedStylesheets = new Map();
+      this.defaultMode = 'aa-light';
+      this.defaultPlatform = this.detectPlatform();
+      this.defaultCognitiveProfile = 'none';
+      this.initialized = false;
+    }
+  
+    /**
+     * Detect the current platform
+     * @returns {string} - Detected platform (desktop, mobile, tablet)
+     */
+    detectPlatform() {
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const isTablet = /(tablet|ipad|playbook|silk)|(android(?!.*mobile))/i.test(navigator.userAgent);
+      
+      if (isMobile) return 'mobile';
+      if (isTablet) return 'tablet';
+      return 'desktop';
+    }
+  
+    /**
+     * Detect color scheme preference
+     * @returns {string} - 'light' or 'dark'
+     */
+    detectColorScheme() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+  
+    /**
+     * Load a CSS file dynamically
+     * @param {string} fileName - The CSS file to load
+     * @param {string} id - Unique identifier for the stylesheet
+     * @returns {Promise} - Promise that resolves when the stylesheet is loaded
+     */
+    loadStylesheet(fileName, id) {
+      return new Promise((resolve, reject) => {
+        // If already loaded, resolve immediately
+        if (this.loadedStylesheets.has(id)) {
+          resolve();
+          return;
+        }
+  
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = fileName;
+        link.id = id;
+  
+        link.onload = () => {
+          this.loadedStylesheets.set(id, link);
+          resolve();
+        };
+  
+        link.onerror = () => {
+          reject(new Error(\`Failed to load \${fileName}\`));
+        };
+  
+        document.head.appendChild(link);
+      });
+    }
+  
+    /**
+     * Initialize the theme by loading base CSS files
+     * @returns {Promise} - Promise that resolves when base CSS is loaded
+     */
+    async initialize() {
+      if (this.initialized) {
         return;
       }
-
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = fileName;
-      link.id = id;
-
-      link.onload = () => {
-        this.loadedStylesheets.set(id, link);
-        resolve();
-      };
-
-      link.onerror = () => {
-        reject(new Error(\`Failed to load \${fileName}\`));
-      };
-
-      document.head.appendChild(link);
-    });
-  }
-
-  /**
-   * Initialize the theme by loading base CSS
-   * @returns {Promise} - Promise that resolves when base CSS is loaded
-   */
-  async initialize() {
-    if (this.initialized) {
-      return;
-    }
-
-    try {
-      // Load base CSS first
-      await this.loadStylesheet('base.css', 'theme-base');
-      
-      // Load system CSS
-      await this.loadStylesheet('system.css', 'theme-system');
-      
-      // Load sizing and spacing CSS
-      await this.loadStylesheet('sizing-spacing.css', 'theme-sizing-spacing');
-      
-      // Load surface containers CSS
-      await this.loadStylesheet('surface-containers.css', 'theme-surface-containers');
-      
-      this.initialized = true;
-    } catch (err) {
-      console.error('Error initializing theme:', err);
-    }
-  }
-
-  /**
-   * Set the current theme data attributes on the document
-   * @param {string} mode - The mode to set
-   * @param {string} platform - The platform to set
-   */
-  setThemeAttributes(mode, platform) {
-    document.documentElement.setAttribute('data-mode', mode);
-    document.documentElement.setAttribute('data-platform', platform);
-  }
-
-  /**
-   * Load the appropriate CSS files based on settings
-   * @param {Object} options - Configuration options
-   * @param {string} [options.mode] - The mode to load (aa-light, dark, etc.)
-   * @param {string} [options.platform] - The platform to load (desktop, mobile, etc.)
-   * @returns {Promise} - Promise that resolves when all stylesheets are loaded
-   */
-  async loadTheme(options = {}) {
-    // Initialize if not already done
-    await this.initialize();
-    
-    const mode = options.mode || this.defaultMode;
-    const platform = options.platform || this.defaultPlatform;
-
-    const promises = [];
-
-    // Load mode CSS
-    promises.push(
-      this.loadStylesheet(\`mode-\${mode.toLowerCase()}.css\`, \`theme-mode-\${mode}\`)
-        .catch(err => console.warn(\`Could not load mode CSS: \${err.message}\`))
-    );
-
-    // Load platform CSS
-    promises.push(
-      this.loadStylesheet(\`platform-\${platform.toLowerCase()}.css\`, \`theme-platform-\${platform}\`)
-        .catch(err => console.warn(\`Could not load platform CSS: \${err.message}\`))
-    );
-
-    // Set data attributes on the document
-    this.setThemeAttributes(mode, platform);
-
-    return Promise.all(promises);
-  }
-}
-
-// Create a global instance
-window.themeLoader = new ThemeLoader();
-
-// Auto-load theme based on default settings
-document.addEventListener('DOMContentLoaded', () => {
-  window.themeLoader.loadTheme();
-});
-`;
-
-  const loaderPath = path.join(outputDir, 'theme-loader.js');
-  await fs.promises.writeFile(loaderPath, loaderContent, 'utf8');
   
-  return loaderPath;
-}
+      try {
+        // Load base CSS files
+        const baseFiles = [
+          { name: 'base.css', id: 'theme-base' },
+          { name: 'system.css', id: 'theme-system' },
+          { name: 'shadow-levels.css', id: 'theme-shadow-levels' },
+          { name: 'sizing-spacing.css', id: 'theme-sizing-spacing' },
+          { name: 'surface-containers.css', id: 'theme-surface-containers' }
+        ];
+  
+        for (const file of baseFiles) {
+          await this.loadStylesheet(file.name, file.id);
+        }
+        
+        this.initialized = true;
+      } catch (err) {
+        console.error('Error initializing theme:', err);
+      }
+    }
+  
+    /**
+     * Set the current theme data attributes on the document
+     * @param {Object} options - Theme configuration options
+     */
+    setThemeAttributes(options) {
+      const {
+        mode = this.defaultMode,
+        platform = this.defaultPlatform,
+        cognitiveProfile = this.defaultCognitiveProfile
+      } = options;
+  
+      document.documentElement.setAttribute('data-mode', mode);
+      document.documentElement.setAttribute('data-platform', platform);
+      document.documentElement.setAttribute('data-cognitive-profile', cognitiveProfile);
+    }
+  
+    /**
+     * Load the appropriate CSS files based on settings
+     * @param {Object} options - Configuration options
+     * @returns {Promise} - Promise that resolves when all stylesheets are loaded
+     */
+    async loadTheme(options = {}) {
+      // Initialize if not already done
+      await this.initialize();
+      
+      // Merge provided options with defaults
+      const themeOptions = {
+        mode: options.mode || this.detectColorScheme() === 'dark' ? 'aa-dark' : this.defaultMode,
+        platform: options.platform || this.defaultPlatform,
+        cognitiveProfile: options.cognitiveProfile || this.defaultCognitiveProfile
+      };
+  
+      const promises = [];
+  
+      // Load mode CSS
+      promises.push(
+        this.loadStylesheet(\`mode-\${themeOptions.mode}.css\`, \`theme-mode-\${themeOptions.mode}\`)
+          .catch(err => console.warn(\`Could not load mode CSS: \${err.message}\`))
+      );
+  
+      // Load platform CSS
+      promises.push(
+        this.loadStylesheet(\`platform-\${themeOptions.platform}.css\`, \`theme-platform-\${themeOptions.platform}\`)
+          .catch(err => console.warn(\`Could not load platform CSS: \${err.message}\`))
+      );
+  
+      // Load cognitive profile CSS
+      promises.push(
+        this.loadStylesheet(\`cognitive-\${themeOptions.cognitiveProfile}.css\`, \`theme-cognitive-\${themeOptions.cognitiveProfile}\`)
+          .catch(err => console.warn(\`Could not load cognitive profile CSS: \${err.message}\`))
+      );
+  
+      // Set data attributes on the document
+      this.setThemeAttributes(themeOptions);
+  
+      return Promise.all(promises);
+    }
+  
+    /**
+     * Create settings UI for theme customization
+     */
+    createSettingsUI() {
+      const settingsContainer = document.createElement('div');
+      settingsContainer.id = 'theme-settings';
+      settingsContainer.innerHTML = \`
+        <div class="theme-settings-section">
+          <h3>Accessibility Mode</h3>
+          <select id="accessibility-mode">
+            <option value="aa-light">WCAG AA (Light)</option>
+            <option value="aa-dark">WCAG AA (Dark)</option>
+            <option value="aaa-light">WCAG AAA (Light)</option>
+            <option value="aaa-dark">WCAG AAA (Dark)</option>
+          </select>
+        </div>
+        <div class="theme-settings-section">
+          <h3>Cognitive Profile</h3>
+          <select id="cognitive-profile">
+            <option value="none">None</option>
+            <option value="adhd">ADHD</option>
+            <option value="dyslexia">Dyslexia</option>
+          </select>
+        </div>
+      \`;
+  
+      // Add event listeners for settings
+      const accessibilityModeSelect = settingsContainer.querySelector('#accessibility-mode');
+      const cognitiveProfileSelect = settingsContainer.querySelector('#cognitive-profile');
+  
+      accessibilityModeSelect.addEventListener('change', (e) => {
+        this.loadTheme({ mode: e.target.value });
+      });
+  
+      cognitiveProfileSelect.addEventListener('change', (e) => {
+        this.loadTheme({ cognitiveProfile: e.target.value });
+      });
+  
+      // Set initial values
+      accessibilityModeSelect.value = this.defaultMode;
+      cognitiveProfileSelect.value = this.defaultCognitiveProfile;
+  
+      document.body.appendChild(settingsContainer);
+    }
+  }
+  
+  // Create a global instance
+  window.themeLoader = new ThemeLoader();
+  
+  // Auto-load theme based on default settings
+  document.addEventListener('DOMContentLoaded', () => {
+    // Auto-detect mode and platform
+    const initialMode = window.themeLoader.detectColorScheme() === 'dark' 
+      ? 'aa-dark' 
+      : window.themeLoader.defaultMode;
+    
+    const initialPlatform = window.themeLoader.detectPlatform();
+  
+    // Load theme with initial settings
+    window.themeLoader.loadTheme({
+      mode: initialMode,
+      platform: initialPlatform
+    });
+  
+    // Optional: Create settings UI
+    window.themeLoader.createSettingsUI();
+  });
+  `;
+  
+    const loaderPath = path.join(outputDir, 'theme-loader.js');
+    await fs.promises.writeFile(loaderPath, loaderContent, 'utf8');
+    
+    return loaderPath;
+  }
 
 /**
  * Main function to convert a JSON file to multiple CSS files
@@ -931,38 +1144,44 @@ document.addEventListener('DOMContentLoaded', () => {
  * @param {string} outputDir - Path for the output directory
  */
 async function convertJsonFileToCssFiles(inputPath, outputDir) {
-  try {
-    // Read the JSON file
-    const data = await fs.promises.readFile(inputPath, 'utf8');
-    const jsonContent = JSON.parse(data);
-    
-    // Transform to multiple CSS files
-    const results = await convertToCssFiles(jsonContent, outputDir);
-    
-    console.log(`Successfully generated CSS files in ${outputDir}`);
-    console.log(`- base.css (common styles)`);
-    
-    if (results.system) {
-      console.log(`- system.css (system tokens)`);
+    try {
+      // Read the JSON file
+      const data = await fs.promises.readFile(inputPath, 'utf8');
+      const jsonContent = JSON.parse(data);
+      
+      // Transform to multiple CSS files
+      const results = await convertToCssFiles(jsonContent, outputDir);
+      
+      // Generate the loader script (THIS LINE IS MISSING)
+      const loaderPath = await generateLoaderScript(outputDir, results);
+      
+      console.log(`Successfully generated CSS files in ${outputDir}`);
+      console.log(`- base.css (common styles)`);
+      
+      if (results.system) {
+        console.log(`- system.css (system tokens)`);
+      }
+      
+      if (results.surfaceContainers) {
+        console.log(`- surface-containers.css (surface containers)`);
+      }
+      
+      if (results.sizingSpacing) {
+        console.log(`- sizing-spacing.css (sizing and spacing)`);
+      }
+      
+      console.log(`- ${results.modes.length} mode files`);
+      console.log(`- ${results.platforms.length} platform files`);
+      
+      // Should also log the loader script creation (MISSING)
+      console.log(`- theme-loader.js (dynamic CSS loader)`);
+      
+      return results;
+    } catch (error) {
+      console.error('Error converting JSON to CSS files:', error);
+      process.exit(1);
     }
-    
-    if (results.surfaceContainers) {
-      console.log(`- surface-containers.css (surface containers)`);
-    }
-    
-    if (results.sizingSpacing) {
-      console.log(`- sizing-spacing.css (sizing and spacing)`);
-    }
-    
-    console.log(`- ${results.modes.length} mode files`);
-    console.log(`- ${results.platforms.length} platform files`);
-    
-    return results;
-  } catch (error) {
-    console.error('Error converting JSON to CSS files:', error);
-    process.exit(1);
   }
-}
 
 // Handle command line arguments
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
@@ -984,65 +1203,6 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     });
 }
 
-/**
- * Convert System tokens to CSS custom properties
- * @param {Object} jsonContent - The parsed JSON content
- * @returns {string} - Generated CSS for system tokens
- */
-function convertSystemToCss(jsonContent) {
-  const systemDefaults = jsonContent['System/Default'];
-  
-  // Start building CSS
-  let css = `:root, ::after, ::before {\n`;
-  
-  // Minimum Target calculation
-  css += ` /* System Variables */\n`;
-  css += ` --Min-Target: min(min(var(--Desktop-Target), var(--PlatformTarget)), var(--Cognitive-Target));\n`;
-  
-  // Buttons
-  if (systemDefaults && systemDefaults.Buttons) {
-    const buttons = systemDefaults.Buttons;
-    const buttonProps = [
-      ['Button-Height', buttons['Button-Height']],
-      ['Button-Minimum-Width', buttons['Button-Minimum-Width']],
-      ['Button-Border-Radius', buttons['Button-Border-Radius']],
-      ['Button-Focus-Radius', buttons['Button-Focus-Radius']],
-      ['Button-Horizontal-Padding', buttons['Button-Horizontal-Padding']],
-      ['Button-Horizontal-Padding-With-Icon', buttons['Button-Horizontal-Padding-With-Icon']],
-      ['Button-Small-Height', buttons['Button-Small-Height']],
-      ['Button-Small-Horizontal-Padding', buttons['Button-Small-Horizontal-Padding']],
-      ['Button-Small-Horizontal-Padding-With-Icon', buttons['Button-Small-Horizontal-Padding-With-Icon']],
-      ['Button-Border', {value: 2, type: 'number'}]
-    ];
-    
-    buttonProps.forEach(([prop, propObj]) => {
-      if (propObj) {
-        const value = typeof propObj.value === 'string' && propObj.value.startsWith('{') 
-          ? propObj.value.replace(/[{}]/g, '').replace(/\./g, '-') 
-          : propObj.value;
-        
-        css += ` --${prop}: ${typeof value === 'number' ? `${value}px` : `var(--${value})`};\n`;
-      }
-    });
-  }
-  
-  // Breakpoints
-  if (systemDefaults && systemDefaults.Breakpoints) {
-    const breakpointProps = ['Small', 'Medium', 'Large', 'Extra-Large', 'Extra-Small', 'Extra-Extra-Large'];
-    
-    breakpointProps.forEach(prop => {
-      if (systemDefaults.Breakpoints[prop]) {
-        css += ` --Breakpoints-${prop.replace(' ', '-')}: ${systemDefaults.Breakpoints[prop].value}px;\n`;
-      }
-    });
-  }
-  
-  // Close the CSS block
-  css += `}\n`;
-  
-  return css;
-}
-
 // Export all functions
 export { 
   convertFontFamilyReference,
@@ -1056,6 +1216,7 @@ export {
   processSizingSpacing,
   convertToCssFiles,
   processBackgrounds,
-  convertJsonFileToCssFiles
+  extractCognitiveVariables, 
+  convertJsonFileToCssFiles,
+  processShadowLevels 
 };
-
