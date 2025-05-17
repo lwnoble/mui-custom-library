@@ -630,7 +630,8 @@ async function convertToCssFiles(jsonContent, outputDir) {
     cognitive: [],
     sizingSpacing: [],
     surfaceContainers: null,
-    system: null
+    system: null,
+    shadowLevels: null
   };
   
   // Create the output directory if it doesn't exist
