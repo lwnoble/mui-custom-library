@@ -997,6 +997,7 @@ export {
   processSizingSpacing,
   convertToCssFiles,
   processBackgrounds,
+  extractCognitiveVariables,
   convertJsonFileToCssFiles
 };
 
