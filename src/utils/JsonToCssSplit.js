@@ -240,44 +240,44 @@ function processShadowLevels(shadowLevels) {
         const level = shadowKey.split('/')[1];
         
         css += `[data-shadow="${level.replace('L-', '')}"] {\n`;
-        css += `  --Box-Shadow: ${generateBoxShadowValue(shadowContent)};\n`;
+        css += `  --Box-Shadow: ${generateBoxShadowValue(shadowContent, level)};\n`;
         css += `}\n\n`;
       }
     }
     
     return css;
-  }
-  
-  function generateBoxShadowValue(shadowLevel) {
-    let shadowValue = '';
+}
+
+function generateBoxShadowValue(shadowLevel, level) {
+let shadowValue = '';
+
+// Find and process drop shadows
+const dropShadows = Object.keys(shadowLevel)
+    .filter(key => key.startsWith('Drop'));
+
+dropShadows.forEach((dropKey, index) => {
+    // External shadow
+    shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Horizontal) `;
+    shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Vertical) `;
+    shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Blur) `;
+    shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Spread) `;
+    shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Color)`;
     
-    // Find and process drop shadows
-    const dropShadows = Object.keys(shadowLevel)
-      .filter(key => key.startsWith('Drop'));
+    // Inset shadow
+    shadowValue += `, inset var(--Inner-Shadows-Level-${level}-${dropKey}-Horizontal) `;
+    shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Vertical) `;
+    shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Blur) `;
+    shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Spread) `;
+    shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Color)`;
     
-    dropShadows.forEach((dropKey, index) => {
-      // External shadow
-      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Horizontal) `;
-      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Vertical) `;
-      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Blur) `;
-      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Spread) `;
-      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Color)`;
-      
-      // Inset shadow
-      shadowValue += `, inset var(--Inner-Shadows-Level-${level}-${dropKey}-Horizontal) `;
-      shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Vertical) `;
-      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Blur) `;
-      shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Spread) `;
-      shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Color)`;
-      
-      // Add comma between drops, except for the last one
-      if (index < dropShadows.length - 1) {
-        shadowValue += ', ';
-      }
-    });
-    
-    return shadowValue;
-  }
+    // Add comma between drops, except for the last one
+    if (index < dropShadows.length - 1) {
+    shadowValue += ', ';
+    }
+});
+
+return shadowValue;
+}
   
 /**
  * Process mode target JSON structure into CSS
