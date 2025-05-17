@@ -434,22 +434,6 @@ function extractPlatformVariables(platformContent, platformName) {
     
     return variables;
   }
-  
-  // In your convertToCssFiles function, add:
-  if (jsonContent['Cognitive/None']) {
-    const cognitiveCss = `[data-platform] {\n${
-      extractCognitiveVariables(jsonContent['Cognitive/None']).join('')
-    }}\n`;
-    
-    const cognitiveFilename = 'cognitive.css';
-    const cognitiveFilePath = path.join(outputDir, cognitiveFilename);
-    
-    await fs.promises.writeFile(cognitiveFilePath, cognitiveCss, 'utf8');
-    results.cognitive = {
-      file: cognitiveFilename,
-      path: cognitiveFilePath
-    };
-  }  
 
 /**
  * Process surface containers JSON structure into CSS
@@ -570,7 +554,6 @@ async function convertToCssFiles(jsonContent, outputDir) {
   };
   
   // Create the output directory if it doesn't exist
-  // Create the output directory if it doesn't exist
   if (!fs.existsSync(outputDir)) {
     try {
       fs.mkdirSync(outputDir, { recursive: true });
@@ -580,6 +563,22 @@ async function convertToCssFiles(jsonContent, outputDir) {
       throw mkdirError;
     }
   }
+
+// In your convertToCssFiles function, add:
+if (jsonContent['Cognitive/None']) {
+    const cognitiveCss = `[data-platform] {\n${
+        extractCognitiveVariables(jsonContent['Cognitive/None']).join('')
+    }}\n`;
+    
+    const cognitiveFilename = 'cognitive.css';
+    const cognitiveFilePath = path.join(outputDir, cognitiveFilename);
+    
+    await fs.promises.writeFile(cognitiveFilePath, cognitiveCss, 'utf8');
+    results.cognitive = {
+        file: cognitiveFilename,
+        path: cognitiveFilePath
+    };
+    }  
   
   // Extract common variables for the base CSS file
   let baseCSS = `/**
@@ -997,7 +996,6 @@ export {
   processSizingSpacing,
   convertToCssFiles,
   processBackgrounds,
-  extractCognitiveVariables,
   convertJsonFileToCssFiles
 };
 
