@@ -1,0 +1,199 @@
+
+Theme Tokens Conversion Debug Log
+=================================
+
+Input Theme Structure:
+[
+  "Surface and Containers/Surface",
+  "Surface and Containers/Surface-Dim",
+  "Surface and Containers/Surface-Bright",
+  "Surface and Containers/Container",
+  "Surface and Containers/Container-Low",
+  "Surface and Containers/Container-Lowest",
+  "Surface and Containers/Container-High",
+  "Surface and Containers/Container-HIghest",
+  "Shadows/Default",
+  "Shadows/Dropshadows",
+  "Shadows/Bevel",
+  "Shadows/Inverse-Bevel",
+  "Shadows/Ridge",
+  "Shadows/None",
+  "Shadows/Recessed",
+  "Shadows/Bevel & Elevation",
+  "Shadows/Buttons",
+  "Shadows/Button-Hover",
+  "Backgrounds/Default",
+  "Backgrounds/Primary",
+  "Backgrounds/Primary-Light",
+  "Backgrounds/Primary-Dark",
+  "Backgrounds/Secondary",
+  "Backgrounds/Secondary-Light",
+  "Backgrounds/Secondary-Dark",
+  "Backgrounds/Tertiary",
+  "Backgrounds/Tertiary-Light",
+  "Backgrounds/Tertiary-Dark",
+  "Backgrounds/White",
+  "Backgrounds/Grey",
+  "Backgrounds/Black",
+  "Backgrounds/Nav-1",
+  "Backgrounds/Nav-2",
+  "Backgrounds/Nav-3",
+  "Modes/AA-light",
+  "Modes/AA-dark",
+  "Modes/AAA-light",
+  "Modes/AAA-dark",
+  "Charts/None",
+  "Charts/Red-Weak",
+  "Charts/Blue-Weak",
+  "Charts/Green-Weak",
+  "Charts/Red-Blind",
+  "Charts/Blue-Blind",
+  "Charts/Green-Blind",
+  "Charts/Blue-Cone",
+  "Charts/Monochromatic",
+  "Gradient/Gradient-1",
+  "Gradient/Gradient-2",
+  "Gradient/Gradient-3",
+  "Gradient/Gradient-4",
+  "System-Styles/Default",
+  "Shadow-Level/L-1",
+  "Shadow-Level/L-2",
+  "Shadow-Level/L-3",
+  "Shadow-Level/L-4",
+  "Shadow-Level/L-5",
+  "Shadow-Level/Buttons",
+  "Shadow-Level/Buttons-Hover",
+  "Shadow-Level/Buttons-Raised",
+  "Shadow-Level/Buttons-Raised-Hover",
+  "Shadow-Level/Cards & Bottom Sheet",
+  "Shadow-Level/Cards-Hover",
+  "Shadow-Level/Navigation",
+  "Shadow-Level/Floating-Action",
+  "Shadow-Level/Floating-Action-Hover",
+  "StatusBar/StatusBar-1",
+  "StatusBar/StatusBar-2",
+  "StatusBar/StatusBar-3",
+  "Device/Desktop-1920x1080",
+  "Device/Desktop-1536x864",
+  "Device/Desktop-1366x768",
+  "Device/Desktop-1280x720",
+  "Device/Desktop-1440x900",
+  "Device/Tablet-Vertical-768x1024",
+  "Device/Tablet-Vertical-810x1080",
+  "Device/Tablet-Vertical-820x1180",
+  "Device/Tablet-Vertical-800x1280",
+  "Device/Tablet-Vertical-601x962",
+  "Device/Tablet-Horizontal-768x1024",
+  "Device/Tablet-Horizontal-810x1080",
+  "Device/Tablet-Horizontal-800x1280",
+  "Device/Tablet-Horizontal-601x962",
+  "Device/Mobile-360x800",
+  "Device/Mobile-390x844",
+  "Device/Mobile-393x873",
+  "Device/Mobile-412x915",
+  "Device/Mobile-375x812",
+  "Device/Tablet-Horizontal-820x1180",
+  "Device/Tablet-Horizontal-1024x768",
+  "Device/Tablet-Horizontal-1080x810",
+  "Device/Tablet-Horizontal-1180x820",
+  "Device/Tablet-Horizontal-1280x800",
+  "Device/Tablet-Horizontal-962x601",
+  "Platform/Desktop",
+  "Platform/IOS-Tablet",
+  "Platform/Android",
+  "Platform/IOS-Mobile",
+  "System/Default",
+  "System/2x",
+  "Screen-Reader/None",
+  "Screen-Reader/Simulation",
+  "Cognitive/None",
+  "Cognitive/ADHD",
+  "Cognitive/Dyslexia",
+  "Spacing/Standard",
+  "Spacing/2x",
+  "Responsive-Styling/Standard",
+  "Responsive-Styling/NoGutter-NoMargin",
+  "Responsive-Styling/Standard-With-LeftNav",
+  "Responsive-Styling/NoGutter-NoMargin-With-LeftNav",
+  "Responsive-Styling/Standard-With-Rail",
+  "Responsive-Styling/NoGutter-NoMargin-With-Rail",
+  "Sizing & Spacing/Default",
+  "Sizing & Spacing/Expanded",
+  "Sizing & Spacing/Reduced",
+  "Sizing & Spacing/Standard",
+  "$themes"
+]
+
+Generated Files:
+{
+  "base": {
+    "file": "base.css",
+    "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/base.css"
+  },
+  "modes": [
+    {
+      "mode": "AA-light",
+      "file": "mode-aa-light.css",
+      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/mode-aa-light.css"
+    },
+    {
+      "mode": "AA-dark",
+      "file": "mode-aa-dark.css",
+      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/mode-aa-dark.css"
+    },
+    {
+      "mode": "AAA-light",
+      "file": "mode-aaa-light.css",
+      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/mode-aaa-light.css"
+    },
+    {
+      "mode": "AAA-dark",
+      "file": "mode-aaa-dark.css",
+      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/mode-aaa-dark.css"
+    }
+  ],
+  "platforms": [
+    {
+      "platform": "Desktop",
+      "file": "platform-desktop.css",
+      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/platform-desktop.css"
+    },
+    {
+      "platform": "IOS-Tablet",
+      "file": "platform-ios-tablet.css",
+      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/platform-ios-tablet.css"
+    },
+    {
+      "platform": "Android",
+      "file": "platform-android.css",
+      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/platform-android.css"
+    },
+    {
+      "platform": "IOS-Mobile",
+      "file": "platform-ios-mobile.css",
+      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/platform-ios-mobile.css"
+    }
+  ],
+  "cognitive": {
+    "file": "cognitive.css",
+    "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/cognitive.css"
+  },
+  "sizingSpacing": {
+    "file": "sizing-spacing.css",
+    "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/sizing-spacing.css"
+  },
+  "surfaceContainers": {
+    "file": "surface-containers.css",
+    "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/surface-containers.css"
+  },
+  "system": {
+    "file": "system.css",
+    "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/system.css"
+  }
+}
+
+Processed Sections:
+- Modes: Modes/AA-light, Modes/AA-dark, Modes/AAA-light, Modes/AAA-dark
+- Platforms: Platform/Desktop, Platform/IOS-Tablet, Platform/Android, Platform/IOS-Mobile
+- System Tokens: Present
+- Cognitive Tokens: Present
