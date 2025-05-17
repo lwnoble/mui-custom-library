@@ -563,22 +563,6 @@ async function convertToCssFiles(jsonContent, outputDir) {
       throw mkdirError;
     }
   }
-
-// In your convertToCssFiles function, add:
-if (jsonContent['Cognitive/None']) {
-    const cognitiveCss = `[data-platform] {\n${
-        extractCognitiveVariables(jsonContent['Cognitive/None']).join('')
-    }}\n`;
-    
-    const cognitiveFilename = 'cognitive.css';
-    const cognitiveFilePath = path.join(outputDir, cognitiveFilename);
-    
-    await fs.promises.writeFile(cognitiveFilePath, cognitiveCss, 'utf8');
-    results.cognitive = {
-        file: cognitiveFilename,
-        path: cognitiveFilePath
-    };
-    }  
   
   // Extract common variables for the base CSS file
   let baseCSS = `/**
@@ -770,6 +754,31 @@ if (jsonContent['Cognitive/None']) {
       file: sizingSpacingFilename,
       path: sizingSpacingFilePath
     };
+  }
+  
+// Process cognitive variables for different profiles
+const cognitiveProfiles = [
+    'Cognitive/None', 
+    'Cognitive/ADHD', 
+    'Cognitive/Dyslexia'
+  ];
+
+  for (const profileKey of cognitiveProfiles) {
+    if (jsonContent[profileKey]) {
+      const cognitiveCss = `[data-cognitive-profile] {\n${
+        extractCognitiveVariables(jsonContent[profileKey]).join('')
+      }}\n`;
+      
+      const cognitiveFilename = `cognitive-${profileKey.split('/')[1].toLowerCase()}.css`;
+      const cognitiveFilePath = path.join(outputDir, cognitiveFilename);
+      
+      await fs.promises.writeFile(cognitiveFilePath, cognitiveCss, 'utf8');
+      results.cognitive.push({
+        profile: profileKey.split('/')[1],
+        file: cognitiveFilename,
+        path: cognitiveFilePath
+      });
+    }
   }
   
   return results;
