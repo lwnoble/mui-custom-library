@@ -174,10 +174,23 @@ Generated Files:
       "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/platform-ios-mobile.css"
     }
   ],
-  "cognitive": {
-    "file": "cognitive.css",
-    "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/cognitive.css"
-  },
+  "cognitive": [
+    {
+      "profile": "None",
+      "file": "cognitive-none.css",
+      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/cognitive-none.css"
+    },
+    {
+      "profile": "ADHD",
+      "file": "cognitive-adhd.css",
+      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/cognitive-adhd.css"
+    },
+    {
+      "profile": "Dyslexia",
+      "file": "cognitive-dyslexia.css",
+      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/cognitive-dyslexia.css"
+    }
+  ],
   "sizingSpacing": {
     "file": "sizing-spacing.css",
     "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/sizing-spacing.css"
