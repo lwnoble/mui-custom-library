@@ -984,65 +984,6 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     });
 }
 
-/**
- * Convert System tokens to CSS custom properties
- * @param {Object} jsonContent - The parsed JSON content
- * @returns {string} - Generated CSS for system tokens
- */
-function convertSystemToCss(jsonContent) {
-  const systemDefaults = jsonContent['System/Default'];
-  
-  // Start building CSS
-  let css = `:root, ::after, ::before {\n`;
-  
-  // Minimum Target calculation
-  css += ` /* System Variables */\n`;
-  css += ` --Min-Target: min(min(var(--Desktop-Target), var(--PlatformTarget)), var(--Cognitive-Target));\n`;
-  
-  // Buttons
-  if (systemDefaults && systemDefaults.Buttons) {
-    const buttons = systemDefaults.Buttons;
-    const buttonProps = [
-      ['Button-Height', buttons['Button-Height']],
-      ['Button-Minimum-Width', buttons['Button-Minimum-Width']],
-      ['Button-Border-Radius', buttons['Button-Border-Radius']],
-      ['Button-Focus-Radius', buttons['Button-Focus-Radius']],
-      ['Button-Horizontal-Padding', buttons['Button-Horizontal-Padding']],
-      ['Button-Horizontal-Padding-With-Icon', buttons['Button-Horizontal-Padding-With-Icon']],
-      ['Button-Small-Height', buttons['Button-Small-Height']],
-      ['Button-Small-Horizontal-Padding', buttons['Button-Small-Horizontal-Padding']],
-      ['Button-Small-Horizontal-Padding-With-Icon', buttons['Button-Small-Horizontal-Padding-With-Icon']],
-      ['Button-Border', {value: 2, type: 'number'}]
-    ];
-    
-    buttonProps.forEach(([prop, propObj]) => {
-      if (propObj) {
-        const value = typeof propObj.value === 'string' && propObj.value.startsWith('{') 
-          ? propObj.value.replace(/[{}]/g, '').replace(/\./g, '-') 
-          : propObj.value;
-        
-        css += ` --${prop}: ${typeof value === 'number' ? `${value}px` : `var(--${value})`};\n`;
-      }
-    });
-  }
-  
-  // Breakpoints
-  if (systemDefaults && systemDefaults.Breakpoints) {
-    const breakpointProps = ['Small', 'Medium', 'Large', 'Extra-Large', 'Extra-Small', 'Extra-Extra-Large'];
-    
-    breakpointProps.forEach(prop => {
-      if (systemDefaults.Breakpoints[prop]) {
-        css += ` --Breakpoints-${prop.replace(' ', '-')}: ${systemDefaults.Breakpoints[prop].value}px;\n`;
-      }
-    });
-  }
-  
-  // Close the CSS block
-  css += `}\n`;
-  
-  return css;
-}
-
 // Export all functions
 export { 
   convertFontFamilyReference,
