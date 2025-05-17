@@ -257,17 +257,13 @@ function processShadowLevels(shadowLevels) {
     }
     
     // Specific Shadow Use Cases
-    const shadowUseCases = [
-      { selector: 'Buttons', level: '0' },
-      { selector: 'Buttons-Hover', level: '2' },
-      { selector: 'Buttons-Raised', level: '3' },
-      { selector: 'Buttons-Raised-Hover', level: '4' },
-      { selector: 'Cards & Bottom Sheet', level: '2' },
-      { selector: 'Cards-Hover', level: '3' },
-      { selector: 'Navigation', level: '2' },
-      { selector: 'Floating-Action', level: '3' },
-      { selector: 'Floating-Action-Hover', level: '4' }
-    ];
+  // Specific Shadow Use Cases
+  const shadowUseCases = [
+    { selector: 'Buttons', level: '0' },
+    { selector: 'Buttons-Hover', level: '2' },
+    { selector: 'Buttons-Raised', level: '3' },
+    { selector: 'Buttons-Raised-Hover', level: '4' }
+  ];
     
     shadowUseCases.forEach(useCase => {
       css += `[data-shadow="${useCase.selector}"] {\n`;
@@ -296,7 +292,7 @@ function processShadowLevels(shadowLevels) {
       // Inset shadow
       shadowValue += `, inset var(--Inner-Shadows-Level-${level}-${dropKey}-Horizontal) `;
       shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Vertical) `;
-      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Blur) `;
+      shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Blur) `;
       shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Spread) `;
       shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Color)`;
       
