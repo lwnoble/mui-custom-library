@@ -157,7 +157,13 @@ function extractModeVariables(bgContent, mode, backgroundType = 'default') {
     return variables;
   }
 
- /**
+  /**
+ * Process each background in the mode
+ * @param {Object} backgrounds - The backgrounds object
+ * @param {string} mode - The mode name
+ * @returns {string} - Generated CSS for backgrounds
+ */
+/**
  * Process each background in the mode
  * @param {Object} backgrounds - The backgrounds object
  * @param {string} mode - The mode name
@@ -219,6 +225,59 @@ function processBackgrounds(backgrounds, mode) {
   
   return css;
 }
+
+function processShadowLevels(shadowLevels) {
+    let css = '';
+    
+    // Default shadow (no attribute)
+    css += `[data-shadow] {\n`;
+    css += `  --Box-Shadow: none;\n`;
+    css += `}\n\n`;
+    
+    // Process each Shadow Level
+    for (const [shadowKey, shadowContent] of Object.entries(shadowLevels)) {
+      if (shadowKey.startsWith('Shadow-Level/')) {
+        const level = shadowKey.split('/')[1];
+        
+        css += `[data-shadow="${level.replace('L-', '')}"] {\n`;
+        css += `  --Box-Shadow: ${generateBoxShadowValue(shadowContent)};\n`;
+        css += `}\n\n`;
+      }
+    }
+    
+    return css;
+  }
+  
+  function generateBoxShadowValue(shadowLevel) {
+    let shadowValue = '';
+    
+    // Find and process drop shadows
+    const dropShadows = Object.keys(shadowLevel)
+      .filter(key => key.startsWith('Drop'));
+    
+    dropShadows.forEach((dropKey, index) => {
+      // External shadow
+      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Horizontal) `;
+      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Vertical) `;
+      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Blur) `;
+      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Spread) `;
+      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Color)`;
+      
+      // Inset shadow
+      shadowValue += `, inset var(--Inner-Shadows-Level-${level}-${dropKey}-Horizontal) `;
+      shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Vertical) `;
+      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Blur) `;
+      shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Spread) `;
+      shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Color)`;
+      
+      // Add comma between drops, except for the last one
+      if (index < dropShadows.length - 1) {
+        shadowValue += ', ';
+      }
+    });
+    
+    return shadowValue;
+  }
   
 /**
  * Process mode target JSON structure into CSS
@@ -638,7 +697,19 @@ async function convertToCssFiles(jsonContent, outputDir) {
       path: surfaceContainersFilePath
     };
   }
-  
+  // Process shadow levels
+  if (Object.keys(jsonContent).some(key => key.startsWith('Shadow-Level/'))) {
+    const shadowLevelsCSS = processShadowLevels(jsonContent);
+    const shadowLevelsFilename = 'shadow-levels.css';
+    const shadowLevelsFilePath = path.join(outputDir, shadowLevelsFilename);
+    
+    await fs.promises.writeFile(shadowLevelsFilePath, shadowLevelsCSS, 'utf8');
+    results.shadowLevels = {
+      file: shadowLevelsFilename,
+      path: shadowLevelsFilePath
+    };
+  }
+
   // Process each mode
   for (const [modeName, modeContent] of Object.entries(jsonContent)) {
     if (modeName.startsWith('Modes/')) {
@@ -1027,6 +1098,7 @@ export {
   convertToCssFiles,
   processBackgrounds,
   extractCognitiveVariables, 
-  convertJsonFileToCssFiles
+  convertJsonFileToCssFiles,
+  processShadowLevels 
 };
 
