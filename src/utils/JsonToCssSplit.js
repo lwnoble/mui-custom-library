@@ -163,15 +163,38 @@ function extractModeVariables(bgContent, mode, backgroundType = 'default') {
  * @param {string} mode - The mode name
  * @returns {string} - Generated CSS for backgrounds
  */
-  function processBackgrounds(backgrounds, mode) {
-    let css = '';
+/**
+ * Process each background in the mode
+ * @param {Object} backgrounds - The backgrounds object
+ * @param {string} mode - The mode name
+ * @returns {string} - Generated CSS for backgrounds
+ */
+function processBackgrounds(backgrounds, mode) {
+  let css = '';
+  
+  // Process default background
+  if (backgrounds.Default) {
+    css += `/* ${mode} mode default background */\n`;
+    css += `[data-mode="${mode}"] [data-background] {\n`;
     
-    // Process default background
-    if (backgrounds.Default) {
-      css += `/* ${mode} mode specific backgrounds */\n`;
-      css += `[data-mode="${mode}"] [data-background] {\n`;
+    const variables = extractModeVariables(backgrounds.Default, mode);
+    variables.forEach(variable => {
+      css += variable;
+    });
+    
+    css += '}\n\n';
+  }
+  
+  // Process other named backgrounds
+  for (const [bgName, bgContent] of Object.entries(backgrounds)) {
+    // Handle standard backgrounds
+    if (bgName !== 'Default' && !bgName.startsWith('StatusBar/')) {
+      const bgNameLower = bgName.toLowerCase();
       
-      const variables = extractModeVariables(backgrounds.Default, mode);
+      css += `/* ${mode} mode specific background */\n`;
+      css += `[data-mode="${mode}"] [data-background="${bgNameLower}"] {\n`;
+      
+      const variables = extractModeVariables(bgContent, mode, bgNameLower);
       variables.forEach(variable => {
         css += variable;
       });
@@ -179,25 +202,29 @@ function extractModeVariables(bgContent, mode, backgroundType = 'default') {
       css += '}\n\n';
     }
     
-    // Process other named backgrounds
-    for (const [bgName, bgContent] of Object.entries(backgrounds)) {
-      if (bgName !== 'Default') {
-        const bgNameLower = bgName.toLowerCase();
-        
-        css += `/* ${mode} mode specific backgrounds */\n`;
-        css += `[data-mode="${mode}"] [data-background="${bgNameLower}"] {\n`;
-        
-        const variables = extractModeVariables(bgContent, mode, bgNameLower);
-        variables.forEach(variable => {
-          css += variable;
-        });
-        
-        css += '}\n\n';
+    // Handle StatusBar backgrounds
+    if (bgName.startsWith('StatusBar/')) {
+      // Find which color/variant is set to "true"
+      for (const [colorKey, colorValue] of Object.entries(bgContent)) {
+        if (colorValue.value === 'true' && colorKey !== 'StatusBar-Label') {
+          const statusBarLabel = bgContent['StatusBar-Label'].value;
+          const colorLower = colorKey.toLowerCase();
+          
+          css += `/* ${mode} mode ${statusBarLabel} background */\n`;
+          css += `[data-mode="${mode}"] [data-background="${statusBarLabel}"],\n`;
+          css += `[data-mode="${mode}"] [data-background="${colorLower}"] {\n`;
+          
+          // You can add specific styles for these backgrounds here if needed
+          css += `  /* ${statusBarLabel} ${colorKey} background styles */\n`;
+          
+          css += '}\n\n';
+        }
       }
     }
-    
-    return css;
   }
+  
+  return css;
+}
   
 /**
  * Process mode target JSON structure into CSS
