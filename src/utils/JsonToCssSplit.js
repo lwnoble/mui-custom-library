@@ -18,28 +18,30 @@ const __dirname = path.dirname(__filename);
  * @returns {string} - The converted value
  */
 function convertFontFamilyReference(value) {
-  // First check if value is a string
-  if (typeof value !== 'string') {
+    // First check if value is a string
+    if (typeof value !== 'string') {
+      return value;
+    }
+    
+    // Check if it's a reference (enclosed in braces)
+    if (value.startsWith('{') && value.endsWith('}')) {
+      // Replace periods with dashes in variable references
+      const varName = value.substring(1, value.length - 1).replace(/\./g, '-');
+      
+      // Special handling for font families
+      if (varName.includes('Congnitive-Font-Families')) {
+        return `var(--${varName})`;
+      } else if (varName.includes('System-Font-Families')) {
+        return `var(--${varName})`;
+      } else {
+        // Generic handling for other references
+        return `var(--${varName})`;
+      }
+    }
+    
+    // If not a reference, return as is
     return value;
   }
-  
-  // Check if it's a reference (enclosed in braces)
-  if (value.startsWith('{') && value.endsWith('}')) {
-    if (value.includes('.Standard')) {
-      return "var(--System-Font-Families-Standard)";
-    } else if (value.includes('.Decorative')) {
-      return "var(--System-Font-Families-Decorative)";
-    } else {
-      // Generic fallback for other references
-      const refName = value.substring(1, value.length - 1);
-      const parts = refName.split('.');
-      return `var(--System-${parts.join('-')})`;
-    }
-  }
-  
-  // If not a reference, return as is
-  return value;
-}
 
 /**
  * Convert System tokens to CSS custom properties
@@ -107,54 +109,95 @@ function convertSystemToCss(jsonContent) {
  * @param {string} backgroundType - The background type (e.g., "Default", "Primary")
  * @returns {Array} - Array of CSS variable declarations
  */
+/**
+ * Extract all mode variables from the background content
+ * @param {Object} bgContent - The background content object
+ * @param {string} mode - The mode name (e.g., "AA-dark")
+ * @param {string} backgroundType - The background type (e.g., "Default", "Primary")
+ * @returns {Array} - Array of CSS variable declarations
+ */
 function extractModeVariables(bgContent, mode, backgroundType = 'default') {
     const variables = [];
     
-    // Define properties in the desired order
-    const surfaceProps = [
-      'Surface', 'Surface-Dim', 'Surface-Bright', 
-      'Surface-Quiet', 'Surface-Dim-Quiet', 'Surface-Bright-Quiet'
+    // Process all properties in the background content
+    for (const [propName, propObj] of Object.entries(bgContent)) {
+      // Skip label properties or properties without values
+      if (propName === 'SurfaceContainer-Label' || !propObj || propObj.value === undefined) {
+        continue;
+      }
+      
+      // Add the variable with its value
+      variables.push(`  --${propName}: ${propObj.value};\n`);
+    }
+    
+    // Order is important, so sort the variables in a logical sequence
+    // Here we can define a specific ordering for important properties
+    const orderedVariables = [
+      // Surface properties
+      ...variables.filter(v => v.includes('--Surface:')),
+      ...variables.filter(v => v.includes('--Surface-Dim:')),
+      ...variables.filter(v => v.includes('--Surface-Bright:')),
+      ...variables.filter(v => v.includes('--Surface-Quiet:')),
+      ...variables.filter(v => v.includes('--Surface-Dim-Quiet:')),
+      ...variables.filter(v => v.includes('--Surface-Bright-Quiet:')),
+      
+      // Container properties
+      ...variables.filter(v => v.includes('--Container:')),
+      ...variables.filter(v => v.includes('--Container-Low:')),
+      ...variables.filter(v => v.includes('--Container-Lowest:')),
+      ...variables.filter(v => v.includes('--Container-High:')),
+      ...variables.filter(v => v.includes('--Container-Highest:')),
+      ...variables.filter(v => v.includes('--Container-On-Quiet:')),
+      ...variables.filter(v => v.includes('--Container-Low-Quiet:')),
+      ...variables.filter(v => v.includes('--Container-Lowest-Quiet:')),
+      ...variables.filter(v => v.includes('--Container-High-Quiet:')),
+      ...variables.filter(v => v.includes('--Container-Highest-Quiet:')),
+      
+      // Dropdown colors
+      ...variables.filter(v => v.includes('--Dropdown-Color-')),
+      
+      // Icon properties
+      ...variables.filter(v => v.includes('--Surface-Icon-')),
+      ...variables.filter(v => v.includes('--Container-Icon-')),
+      
+      // Border properties
+      ...variables.filter(v => v.includes('--Surface-Border')),
+      ...variables.filter(v => v.includes('--Container-Border')),
+      
+      // Button properties
+      ...variables.filter(v => v.includes('--Surface-Button')),
+      ...variables.filter(v => v.includes('--Container-Button')),
+      ...variables.filter(v => v.includes('--Surface-On-Button')),
+      ...variables.filter(v => v.includes('--Container-On-Button')),
+      ...variables.filter(v => v.includes('--Surface-Light-Button')),
+      ...variables.filter(v => v.includes('--Container-Light-Button')),
+      ...variables.filter(v => v.includes('--Surface-On-Light-Button')),
+      ...variables.filter(v => v.includes('--Container-On-Light-Button')),
+      
+      // Hotlink properties
+      ...variables.filter(v => v.includes('--Surface-Hotlink')),
+      ...variables.filter(v => v.includes('--Container-Hotlink')),
+      
+      // Any remaining properties not captured by the filters above
+      ...variables.filter(v => 
+        !v.includes('--Surface-Icon-') && 
+        !v.includes('--Container-Icon-') && 
+        !v.includes('--Surface-Border') && 
+        !v.includes('--Container-Border') && 
+        !v.includes('--Surface-Button') && 
+        !v.includes('--Container-Button') && 
+        !v.includes('--Surface-On-Button') && 
+        !v.includes('--Container-On-Button') && 
+        !v.includes('--Surface-Light-Button') && 
+        !v.includes('--Container-Light-Button') && 
+        !v.includes('--Surface-On-Light-Button') && 
+        !v.includes('--Container-On-Light-Button') && 
+        !v.includes('--Surface-Hotlink') && 
+        !v.includes('--Container-Hotlink')
+      )
     ];
     
-    const containerProps = [
-      'Container', 'Container-Low', 'Container-Lowest', 
-      'Container-High', 'Container-Highest', 
-      'Container-On-Quiet', 'Container-Low-Quiet', 
-      'Container-Lowest-Quiet', 'Container-High-Quiet', 
-      'Container-Highest-Quiet'
-    ];
-    
-    const dropdownProps = [
-      'Dropdown-Color-1', 'Dropdown-Color-2', 'Dropdown-Color-3', 
-      'Dropdown-Color-4', 'Dropdown-Color-5'
-    ];
-    
-    // Process surface properties
-    surfaceProps.forEach(prop => {
-      const fullProp = prop.includes('Surface-') ? prop : `Surface-${prop}`;
-      if (bgContent[fullProp] && bgContent[fullProp].value !== undefined) {
-        variables.push(`  --${prop}: ${bgContent[fullProp].value};\n`);
-      }
-    });
-    
-    // Process container properties
-    containerProps.forEach(prop => {
-      const fullProp = prop.replace('On-Quiet', '-Quiet');
-      if (bgContent[fullProp] && bgContent[fullProp].value !== undefined) {
-        // Special handling for Container-Quiet
-        const variableName = prop === 'Container-On-Quiet' ? 'Container-Quiet' : prop;
-        variables.push(`  --${prop}: ${bgContent[fullProp].value};\n`);
-      }
-    });
-    
-    // Process dropdown colors
-    dropdownProps.forEach(prop => {
-      if (bgContent[prop] && bgContent[prop].value !== undefined) {
-        variables.push(`  --${prop}: ${bgContent[prop].value};\n`);
-      }
-    });
-    
-    return variables;
+    return orderedVariables;
   }
 
   /**
@@ -238,7 +281,7 @@ function processShadowLevels(shadowLevels) {
       if (shadowKey.startsWith('Shadow-Level/')) {
         const level = shadowKey.split('/')[1];
         
-        css += `--Box-Shadow-${level.replace('L-', '')}: ${generateBoxShadowValue(shadowContent, level)};\n`;
+        css += `--Box-Shadow-${level.replace('L-', '').replace(/\s+&\s+/g, '-')}: ${generateBoxShadowValue(shadowContent, level)};\n`;
       }
     }
     
@@ -257,21 +300,58 @@ function processShadowLevels(shadowLevels) {
     }
     
     // Specific Shadow Use Cases
-  // Specific Shadow Use Cases
-  const shadowUseCases = [
-    { selector: 'Buttons', level: '0' },
-    { selector: 'Buttons-Hover', level: '2' },
-    { selector: 'Buttons-Raised', level: '3' },
-    { selector: 'Buttons-Raised-Hover', level: '4' }
-  ];
+    const shadowUseCases = [
+      { selector: 'Buttons', level: '0' },
+      { selector: 'Buttons-Hover', level: '2' },
+      { selector: 'Buttons-Raised', level: '3' },
+      { selector: 'Buttons-Raised-Hover', level: '4' },
+      { selector: 'Cards', level: '2' },
+      { selector: 'Cards-Hover', level: '3' },
+      { selector: 'Cards-Bottom-Sheet', level: '4' },  // Renamed from "Cards & Bottom Sheet"
+      { selector: 'Navigation', level: '5' }
+    ];
     
     shadowUseCases.forEach(useCase => {
       css += `[data-shadow="${useCase.selector}"] {\n`;
-      css += `  --Box-Shadow: var(--Box-Shadow-${useCase.level});\n`;
+      css += `  --Box-Shadow: var(--Box-Shadow-${useCase.selector});\n`;
       css += `}\n\n`;
     });
     
     return css;
+  }
+  
+  function generateBoxShadowValue(shadowLevel, level) {
+    let shadowValue = '';
+    
+    // Replace any spaces and ampersands in the level name for variable references
+    const sanitizedLevel = level.replace(/\s+&\s+/g, '-');
+    
+    // Find and process drop shadows
+    const dropShadows = Object.keys(shadowLevel)
+      .filter(key => key.startsWith('Drop'));
+    
+    dropShadows.forEach((dropKey, index) => {
+      // External shadow
+      shadowValue += `var(--Shadows-Level-${sanitizedLevel}-${dropKey}-Horizontal) `;
+      shadowValue += `var(--Shadows-Level-${sanitizedLevel}-${dropKey}-Vertical) `;
+      shadowValue += `var(--Shadows-Level-${sanitizedLevel}-${dropKey}-Blur) `;
+      shadowValue += `var(--Shadows-Level-${sanitizedLevel}-${dropKey}-Spread) `;
+      shadowValue += `var(--Shadows-Level-${sanitizedLevel}-${dropKey}-Color)`;
+      
+      // Inset shadow
+      shadowValue += `, inset var(--Inner-Shadows-Level-${sanitizedLevel}-${dropKey}-Horizontal) `;
+      shadowValue += `var(--Inner-Shadows-Level-${sanitizedLevel}-${dropKey}-Vertical) `;
+      shadowValue += `var(--Inner-Shadows-Level-${sanitizedLevel}-${dropKey}-Blur) `;
+      shadowValue += `var(--Inner-Shadows-Level-${sanitizedLevel}-${dropKey}-Spread) `;
+      shadowValue += `var(--Inner-Shadows-Level-${sanitizedLevel}-${dropKey}-Color)`;
+      
+      // Add comma between drops, except for the last one
+      if (index < dropShadows.length - 1) {
+        shadowValue += ', ';
+      }
+    });
+    
+    return shadowValue;
   }
   
   function generateBoxShadowValue(shadowLevel, level) {
@@ -468,7 +548,7 @@ function extractPlatformVariables(platformContent, platformName) {
     return variables;
 }
 
-  function extractCognitiveVariables(cognitiveContent) {
+function extractCognitiveVariables(cognitiveContent) {
     const variables = [];
     
     // Add Cognitive Font Families
@@ -497,7 +577,7 @@ function extractPlatformVariables(platformContent, platformName) {
             // Handle font family references
             let value = propObj.value;
             if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-              // Remove braces and convert to CSS variable reference
+              // Remove braces and convert periods to dashes in CSS variable reference
               value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
             }
             
@@ -516,8 +596,8 @@ function extractPlatformVariables(platformContent, platformName) {
     });
     
     // Process Spacing values
-    if (cognitiveContent['Cognitive-Default']?.Spacing) {
-      Object.entries(cognitiveContent['Cognitive-Default'].Spacing).forEach(([spacingName, spacingObj]) => {
+    if (defaultContent?.Spacing) {
+      Object.entries(defaultContent.Spacing).forEach(([spacingName, spacingObj]) => {
         // Skip entries without a value
         if (spacingObj.value === undefined) return;
         
@@ -533,8 +613,8 @@ function extractPlatformVariables(platformContent, platformName) {
     }
     
     // Add Target if exists
-    if (cognitiveContent['Cognitive-Default']?.Target) {
-      const targetValue = cognitiveContent['Cognitive-Default'].Target.value;
+    if (defaultContent?.Target) {
+      const targetValue = defaultContent.Target.value;
       variables.push(`  --Cognitive-Target: var(--Platform-Default-Target);\n`);
     }
     

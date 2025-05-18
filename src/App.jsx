@@ -1,9 +1,10 @@
 import React from 'react';
+import ThemeButtonDemo from './Components/ThemeButtonDemo.jsx'; // Added .jsx extension
 
 function App() {
   return (
-    <div>
-      <h1>Hello from React!</h1>
+    <div className="App">
+      <ThemeButtonDemo />
     </div>
   );
 }
