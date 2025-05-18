@@ -359,8 +359,17 @@ function processShadowLevels(shadowLevels) {
     return shadowValue;
   }
   
-  function generateBoxShadowValue(shadowLevel, level) {
+/**
+ * Generate a proper box shadow value from the shadow level configuration
+ * @param {Object} shadowLevel - The shadow level configuration
+ * @param {string} level - The level name/identifier
+ * @returns {string} - The generated box shadow value
+ */
+function generateBoxShadowValue(shadowLevel, level) {
     let shadowValue = '';
+    
+    // Replace any spaces and ampersands in the level name for variable references
+    const sanitizedLevel = level.replace(/\s+&\s+/g, '-');
     
     // Find and process drop shadows
     const dropShadows = Object.keys(shadowLevel)
@@ -368,18 +377,18 @@ function processShadowLevels(shadowLevels) {
     
     dropShadows.forEach((dropKey, index) => {
       // External shadow
-      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Horizontal) `;
-      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Vertical) `;
-      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Blur) `;
-      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Spread) `;
-      shadowValue += `var(--Shadows-Level-${level}-${dropKey}-Color)`;
+      shadowValue += `var(--Shadows-Level-${sanitizedLevel}-${dropKey}-Horizontal) `;
+      shadowValue += `var(--Shadows-Level-${sanitizedLevel}-${dropKey}-Vertical) `;
+      shadowValue += `var(--Shadows-Level-${sanitizedLevel}-${dropKey}-Blur) `;
+      shadowValue += `var(--Shadows-Level-${sanitizedLevel}-${dropKey}-Spread) `;
+      shadowValue += `var(--Shadows-Level-${sanitizedLevel}-${dropKey}-Color)`;
       
       // Inset shadow
-      shadowValue += `, inset var(--Inner-Shadows-Level-${level}-${dropKey}-Horizontal) `;
-      shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Vertical) `;
-      shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Blur) `;
-      shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Spread) `;
-      shadowValue += `var(--Inner-Shadows-Level-${level}-${dropKey}-Color)`;
+      shadowValue += `, inset var(--Inner-Shadows-Level-${sanitizedLevel}-${dropKey}-Horizontal) `;
+      shadowValue += `var(--Inner-Shadows-Level-${sanitizedLevel}-${dropKey}-Vertical) `;
+      shadowValue += `var(--Inner-Shadows-Level-${sanitizedLevel}-${dropKey}-Blur) `;
+      shadowValue += `var(--Inner-Shadows-Level-${sanitizedLevel}-${dropKey}-Spread) `;
+      shadowValue += `var(--Inner-Shadows-Level-${sanitizedLevel}-${dropKey}-Color)`;
       
       // Add comma between drops, except for the last one
       if (index < dropShadows.length - 1) {
