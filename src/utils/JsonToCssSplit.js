@@ -272,20 +272,23 @@ function processBackgrounds(backgrounds, mode) {
 function processShadowLevels(shadowLevels) {
     let css = '';
     
-    // Generate Box Shadow Variables
-    css += `/* Box Shadow Variables */\n`;
-    css += `--Box-Shadow-0: none;\n`;
+    // Start a :root block for the shadow variables
+    css += `/* Box Shadow Variables */\n:root, ::after, ::before {\n`;
+    
+    // Add the default shadow
+    css += `  --Box-Shadow-0: none;\n`;
     
     // Process each Shadow Level
     for (const [shadowKey, shadowContent] of Object.entries(shadowLevels)) {
       if (shadowKey.startsWith('Shadow-Level/')) {
         const level = shadowKey.split('/')[1];
         
-        css += `--Box-Shadow-${level.replace('L-', '').replace(/\s+&\s+/g, '-')}: ${generateBoxShadowValue(shadowContent, level)};\n`;
+        css += `  --Box-Shadow-${level.replace('L-', '').replace(/\s+&\s+/g, '-')}: ${generateBoxShadowValue(shadowContent, level)};\n`;
       }
     }
     
-    css += '\n';
+    // Close the :root block
+    css += `}\n\n`;
     
     // Default shadow (no attribute)
     css += `[data-shadow] {\n`;
@@ -308,7 +311,9 @@ function processShadowLevels(shadowLevels) {
       { selector: 'Cards', level: '2' },
       { selector: 'Cards-Hover', level: '3' },
       { selector: 'Cards-Bottom-Sheet', level: '4' },  // Renamed from "Cards & Bottom Sheet"
-      { selector: 'Navigation', level: '5' }
+      { selector: 'Navigation', level: '5' },
+      { selector: 'Floating-Action', level: '5' },
+      { selector: 'Floating-Action-Hover', level: '5' }
     ];
     
     shadowUseCases.forEach(useCase => {
@@ -318,7 +323,7 @@ function processShadowLevels(shadowLevels) {
     });
     
     return css;
-  }
+}
   
   function generateBoxShadowValue(shadowLevel, level) {
     let shadowValue = '';
