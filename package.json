@@ -9,13 +9,13 @@
     "src/styles/theme-files"
   ],
   "scripts": {
-   "generate-css": "node src/utils/convert-theme-tokens.js",
-    "prepare": "npm run generate-css",  
+    "generate-css": "node src/utils/convert-theme-tokens.js",
+    "prepare": "npm run generate-css",
     "build:lib": "echo 'Build lib script placeholder'",
     "convert-tokens": "node utils/convert-theme-tokens.js",
-    "start": "webpack serve --mode development",
-    "build": "webpack --mode production",
-    "test": "react-scripts test",
+    "start": "webpack serve --config webpack.config.mjs",
+    "build": "NODE_ENV=production webpack --config webpack.config.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "eject": "react-scripts eject"
   },
   "keywords": [
@@ -29,19 +29,23 @@
   "license": "MIT",
   "dependencies": {
     "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0", 
+    "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.0.2",
     "@mui/material": "^7.0.2",
     "prop-types": "^15.8.1"
   },
   "peerDependencies": {
-    "react": "^17.0.0 || ^18.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.21.0",
-    "@babel/core": "^7.21.4",
-    "@babel/preset-env": "^7.21.4",
-    "@babel/preset-react": "^7.18.6"
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-react": "^7.27.1",
+    "babel-loader": "^10.0.0",
+    "css-loader": "^7.1.2",
+    "html-webpack-plugin": "^5.6.3",
+    "style-loader": "^4.0.0"
   }
 }
