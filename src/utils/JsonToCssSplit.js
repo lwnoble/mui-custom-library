@@ -325,40 +325,6 @@ function processShadowLevels(shadowLevels) {
     return css;
 }
   
-  function generateBoxShadowValue(shadowLevel, level) {
-    let shadowValue = '';
-    
-    // Replace any spaces and ampersands in the level name for variable references
-    const sanitizedLevel = level.replace(/\s+&\s+/g, '-');
-    
-    // Find and process drop shadows
-    const dropShadows = Object.keys(shadowLevel)
-      .filter(key => key.startsWith('Drop'));
-    
-    dropShadows.forEach((dropKey, index) => {
-      // External shadow
-      shadowValue += `var(--Shadows-Level-${sanitizedLevel}-${dropKey}-Horizontal) `;
-      shadowValue += `var(--Shadows-Level-${sanitizedLevel}-${dropKey}-Vertical) `;
-      shadowValue += `var(--Shadows-Level-${sanitizedLevel}-${dropKey}-Blur) `;
-      shadowValue += `var(--Shadows-Level-${sanitizedLevel}-${dropKey}-Spread) `;
-      shadowValue += `var(--Shadows-Level-${sanitizedLevel}-${dropKey}-Color)`;
-      
-      // Inset shadow
-      shadowValue += `, inset var(--Inner-Shadows-Level-${sanitizedLevel}-${dropKey}-Horizontal) `;
-      shadowValue += `var(--Inner-Shadows-Level-${sanitizedLevel}-${dropKey}-Vertical) `;
-      shadowValue += `var(--Inner-Shadows-Level-${sanitizedLevel}-${dropKey}-Blur) `;
-      shadowValue += `var(--Inner-Shadows-Level-${sanitizedLevel}-${dropKey}-Spread) `;
-      shadowValue += `var(--Inner-Shadows-Level-${sanitizedLevel}-${dropKey}-Color)`;
-      
-      // Add comma between drops, except for the last one
-      if (index < dropShadows.length - 1) {
-        shadowValue += ', ';
-      }
-    });
-    
-    return shadowValue;
-  }
-  
 /**
  * Generate a proper box shadow value from the shadow level configuration
  * @param {Object} shadowLevel - The shadow level configuration
