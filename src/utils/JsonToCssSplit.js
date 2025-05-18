@@ -468,7 +468,7 @@ function extractChartVariables(chartContent) {
 }
 
 /**
-* Extract platform typography variables
+* Extract platform typography variables with corrected font family references
 * @param {Object} platformContent - The platform content object
 * @param {String} platformName - The platform name
 * @returns {Array} - Array of CSS variable declarations
@@ -499,10 +499,17 @@ function extractPlatformVariables(platformContent, platformName) {
           
           // Convert reference format {Something.Something} to var(--Something-Something)
           if (typeof cssValue === 'string' && cssValue.startsWith('{') && cssValue.endsWith('}')) {
-            // Special handling for font families to match the exact output
-            if (cssValue.includes('Congnitive-Font-Families')) {
-              cssValue = cssValue.replace('{Congnitive-Font-Families', 'var(--Congnitive-Font-Families');
+            // Special handling for font families with consistent formatting
+            if (cssValue.includes('Cognitive-Font-Families') || cssValue.includes('Congnitive-Font-Families')) {
+              // Fix the spelling if needed (Congnitive → Cognitive)
+              cssValue = cssValue
+                .replace('Congnitive-Font-Families', 'Cognitive-Font-Families')
+                .replace(/[{}]/g, '') // Remove both braces
+                .replace(/\./g, '-'); // Replace dots with dashes
+              
+              cssValue = `var(--${cssValue})`;
             } else {
+              // Generic handling for other references
               cssValue = cssValue.replace(/[{}]/g, '').replace(/\./g, '-');
               cssValue = `var(--${cssValue})`;
             }
