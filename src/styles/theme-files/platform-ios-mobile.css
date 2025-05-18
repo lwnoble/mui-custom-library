@@ -1,5 +1,7 @@
-:root, ::after, ::before {
-  /* IOS-Mobile platform specific typography */
+/* IOS-Mobile platform specific typography */
+[data-platform="IOS-Mobile"] {
+  --Platform-Font-Families-Standard: "SF Pro";
+  --Platform-Font-Families-Decorative: "SF Pro";
   --Android: none;
   --IOS: block;
   --Desktop: none;
@@ -246,3 +248,4 @@
   --Platform-Buttons-Extra-Small-SR-Character-Spacing: 1.32px;
   --Platform-Target: 44px;
 }
+

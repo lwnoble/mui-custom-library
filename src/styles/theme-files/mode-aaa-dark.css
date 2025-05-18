@@ -1,19 +1,5 @@
-:root, ::after, ::before {
-/* AAA-dark mode paragraph spacing */
-  --Body-Medium: var(--Cognitive-Default-Body-Medium-AAA-Paragraph-Spacing);
-  --Body-Small: var(--Cognitive-Default-Body-Small-AAA-Paragraph-Spacing);
-  --Body-Large: var(--Cognitive-Default-Body-Large-AAA-Paragraph-Spacing);
-  --Legal: var(--Cognitive-2x-Legal-Standard-AAA-Paragraph-Spacing);
-  --Caption: var(--Cognitive-Default-Captions-Standard-AAA-Paragraph-Spacing);
-
-/* AAA-dark mode targets */
-  --Mode-Target-Desktop: 48px;
-  --Mode-Target-Android: 48px;
-  --Mode-Target-IOS-Mobile: 48px;
-  --Mode-Target-IOS-Tablet: 48px;
-}
-
-[data-background] {
+/* AAA-dark mode specific backgrounds */
+[data-mode="AAA-dark"] [data-background] {
   --Surface: #1f2928;
   --Surface-Dim: #1b2221;
   --Surface-Bright: #293534;
@@ -100,7 +86,7 @@
 }
 
 /* AAA-dark mode specific backgrounds */
-[data-background="primary"] {
+[data-mode="AAA-dark"] [data-background="primary"] {
   --Surface: #161c1b;
   --Surface-Dim: #141918;
   --Surface-Bright: #1d2524;
@@ -189,7 +175,7 @@
 }
 
 /* AAA-dark mode specific backgrounds */
-[data-background="primary-light"] {
+[data-mode="AAA-dark"] [data-background="primary-light"] {
   --Surface: #182220;
   --Surface-Dim: #161d1c;
   --Surface-Bright: #202c2b;
@@ -278,7 +264,7 @@
 }
 
 /* AAA-dark mode specific backgrounds */
-[data-background="primary-dark"] {
+[data-mode="AAA-dark"] [data-background="primary-dark"] {
   --Surface: #141717;
   --Surface-Dim: #131515;
   --Surface-Bright: #1b1f1f;
@@ -368,7 +354,7 @@
 }
 
 /* AAA-dark mode specific backgrounds */
-[data-background="secondary"] {
+[data-mode="AAA-dark"] [data-background="secondary"] {
   --Surface: #3f1e19;
   --Surface-Dim: #331a17;
   --Surface-Bright: #4f2821;
@@ -458,7 +444,7 @@
 }
 
 /* AAA-dark mode specific backgrounds */
-[data-background="secondary-light"] {
+[data-mode="AAA-dark"] [data-background="secondary-light"] {
   --Surface: #422723;
   --Surface-Dim: #35211d;
   --Surface-Bright: #52332e;
@@ -550,7 +536,7 @@
 }
 
 /* AAA-dark mode specific backgrounds */
-[data-background="secondary-dark"] {
+[data-mode="AAA-dark"] [data-background="secondary-dark"] {
   --Surface: #161c1b;
   --Surface-Dim: #141918;
   --Surface-Bright: #1d2524;
@@ -640,7 +626,7 @@
 }
 
 /* AAA-dark mode specific backgrounds */
-[data-background="tertiary"] {
+[data-mode="AAA-dark"] [data-background="tertiary"] {
   --Surface: #3c382a;
   --Surface-Dim: #312d23;
   --Surface-Bright: #4b4636;
@@ -729,7 +715,7 @@
 }
 
 /* AAA-dark mode specific backgrounds */
-[data-background="tertiary-light"] {
+[data-mode="AAA-dark"] [data-background="tertiary-light"] {
   --Surface: #3f3b2f;
   --Surface-Dim: #333026;
   --Surface-Bright: #4d493b;
@@ -819,7 +805,7 @@
 }
 
 /* AAA-dark mode specific backgrounds */
-[data-background="tertiary-dark"] {
+[data-mode="AAA-dark"] [data-background="tertiary-dark"] {
   --Surface: #37311e;
   --Surface-Dim: #2d281a;
   --Surface-Bright: #453e28;
@@ -909,7 +895,7 @@
 }
 
 /* AAA-dark mode specific backgrounds */
-[data-background="white"] {
+[data-mode="AAA-dark"] [data-background="white"] {
   --Surface: #4a4a4a;
   --Surface-Dim: #3c3c3c;
   --Surface-Bright: #5b5b5b;
@@ -998,7 +984,7 @@
 }
 
 /* AAA-dark mode specific backgrounds */
-[data-background="grey"] {
+[data-mode="AAA-dark"] [data-background="grey"] {
   --Surface: #282828;
   --Surface-Dim: #222222;
   --Surface-Bright: #343434;
@@ -1087,7 +1073,7 @@
 }
 
 /* AAA-dark mode specific backgrounds */
-[data-background="black"] {
+[data-mode="AAA-dark"] [data-background="black"] {
   --Surface: #1f2928;
   --Surface-Dim: #1b2221;
   --Surface-Bright: #293534;
@@ -1175,8 +1161,16 @@
   --Container-Message-Padding: 0;
 }
 
+/* AAA-dark mode targets */
+[data-mode="AAA-dark"] {
+  --Mode-Target-Desktop: 48px;
+  --Mode-Target-Android: 48px;
+  --Mode-Target-IOS-Mobile: 48px;
+  --Mode-Target-IOS-Tablet: 48px;
+}
+
 /* AAA-dark mode Red-Weak chart */
-[charts="Red-Weak"] {
+[data-mode="AAA-dark"] [charts="Red-Weak"] {
   --Chart-1: #3f6cdf;
   --Chart-2: #347aa5;
   --Chart-3: #4ea1cf;
@@ -1201,7 +1195,7 @@
 }
 
 /* AAA-dark mode Blue-Weak chart */
-[charts="Blue-Weak"] {
+[data-mode="AAA-dark"] [charts="Blue-Weak"] {
   --Chart-1: #3f6cdf;
   --Chart-2: #347aa5;
   --Chart-3: #4ea1cf;
@@ -1226,7 +1220,7 @@
 }
 
 /* AAA-dark mode Green-Weak chart */
-[charts="Green-Weak"] {
+[data-mode="AAA-dark"] [charts="Green-Weak"] {
   --Chart-1: #347aa5;
   --Chart-2: #3f6cdf;
   --Chart-3: #6e70ae;
@@ -1251,7 +1245,7 @@
 }
 
 /* AAA-dark mode Red-Blind chart */
-[charts="Red-Blind"] {
+[data-mode="AAA-dark"] [charts="Red-Blind"] {
   --Chart-1: #ffdbc6;
   --Chart-2: #a1afdd;
   --Chart-3: #3679cf;
@@ -1276,7 +1270,7 @@
 }
 
 /* AAA-dark mode Blue-Blind chart */
-[charts="Blue-Blind"] {
+[data-mode="AAA-dark"] [charts="Blue-Blind"] {
   --Chart-1: #226f78;
   --Chart-2: #3d8c98;
   --Chart-3: #67989b;
@@ -1301,7 +1295,7 @@
 }
 
 /* AAA-dark mode Green-Blind chart */
-[charts="Green-Blind"] {
+[data-mode="AAA-dark"] [charts="Green-Blind"] {
   --Chart-1: #f2b501;
   --Chart-2: #a88022;
   --Chart-3: #ab9283;
@@ -1326,7 +1320,7 @@
 }
 
 /* AAA-dark mode Blue-Cone chart */
-[charts="Blue-Cone"] {
+[data-mode="AAA-dark"] [charts="Blue-Cone"] {
   --Chart-1: #9056d4;
   --Chart-2: #347aa5;
   --Chart-3: #4ea1cf;
@@ -1351,7 +1345,7 @@
 }
 
 /* AAA-dark mode Monochromatic chart */
-[charts="Monochromatic"] {
+[data-mode="AAA-dark"] [charts="Monochromatic"] {
   --Chart-1: #ffffff;
   --Chart-2: #ffffff;
   --Chart-3: #ffffff;
@@ -1375,7 +1369,7 @@
 }
 
 /* AAA-dark mode Default chart */
-[charts="Default"] {
+[data-mode="AAA-dark"] [charts="Default"] {
   --Chart-1: #598a84;
   --Chart-2: #d85640;
   --Chart-3: #cdbb87;
@@ -1401,3 +1395,13 @@
   --Chart-Axis-Color: rgba(255,255,255,0.75);
   --Chart-Grid-Color: rgba(255,255,255,0.15);
 }
+
+/* AAA-dark mode paragraph spacing */
+[data-mode="AAA-dark"] {
+  --Body-Medium: var(--Cognitive-Default-Body-Medium-AAA-Paragraph-Spacing);
+  --Body-Small: var(--Cognitive-Default-Body-Small-AAA-Paragraph-Spacing);
+  --Body-Large: var(--Cognitive-Default-Body-Large-AAA-Paragraph-Spacing);
+  --Legal: var(--Cognitive-2x-Legal-Standard-AAA-Paragraph-Spacing);
+  --Caption: var(--Cognitive-Default-Captions-Standard-AAA-Paragraph-Spacing);
+}
+

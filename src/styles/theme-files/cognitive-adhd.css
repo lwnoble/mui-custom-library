@@ -1,4 +1,4 @@
-:root, ::after, ::before {
+[data-cognitive-profile] {
   --Congnitive-Font-Families-Standard: "Open Sans";
   --Congnitive-Font-Families-Decorative: "Open Sans";
   --Cognitive-Body-Small-Font-Family: var(--Congnitive-Font-Families-Standard);
