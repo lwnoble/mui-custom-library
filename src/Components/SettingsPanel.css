@@ -1,0 +1,158 @@
+/* SettingsPanel.css */
+/* Sliding panel for settings */
+.settings-toggle-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--Container-Button, #3a6661);
+    color: var(--Container-On-Button, #ffffff);
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+  }
+  
+  .settings-toggle-button:hover {
+    background-color: var(--Container-Button-Hover, #d95c49);
+  }
+  
+  .settings-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 380px;
+    height: 100%;
+    background-color: var(--Container, #f2f6f5);
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: right 0.3s ease-in-out;
+    overflow-y: auto;
+  }
+  
+  .settings-panel.open {
+    right: 0;
+  }
+  
+  .settings-panel-content {
+    padding: 20px;
+  }
+  
+  .settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--Container-Border, #6b8b87);
+  }
+  
+  .settings-header h2 {
+    margin: 0;
+    color: var(--On-Container, #2e4e4b);
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--On-Container, #2e4e4b);
+  }
+  
+  .settings-section {
+    margin-bottom: 30px;
+  }
+  
+  .settings-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--On-Container, #2e4e4b);
+    font-size: 1.1em;
+  }
+  
+  .setting-group {
+    margin-bottom: 20px;
+  }
+  
+  .setting-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: var(--On-Container, #2e4e4b);
+  }
+  
+  .toggle-group {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .toggle-button {
+    padding: 8px 16px;
+    background-color: var(--Container-Highest, #e5edec);
+    border: 1px solid var(--Container-Border, #6b8b87);
+    border-radius: 4px;
+    cursor: pointer;
+    flex: 1;
+    color: var(--On-Container, #2e4e4b);
+    transition: all 0.2s;
+  }
+  
+  .toggle-button.active {
+    background-color: var(--Container-Button, #c94935);
+    color: var(--Container-On-Button, #ffffff);
+    border-color: var(--Container-Button, #c94935);
+  }
+  
+  .select-wrapper {
+    position: relative;
+  }
+  
+  .select-wrapper select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--Container-Border, #6b8b87);
+    border-radius: 4px;
+    background-color: var(--Container-Highest, #e5edec);
+    color: var(--On-Container, #2e4e4b);
+    appearance: none;
+    cursor: pointer;
+  }
+  
+  .select-wrapper::after {
+    content: '▼';
+    font-size: 12px;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  
+  .settings-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  }
+  
+  .reset-button {
+    padding: 10px 20px;
+    background-color: var(--Container-Highest, #e5edec);
+    border: 1px solid var(--Container-Border, #6b8b87);
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--On-Container, #2e4e4b);
+    transition: all 0.2s;
+  }
+  
+  .reset-button:hover {
+    background-color: var(--Container-Highest-Quiet, #506b68);
+    color: white;
+  }

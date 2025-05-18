@@ -468,13 +468,28 @@ function extractChartVariables(chartContent) {
 }
 
 /**
-* Extract platform typography variables with corrected font family references
-* @param {Object} platformContent - The platform content object
-* @param {String} platformName - The platform name
-* @returns {Array} - Array of CSS variable declarations
-*/
+ * Extract platform typography variables with corrected font family references
+ * @param {Object} platformContent - The platform content object
+ * @param {String} platformName - The platform name
+ * @returns {Array} - Array of CSS variable declarations
+ */
 function extractPlatformVariables(platformContent, platformName) {
     const variables = [];
+    
+    // Add platform-specific font family variables explicitly
+    if (platformContent['Platform-Font-Families']) {
+      const fontFamilies = platformContent['Platform-Font-Families'];
+      
+      // Standard font family
+      if (fontFamilies.Standard && fontFamilies.Standard.value) {
+        variables.push(`  --Platform-Font-Families-Standard: "${fontFamilies.Standard.value}";\n`);
+      }
+      
+      // Decorative font family
+      if (fontFamilies.Decorative && fontFamilies.Decorative.value) {
+        variables.push(`  --Platform-Font-Families-Decorative: "${fontFamilies.Decorative.value}";\n`);
+      }
+    }
     
     // Add platform visibility variables
     const platforms = ['Android', 'IOS', 'Desktop'];

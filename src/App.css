@@ -1,0 +1,27 @@
+.settings-toggle-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--Container-Button, #3a6661);
+    color: var(--Container-On-Button, #ffffff);
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+  }
+  
+  .settings-toggle-button:hover {
+    background-color: var(--Container-Button-Hover, #d95c49);
+  }
+  
+  .main-content {
+    padding: 20px;
+  }

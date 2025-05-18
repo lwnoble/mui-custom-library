@@ -1,5 +1,5 @@
-/* Desktop platform specific typography */
-[data-platform="Desktop"] {
+:root, ::after, ::before {
+  /* Desktop platform specific typography */
   --Android: none;
   --IOS: none;
   --Desktop: block;
@@ -246,4 +246,3 @@
   --Platform-Buttons-Extra-Small-SR-Character-Spacing: 1.32px;
   --Platform-Target: 24px;
 }
-

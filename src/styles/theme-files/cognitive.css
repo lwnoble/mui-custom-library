@@ -1,4 +1,5 @@
-[data-platform] {
+:root, ::after, ::before {
+  [data-platform] {
   --Congnitive-Font-Families-Standard: "Roboto";
   --Congnitive-Font-Families-Decorative: "Bungee";
   --Cognitive-Body-Small-Font-Family: var(--Platform-Default-Body-Small-Font-Family);
@@ -256,4 +257,5 @@
   --Cognitive-Spacing-Spacing-Quarter: var(--Default-Spacing-Quarter);
   --Cognitive-Spacing-Spacing-One-And-Half: var(--Default-Spacing-Quarter);
   --Cognitive-Target: var(--Platform-Default-Target);
+}
 }

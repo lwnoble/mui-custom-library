@@ -1,5 +1,5 @@
+:root, ::after, ::before {
 /* Android platform specific typography */
-[data-platform="Android"] {
   --Android: block;
   --IOS: none;
   --Desktop: none;
@@ -246,4 +246,3 @@
   --Platform-Buttons-Extra-Small-SR-Character-Spacing: 1.32px;
   --Platform-Target: 0px;
 }
-

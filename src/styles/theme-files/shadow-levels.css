@@ -1,23 +1,22 @@
 /* Box Shadow Variables */
 :root, ::after, ::before {
-  --Box-Shadow-0: none;
-  --Box-Shadow-L-1: var(--Shadows-Level-L-1-Drop-Shadows-Horizontal) var(--Shadows-Level-L-1-Drop-Shadows-Vertical) var(--Shadows-Level-L-1-Drop-Shadows-Blur) var(--Shadows-Level-L-1-Drop-Shadows-Spread) var(--Shadows-Level-L-1-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-L-1-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-L-1-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-L-1-Drop-Shadows-Blur) var(--Inner-Shadows-Level-L-1-Drop-Shadows-Spread) var(--Inner-Shadows-Level-L-1-Drop-Shadows-Color);
-  --Box-Shadow-L-2: var(--Shadows-Level-L-2-Drop-Shadows-Horizontal) var(--Shadows-Level-L-2-Drop-Shadows-Vertical) var(--Shadows-Level-L-2-Drop-Shadows-Blur) var(--Shadows-Level-L-2-Drop-Shadows-Spread) var(--Shadows-Level-L-2-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-L-2-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-L-2-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-L-2-Drop-Shadows-Blur) var(--Inner-Shadows-Level-L-2-Drop-Shadows-Spread) var(--Inner-Shadows-Level-L-2-Drop-Shadows-Color);
-  --Box-Shadow-L-3: var(--Shadows-Level-L-3-Drop-Shadows-Horizontal) var(--Shadows-Level-L-3-Drop-Shadows-Vertical) var(--Shadows-Level-L-3-Drop-Shadows-Blur) var(--Shadows-Level-L-3-Drop-Shadows-Spread) var(--Shadows-Level-L-3-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-L-3-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-L-3-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-L-3-Drop-Shadows-Blur) var(--Inner-Shadows-Level-L-3-Drop-Shadows-Spread) var(--Inner-Shadows-Level-L-3-Drop-Shadows-Color);
-  --Box-Shadow-L-4: var(--Shadows-Level-L-4-Drop-Shadows-Horizontal) var(--Shadows-Level-L-4-Drop-Shadows-Vertical) var(--Shadows-Level-L-4-Drop-Shadows-Blur) var(--Shadows-Level-L-4-Drop-Shadows-Spread) var(--Shadows-Level-L-4-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-L-4-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-L-4-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-L-4-Drop-Shadows-Blur) var(--Inner-Shadows-Level-L-4-Drop-Shadows-Spread) var(--Inner-Shadows-Level-L-4-Drop-Shadows-Color);
-  --Box-Shadow-L-5: var(--Shadows-Level-L-5-Drop-Shadows-Horizontal) var(--Shadows-Level-L-5-Drop-Shadows-Vertical) var(--Shadows-Level-L-5-Drop-Shadows-Blur) var(--Shadows-Level-L-5-Drop-Shadows-Spread) var(--Shadows-Level-L-5-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-L-5-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-L-5-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-L-5-Drop-Shadows-Blur) var(--Inner-Shadows-Level-L-5-Drop-Shadows-Spread) var(--Inner-Shadows-Level-L-5-Drop-Shadows-Color);
-  --Box-Shadow-Buttons: var(--Shadows-Level-Buttons-Drop-Shadows-Horizontal) var(--Shadows-Level-Buttons-Drop-Shadows-Vertical) var(--Shadows-Level-Buttons-Drop-Shadows-Blur) var(--Shadows-Level-Buttons-Drop-Shadows-Spread) var(--Shadows-Level-Buttons-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Buttons-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Buttons-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-Buttons-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Buttons-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Buttons-Drop-Shadows-Color);
-  --Box-Shadow-Buttons-Hover: var(--Shadows-Level-Buttons-Hover-Drop-Shadows-Horizontal) var(--Shadows-Level-Buttons-Hover-Drop-Shadows-Vertical) var(--Shadows-Level-Buttons-Hover-Drop-Shadows-Blur) var(--Shadows-Level-Buttons-Hover-Drop-Shadows-Spread) var(--Shadows-Level-Buttons-Hover-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Buttons-Hover-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Buttons-Hover-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-Buttons-Hover-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Buttons-Hover-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Buttons-Hover-Drop-Shadows-Color);
-  --Box-Shadow-Buttons-Raised: var(--Shadows-Level-Buttons-Raised-Drop-Shadows-Horizontal) var(--Shadows-Level-Buttons-Raised-Drop-Shadows-Vertical) var(--Shadows-Level-Buttons-Raised-Drop-Shadows-Blur) var(--Shadows-Level-Buttons-Raised-Drop-Shadows-Spread) var(--Shadows-Level-Buttons-Raised-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Buttons-Raised-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Buttons-Raised-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-Buttons-Raised-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Buttons-Raised-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Buttons-Raised-Drop-Shadows-Color);
-  --Box-Shadow-Buttons-Raised-Hover: var(--Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Horizontal) var(--Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Vertical) var(--Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Blur) var(--Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Spread) var(--Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Color);
-  --Box-Shadow-Cards-Bottom-Sheet: var(--Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Horizontal) var(--Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Vertical) var(--Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Blur) var(--Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Spread) var(--Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Color);
-  --Box-Shadow-Cards-Hover: var(--Shadows-Level-Cards-Hover-Drop-Shadows-Horizontal) var(--Shadows-Level-Cards-Hover-Drop-Shadows-Vertical) var(--Shadows-Level-Cards-Hover-Drop-Shadows-Blur) var(--Shadows-Level-Cards-Hover-Drop-Shadows-Spread) var(--Shadows-Level-Cards-Hover-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Cards-Hover-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Cards-Hover-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-Cards-Hover-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Cards-Hover-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Cards-Hover-Drop-Shadows-Color);
-  --Box-Shadow-Navigation: var(--Shadows-Level-Navigation-Drop-Shadows-Horizontal) var(--Shadows-Level-Navigation-Drop-Shadows-Vertical) var(--Shadows-Level-Navigation-Drop-Shadows-Blur) var(--Shadows-Level-Navigation-Drop-Shadows-Spread) var(--Shadows-Level-Navigation-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Navigation-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Navigation-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-Navigation-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Navigation-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Navigation-Drop-Shadows-Color);
-  --Box-Shadow-Floating-Action: var(--Shadows-Level-Floating-Action-Drop-Shadows-Horizontal) var(--Shadows-Level-Floating-Action-Drop-Shadows-Vertical) var(--Shadows-Level-Floating-Action-Drop-Shadows-Blur) var(--Shadows-Level-Floating-Action-Drop-Shadows-Spread) var(--Shadows-Level-Floating-Action-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Floating-Action-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Floating-Action-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-Floating-Action-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Floating-Action-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Floating-Action-Drop-Shadows-Color);
-  --Box-Shadow-Floating-Action-Hover: var(--Shadows-Level-Floating-Action-Hover-Drop-Shadows-Horizontal) var(--Shadows-Level-Floating-Action-Hover-Drop-Shadows-Vertical) var(--Shadows-Level-Floating-Action-Hover-Drop-Shadows-Blur) var(--Shadows-Level-Floating-Action-Hover-Drop-Shadows-Spread) var(--Shadows-Level-Floating-Action-Hover-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Floating-Action-Hover-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Floating-Action-Hover-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-Floating-Action-Hover-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Floating-Action-Hover-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Floating-Action-Hover-Drop-Shadows-Color);
-}
+--Box-Shadow-0: none;
+--Box-Shadow-1: var(--Shadows-Level-L-1-Drop-Shadows-Horizontal) var(--Shadows-Level-L-1-Drop-Shadows-Vertical) var(--Shadows-Level-L-1-Drop-Shadows-Blur) var(--Shadows-Level-L-1-Drop-Shadows-Spread) var(--Shadows-Level-L-1-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-L-1-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-L-1-Drop-Shadows-Vertical) var(--Shadows-Level-L-1-Drop-Shadows-Blur) var(--Inner-Shadows-Level-L-1-Drop-Shadows-Spread) var(--Inner-Shadows-Level-L-1-Drop-Shadows-Color);
+--Box-Shadow-2: var(--Shadows-Level-L-2-Drop-Shadows-Horizontal) var(--Shadows-Level-L-2-Drop-Shadows-Vertical) var(--Shadows-Level-L-2-Drop-Shadows-Blur) var(--Shadows-Level-L-2-Drop-Shadows-Spread) var(--Shadows-Level-L-2-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-L-2-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-L-2-Drop-Shadows-Vertical) var(--Shadows-Level-L-2-Drop-Shadows-Blur) var(--Inner-Shadows-Level-L-2-Drop-Shadows-Spread) var(--Inner-Shadows-Level-L-2-Drop-Shadows-Color);
+--Box-Shadow-3: var(--Shadows-Level-L-3-Drop-Shadows-Horizontal) var(--Shadows-Level-L-3-Drop-Shadows-Vertical) var(--Shadows-Level-L-3-Drop-Shadows-Blur) var(--Shadows-Level-L-3-Drop-Shadows-Spread) var(--Shadows-Level-L-3-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-L-3-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-L-3-Drop-Shadows-Vertical) var(--Shadows-Level-L-3-Drop-Shadows-Blur) var(--Inner-Shadows-Level-L-3-Drop-Shadows-Spread) var(--Inner-Shadows-Level-L-3-Drop-Shadows-Color);
+--Box-Shadow-4: var(--Shadows-Level-L-4-Drop-Shadows-Horizontal) var(--Shadows-Level-L-4-Drop-Shadows-Vertical) var(--Shadows-Level-L-4-Drop-Shadows-Blur) var(--Shadows-Level-L-4-Drop-Shadows-Spread) var(--Shadows-Level-L-4-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-L-4-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-L-4-Drop-Shadows-Vertical) var(--Shadows-Level-L-4-Drop-Shadows-Blur) var(--Inner-Shadows-Level-L-4-Drop-Shadows-Spread) var(--Inner-Shadows-Level-L-4-Drop-Shadows-Color);
+--Box-Shadow-5: var(--Shadows-Level-L-5-Drop-Shadows-Horizontal) var(--Shadows-Level-L-5-Drop-Shadows-Vertical) var(--Shadows-Level-L-5-Drop-Shadows-Blur) var(--Shadows-Level-L-5-Drop-Shadows-Spread) var(--Shadows-Level-L-5-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-L-5-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-L-5-Drop-Shadows-Vertical) var(--Shadows-Level-L-5-Drop-Shadows-Blur) var(--Inner-Shadows-Level-L-5-Drop-Shadows-Spread) var(--Inner-Shadows-Level-L-5-Drop-Shadows-Color);
+--Box-Shadow-Buttons: var(--Shadows-Level-Buttons-Drop-Shadows-Horizontal) var(--Shadows-Level-Buttons-Drop-Shadows-Vertical) var(--Shadows-Level-Buttons-Drop-Shadows-Blur) var(--Shadows-Level-Buttons-Drop-Shadows-Spread) var(--Shadows-Level-Buttons-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Buttons-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Buttons-Drop-Shadows-Vertical) var(--Shadows-Level-Buttons-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Buttons-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Buttons-Drop-Shadows-Color);
+--Box-Shadow-Buttons-Hover: var(--Shadows-Level-Buttons-Hover-Drop-Shadows-Horizontal) var(--Shadows-Level-Buttons-Hover-Drop-Shadows-Vertical) var(--Shadows-Level-Buttons-Hover-Drop-Shadows-Blur) var(--Shadows-Level-Buttons-Hover-Drop-Shadows-Spread) var(--Shadows-Level-Buttons-Hover-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Buttons-Hover-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Buttons-Hover-Drop-Shadows-Vertical) var(--Shadows-Level-Buttons-Hover-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Buttons-Hover-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Buttons-Hover-Drop-Shadows-Color);
+--Box-Shadow-Buttons-Raised: var(--Shadows-Level-Buttons-Raised-Drop-Shadows-Horizontal) var(--Shadows-Level-Buttons-Raised-Drop-Shadows-Vertical) var(--Shadows-Level-Buttons-Raised-Drop-Shadows-Blur) var(--Shadows-Level-Buttons-Raised-Drop-Shadows-Spread) var(--Shadows-Level-Buttons-Raised-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Buttons-Raised-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Buttons-Raised-Drop-Shadows-Vertical) var(--Shadows-Level-Buttons-Raised-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Buttons-Raised-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Buttons-Raised-Drop-Shadows-Color);
+--Box-Shadow-Buttons-Raised-Hover: var(--Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Horizontal) var(--Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Vertical) var(--Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Blur) var(--Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Spread) var(--Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Vertical) var(--Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Buttons-Raised-Hover-Drop-Shadows-Color);
+--Box-Shadow-Cards-Bottom-Sheet: var(--Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Horizontal) var(--Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Vertical) var(--Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Blur) var(--Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Spread) var(--Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Vertical) var(--Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Cards-Bottom-Sheet-Drop-Shadows-Color);
+--Box-Shadow-Cards-Hover: var(--Shadows-Level-Cards-Hover-Drop-Shadows-Horizontal) var(--Shadows-Level-Cards-Hover-Drop-Shadows-Vertical) var(--Shadows-Level-Cards-Hover-Drop-Shadows-Blur) var(--Shadows-Level-Cards-Hover-Drop-Shadows-Spread) var(--Shadows-Level-Cards-Hover-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Cards-Hover-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Cards-Hover-Drop-Shadows-Vertical) var(--Shadows-Level-Cards-Hover-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Cards-Hover-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Cards-Hover-Drop-Shadows-Color);
+--Box-Shadow-Navigation: var(--Shadows-Level-Navigation-Drop-Shadows-Horizontal) var(--Shadows-Level-Navigation-Drop-Shadows-Vertical) var(--Shadows-Level-Navigation-Drop-Shadows-Blur) var(--Shadows-Level-Navigation-Drop-Shadows-Spread) var(--Shadows-Level-Navigation-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Navigation-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Navigation-Drop-Shadows-Vertical) var(--Shadows-Level-Navigation-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Navigation-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Navigation-Drop-Shadows-Color);
+--Box-Shadow-Floating-Action: var(--Shadows-Level-Floating-Action-Drop-Shadows-Horizontal) var(--Shadows-Level-Floating-Action-Drop-Shadows-Vertical) var(--Shadows-Level-Floating-Action-Drop-Shadows-Blur) var(--Shadows-Level-Floating-Action-Drop-Shadows-Spread) var(--Shadows-Level-Floating-Action-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Floating-Action-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Floating-Action-Drop-Shadows-Vertical) var(--Shadows-Level-Floating-Action-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Floating-Action-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Floating-Action-Drop-Shadows-Color);
+--Box-Shadow-Floating-Action-Hover: var(--Shadows-Level-Floating-Action-Hover-Drop-Shadows-Horizontal) var(--Shadows-Level-Floating-Action-Hover-Drop-Shadows-Vertical) var(--Shadows-Level-Floating-Action-Hover-Drop-Shadows-Blur) var(--Shadows-Level-Floating-Action-Hover-Drop-Shadows-Spread) var(--Shadows-Level-Floating-Action-Hover-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-Floating-Action-Hover-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-Floating-Action-Hover-Drop-Shadows-Vertical) var(--Shadows-Level-Floating-Action-Hover-Drop-Shadows-Blur) var(--Inner-Shadows-Level-Floating-Action-Hover-Drop-Shadows-Spread) var(--Inner-Shadows-Level-Floating-Action-Hover-Drop-Shadows-Color);
 
-[data-shadow] {
+[data-shadow="0"] {
   --Box-Shadow: var(--Box-Shadow-0);
 }
 
@@ -42,42 +41,38 @@
 }
 
 [data-shadow="Buttons"] {
-  --Box-Shadow: var(--Box-Shadow-Buttons);
+  --Box-Shadow: var(--Box-Shadow-0);
 }
 
 [data-shadow="Buttons-Hover"] {
-  --Box-Shadow: var(--Box-Shadow-Buttons-Hover);
+  --Box-Shadow: var(--Box-Shadow-2);
 }
 
 [data-shadow="Buttons-Raised"] {
-  --Box-Shadow: var(--Box-Shadow-Buttons-Raised);
+  --Box-Shadow: var(--Box-Shadow-3);
 }
 
 [data-shadow="Buttons-Raised-Hover"] {
-  --Box-Shadow: var(--Box-Shadow-Buttons-Raised-Hover);
-}
-
-[data-shadow="Cards"] {
-  --Box-Shadow: var(--Box-Shadow-Cards);
-}
-
-[data-shadow="Cards-Hover"] {
-  --Box-Shadow: var(--Box-Shadow-Cards-Hover);
+  --Box-Shadow: var(--Box-Shadow-4);
 }
 
 [data-shadow="Cards-Bottom-Sheet"] {
-  --Box-Shadow: var(--Box-Shadow-Cards-Bottom-Sheet);
+  --Box-Shadow: var(--Box-Shadow-2);
+}
+
+[data-shadow="Cards-Hover"] {
+  --Box-Shadow: var(--Box-Shadow-3);
 }
 
 [data-shadow="Navigation"] {
-  --Box-Shadow: var(--Box-Shadow-Navigation);
+  --Box-Shadow: var(--Box-Shadow-2);
 }
 
 [data-shadow="Floating-Action"] {
-  --Box-Shadow: var(--Box-Shadow-Floating-Action);
+  --Box-Shadow: var(--Box-Shadow-3);
 }
 
 [data-shadow="Floating-Action-Hover"] {
-  --Box-Shadow: var(--Box-Shadow-Floating-Action-Hover);
+  --Box-Shadow: var(--Box-Shadow-4);
 }
-
+}

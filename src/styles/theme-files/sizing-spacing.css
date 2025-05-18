@@ -1,5 +1,7 @@
-/* Default sizing and spacing */
-[data-sizing-spacing] {
+
+:root[data-sizing-spacing],
+::before[data-sizing-spacing],
+::after[data-sizing-spacing] {
   --Sizing-1: 8px;
   --Sizing-2: 16px;
   --Sizing-3: 24px;
@@ -85,7 +87,7 @@
 }
 
 /* Reduced sizing and spacing */
-[data-sizing-spacing="reduced"] {
+[data-sizing-spacing="reduced"]{
   --Sizing-1: 8px;
   --Sizing-2: 16px;
   --Sizing-3: 24px;
@@ -169,4 +171,3 @@
   --Spacing-11: 88px;
   --Spacing-12: 96px;
 }
-

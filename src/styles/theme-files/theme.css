@@ -1,0 +1,15 @@
+body {
+    font-family: var(--Cognitive-Font-Families-Standard);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+  
+div, header, footer {
+    background: var(--Background);
+    color: var(--On-Color);
+}
+
+.quiet { 
+    color: var(--On-Quiet);
+}
+
