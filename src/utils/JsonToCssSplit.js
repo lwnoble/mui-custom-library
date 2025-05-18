@@ -280,12 +280,15 @@ function processShadowLevels(shadowLevels) {
     
     // Process each Shadow Level
     for (const [shadowKey, shadowContent] of Object.entries(shadowLevels)) {
-      if (shadowKey.startsWith('Shadow-Level/')) {
-        const level = shadowKey.split('/')[1];
-        
-        css += `  --Box-Shadow-${level.replace('L-', '').replace(/\s+&\s+/g, '-')}: ${generateBoxShadowValue(shadowContent, level)};\n`;
+        if (shadowKey.startsWith('Shadow-Level/')) {
+          const level = shadowKey.split('/')[1];
+          
+          // Properly sanitize level names by replacing spaces and ampersands with hyphens
+          const sanitizedLevel = level.replace(/\s+&\s+/g, '-').replace(/\s+/g, '-');
+          
+          css += `  --Box-Shadow-${sanitizedLevel}: ${generateBoxShadowValue(shadowContent, sanitizedLevel)};\n`;
+        }
       }
-    }
     
     // Close the :root block
     css += `}\n\n`;
