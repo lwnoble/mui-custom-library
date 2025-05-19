@@ -69,8 +69,8 @@ async function convertSystemToCss(jsonContent, outputDir) {
     // Process all properties in the system default section
     for (const [key, value] of Object.entries(systemDefault)) {
       if (value && value.value !== undefined) {
-        // Format the CSS variable name (convert camelCase or PascalCase to kebab-case with prefix)
-        const varName = `--${key}`;
+        // Convert variable names with spaces
+        const varName = key.replace(/\s+/g, '-');
         
         // Format the value based on its type
         let cssValue = value.value;
@@ -78,20 +78,20 @@ async function convertSystemToCss(jsonContent, outputDir) {
           // Add 'px' to numeric values
           cssValue = `${cssValue}px`;
         } else if (typeof cssValue === 'string') {
-          // Check if it's a color or needs quotes
-          if (cssValue.startsWith('#') || cssValue.startsWith('rgb') || cssValue.startsWith('hsl')) {
-            // Color values don't need quotes
-          } else if (cssValue.startsWith('{') && cssValue.endsWith('}')) {
-            // Reference to another variable, convert to CSS var() format
+          // Check if it's a reference
+          if (cssValue.startsWith('{') && cssValue.endsWith('}')) {
+            // Convert reference to var() format
             cssValue = `var(--${cssValue.substring(1, cssValue.length - 1).replace(/\./g, '-')})`;
+          } else if (cssValue.startsWith('#') || cssValue.startsWith('rgb') || cssValue.startsWith('hsl')) {
+            // Color values don't need quotes
           } else {
-            // Add quotes to string values that aren't colors or references
+            // Add quotes to string values
             cssValue = `"${cssValue}"`;
           }
         }
         
         // Add the variable to the CSS
-        css += `  ${varName}: ${cssValue};\n`;
+        css += `  --${varName}: ${cssValue};\n`;
       }
     }
     
@@ -113,12 +113,16 @@ async function convertSystemToCss(jsonContent, outputDir) {
       // Process each property in the section
       for (const [key, value] of Object.entries(sectionData)) {
         if (value && (value.value !== undefined || typeof value === 'object')) {
+          // Convert variable names with spaces
+          const sanitizedKey = key.replace(/\s+/g, '-');
+          
           // For nested objects
           if (typeof value === 'object' && !value.value && !value.type) {
             // Process nested properties
             for (const [nestedKey, nestedValue] of Object.entries(value)) {
               if (nestedValue && nestedValue.value !== undefined) {
-                const nestedVarName = `--${prefix}-${key}-${nestedKey}`;
+                const nestedSanitizedKey = nestedKey.replace(/\s+/g, '-');
+                const nestedVarName = `--${prefix}-${sanitizedKey}-${nestedSanitizedKey}`;
                 let nestedCssValue = nestedValue.value;
                 
                 // Format the value based on its type
@@ -133,7 +137,7 @@ async function convertSystemToCss(jsonContent, outputDir) {
             }
           } else {
             // For direct properties
-            const varName = `--${prefix}-${key}`;
+            const varName = `--${prefix}-${sanitizedKey}`;
             let cssValue = value.value;
             
             // Format the value based on its type
@@ -178,8 +182,7 @@ async function convertSystemToCss(jsonContent, outputDir) {
       { name: "--Sizing-Sizing-40", value: "var(--Sizing-40)" },
       { name: "--Sizing-Sizing-24", value: "var(--Sizing-24)" },
       { name: "--Sizing-Sizing-50", value: "var(--Sizing-50)" },
-      { name: "--Sizing-Minimum Target", value: "var(--Cognitive-Default-Target)" },
-      // More variables can be added here
+      { name: "--Sizing-Minimum-Target", value: "var(--Cognitive-Default-Target)" },
     ];
     
     // Add any additional variables that weren't extracted from the JSON
@@ -189,6 +192,9 @@ async function convertSystemToCss(jsonContent, outputDir) {
         css += `  ${variable.name}: ${variable.value};\n`;
       }
     });
+    
+    // Add Breakpoints-Extra-Extra-Large with 'px'
+    css = css.replace('--Breakpoints-Extra-Extra-Large: 1440;', '--Breakpoints-Extra-Extra-Large: 1440px;');
     
     // Close the CSS block
     css += `}\n`;
@@ -203,7 +209,7 @@ async function convertSystemToCss(jsonContent, outputDir) {
       file: systemFilename,
       path: systemFilePath
     };
-  }
+}
 
 /**
  * Extract all mode variables from the background content
