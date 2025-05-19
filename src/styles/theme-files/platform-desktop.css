@@ -1,5 +1,7 @@
-:root, ::after, ::before {
-  /* Desktop platform specific typography */
+/* Desktop platform specific typography */
+[data-platform="Desktop"] {
+  --Platform-Font-Families-Standard: "{Congnitive-Font-Families.Standard}";
+  --Platform-Font-Families-Decorative: "{Congnitive-Font-Families.Decorative}";
   --Android: none;
   --IOS: none;
   --Desktop: block;
@@ -246,3 +248,4 @@
   --Platform-Buttons-Extra-Small-SR-Character-Spacing: 1.32px;
   --Platform-Target: 24px;
 }
+

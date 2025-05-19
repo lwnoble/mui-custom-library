@@ -95,11 +95,11 @@ const loadTheme = (options = {}) => {
       // 2. Then load platform CSS
       .then(() => loadCssFile(`/styles/theme-files/platform-${settings.platform.toLowerCase()}.css`))
       
-      // 3. Then load cognitive CSS
-      .then(() => loadCssFile(`/styles/theme-files/cognitive-${settings.cognitive.toLowerCase()}.css`))
-      
-      // 4. Then load sizing and spacing CSS
+      // 3. Then load sizing and spacing CSS
       .then(() => loadCssFile('/styles/theme-files/sizing-spacing.css'))
+    
+      // 4. Then load cognitive CSS
+      .then(() => loadCssFile(`/styles/theme-files/cognitive-${settings.cognitive.toLowerCase()}.css`))
       
       // 5. Then load surface containers CSS
       .then(() => loadCssFile('/styles/theme-files/surface-containers.css'))
