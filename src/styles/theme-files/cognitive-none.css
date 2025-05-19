@@ -2,7 +2,7 @@
 [data-cognitive-profile="none"] {
   --Cognitive-Multiplier: 1;
   --Cognitive-Multiplier: 1;
-  --Cognitive-Target: 24;
+  --Cognitive-Target: var(--Platform-Default-Target);
   --Typography-Font-Families-Standard: "{Platform-Font-Families.Standard}";
   --Typography-Font-Families-Decorative: "{Platform-Font-Families.Decorative}";
   --Typography-Body-Small-Font-Family: var(--Platform-Default-Body-Small-Font-Family);
