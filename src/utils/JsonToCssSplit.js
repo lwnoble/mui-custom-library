@@ -822,14 +822,84 @@ function extractCognitiveVariables(cognitiveContent) {
                         cognitiveContent['Cognitive-Label']?.value || 
                         'None';
     
-    // Add Cognitive Multiplier based on profile type - this is the only variable we're keeping
-    if (profileName.toLowerCase() === 'none') {
-      variables.push(`  --Cognitive-Multiplier: 1;\n`);
-    } else if (profileName.toLowerCase() === 'adhd' || profileName.toLowerCase() === 'dyslexia') {
-      variables.push(`  --Cognitive-Multiplier: 1.5;\n`);
+    // Determine multiplier and target based on profile type
+    let multiplier = 1;
+    let target = 24;  // Default target value
+    
+    switch (profileName.toLowerCase()) {
+        case 'none':
+            multiplier = 1;
+            target = 24;  // Standard desktop target
+            break;
+        case 'adhd':
+            multiplier = 1.33;  // Increased spacing and sizing
+            target = 32;  // Larger interaction areas
+            break;
+        case 'dyslexia':
+            multiplier = 1.17;  // Moderate increase for readability
+            target = 28;  // Slightly larger than standard
+            break;
+    }
+    
+    // Add Cognitive Multiplier and Target
+    variables.push(`  --Cognitive-Multiplier: ${multiplier};\n`);
+    variables.push(`  --Cognitive-Target: ${target};\n`);
+    
+    // Add Typography font families from Congnitive-Font-Families
+    if (cognitiveContent['Congnitive-Font-Families']) {
+        const fontFamilies = cognitiveContent['Congnitive-Font-Families'];
+        
+        if (fontFamilies.Standard && fontFamilies.Standard.value) {
+            variables.push(`  --Typography-Font-Families-Standard: "${fontFamilies.Standard.value}";\n`);
+        }
+        
+        if (fontFamilies.Decorative && fontFamilies.Decorative.value) {
+            variables.push(`  --Typography-Font-Families-Decorative: "${fontFamilies.Decorative.value}";\n`);
+        }
+    }
+    
+    // If Cognitive-Default exists, process its typography sections
+    if (cognitiveContent['Cognitive-Default']) {
+        const defaultContent = cognitiveContent['Cognitive-Default'];
+        const typographySections = [
+            'Body', 'Buttons', 'Captions', 'Subtitles', 'Legal', 
+            'Labels', 'Overline', 'Display', 'Headers', 'Number'
+        ];
+        
+        typographySections.forEach(section => {
+            if (defaultContent[section]) {
+                processTypographySection(defaultContent[section], section, variables);
+            }
+        });
     }
     
     return variables;
+}
+
+function processTypographySection(sectionContent, sectionName, variables) {
+    // Iterate through subsections (Small, Medium, Large, etc.)
+    for (const [typeName, typeContent] of Object.entries(sectionContent)) {
+        // Process each property in the subsection
+        for (const [propName, propContent] of Object.entries(typeContent)) {
+            if (propContent.value) {
+                // Determine the variable name
+                const formattedTypeName = typeName.replace(/-/g, '');
+                const variableName = `--Typography-${sectionName}-${formattedTypeName}-${propName}`;
+                
+                // Convert reference format
+                let value = propContent.value;
+                if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+                    // Remove braces and convert dot notation to variable notation
+                    value = value.substring(1, value.length - 1)
+                        .replace(/\./g, '-');
+                    value = `var(--${value})`;
+                }
+                
+                // Add the variable
+                variables.push(`  ${variableName}: ${value};\n`);
+            }
+        }
+    }
 }
 
 /**
