@@ -895,12 +895,16 @@ function processTypographySection(sectionContent, sectionName, variables) {
                 // Convert reference format
                 let value = propContent.value;
                 if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-                    // Remove braces and convert dot notation to variable notation
+                    // Remove braces 
                     value = value.substring(1, value.length - 1)
+                        // Replace dot notation with hyphen
                         .replace(/\./g, '-');
                     
-                    // Special handling for Congnitive font families
-                    if (value.includes('Congnitive-Font-Families-Standard')) {
+                    // Special handling for font families and other references
+                    if (value.includes('Platform-Font-Families')) {
+                        // Ensure it's converted to a var() reference
+                        value = `var(--${value})`;
+                    } else if (value.includes('Congnitive-Font-Families-Standard')) {
                         value = 'var(--Typography-Font-Families-Standard)';
                     } else if (value.includes('Congnitive-Font-Families-Decorative')) {
                         value = 'var(--Typography-Font-Families-Decorative)';
@@ -910,10 +914,93 @@ function processTypographySection(sectionContent, sectionName, variables) {
                 }
                 
                 // Add the variable
-                variables.push(`  ${variableName}: ${value};\n`);
+                variables.add(`  ${variableName}: ${value};\n`);
             }
         }
     }
+}
+
+function extractCognitiveVariables(cognitiveContent) {
+    const variables = new Set();
+    
+    // Get the profile name from either Cognitive-Profile or Cognitive-Label
+    const profileName = cognitiveContent['Cognitive-Profile']?.value || 
+                        cognitiveContent['Cognitive-Label']?.value || 
+                        'None';
+    
+    // Determine multiplier based on profile type
+    let multiplier = 1;
+    
+    switch (profileName.toLowerCase()) {
+        case 'none':
+            multiplier = 1;
+            break;
+        case 'adhd':
+        case 'dyslexia':
+            multiplier = 1.33;
+            break;
+    }
+    
+    // Get target from the Cognitive-Default section
+    let target = 'var(--Platform-Default-Target)';
+    if (cognitiveContent['Cognitive-Default'] && 
+        cognitiveContent['Cognitive-Default'].Target && 
+        cognitiveContent['Cognitive-Default'].Target.value) {
+        // If the value is a reference, convert it to a var()
+        const targetValue = cognitiveContent['Cognitive-Default'].Target.value;
+        if (typeof targetValue === 'string' && targetValue.startsWith('{') && targetValue.endsWith('}')) {
+            target = `var(--${targetValue.substring(1, targetValue.length - 1).replace(/\./g, '-')})`;
+        }
+    }
+    
+    // Add Cognitive Multiplier and Target
+    variables.add(`  --Cognitive-Multiplier: ${multiplier};\n`);
+    variables.add(`  --Cognitive-Target: ${target};\n`);
+    
+    // Add Typography font families
+    if (cognitiveContent['Congnitive-Font-Families']) {
+        const fontFamilies = cognitiveContent['Congnitive-Font-Families'];
+        
+        if (fontFamilies.Standard && fontFamilies.Standard.value) {
+            let standardFontValue = fontFamilies.Standard.value;
+            // Check if the value is a reference
+            if (typeof standardFontValue === 'string' && standardFontValue.startsWith('{') && standardFontValue.endsWith('}')) {
+                standardFontValue = `var(--${standardFontValue.substring(1, standardFontValue.length - 1).replace(/\./g, '-')})`;
+            } else {
+                standardFontValue = `"${standardFontValue}"`;
+            }
+            variables.add(`  --Typography-Font-Families-Standard: ${standardFontValue};\n`);
+        }
+        
+        if (fontFamilies.Decorative && fontFamilies.Decorative.value) {
+            let decorativeFontValue = fontFamilies.Decorative.value;
+            // Check if the value is a reference
+            if (typeof decorativeFontValue === 'string' && decorativeFontValue.startsWith('{') && decorativeFontValue.endsWith('}')) {
+                decorativeFontValue = `var(--${decorativeFontValue.substring(1, decorativeFontValue.length - 1).replace(/\./g, '-')})`;
+            } else {
+                decorativeFontValue = `"${decorativeFontValue}"`;
+            }
+            variables.add(`  --Typography-Font-Families-Decorative: ${decorativeFontValue};\n`);
+        }
+    }
+    
+    // Process typography sections
+    if (cognitiveContent['Cognitive-Default']) {
+        const defaultContent = cognitiveContent['Cognitive-Default'];
+        const typographySections = [
+            'Body', 'Buttons', 'Captions', 'Subtitles', 'Legal', 
+            'Labels', 'Overline', 'Display', 'Headers', 'Number'
+        ];
+        
+        typographySections.forEach(section => {
+            if (defaultContent[section]) {
+                processTypographySection(defaultContent[section], section, variables);
+            }
+        });
+    }
+    
+    // Convert Set back to array for return
+    return Array.from(variables);
 }
 
 /**
