@@ -48,59 +48,162 @@ function convertFontFamilyReference(value) {
  * @param {Object} jsonContent - The parsed JSON content
  * @returns {string} - Generated CSS for system tokens
  */
-function convertSystemToCss(jsonContent) {
-  const systemDefaults = jsonContent['System/Default'];
+/**
+ * Convert System tokens to CSS custom properties
+ * @param {Object} jsonContent - The complete JSON content
+ * @param {string} outputDir - The directory to save the file
+ * @returns {Promise<Object>} - Information about the generated file
+ */
+async function convertSystemToCss(jsonContent, outputDir) {
+    // Find the system styles section - could be 'System-Styles/Default' or 'System/Default'
+    const systemDefault = jsonContent['System-Styles/Default'] || jsonContent['System/Default'];
+    
+    if (!systemDefault) {
+      console.error('System styles section not found in JSON content');
+      return null;
+    }
   
-  // Start building CSS
-  let css = `:root, ::after, ::before {\n`;
-  
-  // Minimum Target calculation
-  css += ` /* System Variables */\n`;
-  css += ` --Min-Target: min(min(var(--Desktop-Target), var(--PlatformTarget)), var(--Cognitive-Target));\n`;
-  
-  // Buttons
-  if (systemDefaults && systemDefaults.Buttons) {
-    const buttons = systemDefaults.Buttons;
-    const buttonProps = [
-      ['Button-Height', buttons['Button-Height']],
-      ['Button-Minimum-Width', buttons['Button-Minimum-Width']],
-      ['Button-Border-Radius', buttons['Button-Border-Radius']],
-      ['Button-Focus-Radius', buttons['Button-Focus-Radius']],
-      ['Button-Horizontal-Padding', buttons['Button-Horizontal-Padding']],
-      ['Button-Horizontal-Padding-With-Icon', buttons['Button-Horizontal-Padding-With-Icon']],
-      ['Button-Small-Height', buttons['Button-Small-Height']],
-      ['Button-Small-Horizontal-Padding', buttons['Button-Small-Horizontal-Padding']],
-      ['Button-Small-Horizontal-Padding-With-Icon', buttons['Button-Small-Horizontal-Padding-With-Icon']],
-      ['Button-Border', {value: 2, type: 'number'}]
+    // Start building the CSS
+    let css = `:root {\n`;
+    
+    // Process all properties in the system default section
+    for (const [key, value] of Object.entries(systemDefault)) {
+      if (value && value.value !== undefined) {
+        // Format the CSS variable name (convert camelCase or PascalCase to kebab-case with prefix)
+        const varName = `--${key}`;
+        
+        // Format the value based on its type
+        let cssValue = value.value;
+        if (typeof cssValue === 'number') {
+          // Add 'px' to numeric values
+          cssValue = `${cssValue}px`;
+        } else if (typeof cssValue === 'string') {
+          // Check if it's a color or needs quotes
+          if (cssValue.startsWith('#') || cssValue.startsWith('rgb') || cssValue.startsWith('hsl')) {
+            // Color values don't need quotes
+          } else if (cssValue.startsWith('{') && cssValue.endsWith('}')) {
+            // Reference to another variable, convert to CSS var() format
+            cssValue = `var(--${cssValue.substring(1, cssValue.length - 1).replace(/\./g, '-')})`;
+          } else {
+            // Add quotes to string values that aren't colors or references
+            cssValue = `"${cssValue}"`;
+          }
+        }
+        
+        // Add the variable to the CSS
+        css += `  ${varName}: ${cssValue};\n`;
+      }
+    }
+    
+    // Find common system variables that might be in other sections
+    const systemSections = [
+      'Sizing', 'Buttons', 'Focus', 'Cards', 'Inputs', 'Handles', 
+      'Avatars', 'Accordian', 'Breakpoints', 'Modals', 'Navigation',
+      'Spacing', 'Columns', 'Border', 'StatusBar', 'HoverOverlay'
     ];
     
-    buttonProps.forEach(([prop, propObj]) => {
-      if (propObj) {
-        const value = typeof propObj.value === 'string' && propObj.value.startsWith('{') 
-          ? propObj.value.replace(/[{}]/g, '').replace(/\./g, '-') 
-          : propObj.value;
-        
-        css += ` --${prop}: ${typeof value === 'number' ? `${value}px` : `var(--${value})`};\n`;
+    // Function to extract variables from a section
+    const extractSectionVariables = (section, prefix) => {
+      const sectionData = jsonContent[section] || 
+                          jsonContent[`${section}/Default`] ||
+                          systemDefault[section];
+      
+      if (!sectionData) return;
+      
+      // Process each property in the section
+      for (const [key, value] of Object.entries(sectionData)) {
+        if (value && (value.value !== undefined || typeof value === 'object')) {
+          // For nested objects
+          if (typeof value === 'object' && !value.value && !value.type) {
+            // Process nested properties
+            for (const [nestedKey, nestedValue] of Object.entries(value)) {
+              if (nestedValue && nestedValue.value !== undefined) {
+                const nestedVarName = `--${prefix}-${key}-${nestedKey}`;
+                let nestedCssValue = nestedValue.value;
+                
+                // Format the value based on its type
+                if (typeof nestedCssValue === 'number') {
+                  nestedCssValue = `${nestedCssValue}px`;
+                } else if (typeof nestedCssValue === 'string' && nestedCssValue.startsWith('{') && nestedCssValue.endsWith('}')) {
+                  nestedCssValue = `var(--${nestedCssValue.substring(1, nestedCssValue.length - 1).replace(/\./g, '-')})`;
+                }
+                
+                css += `  ${nestedVarName}: ${nestedCssValue};\n`;
+              }
+            }
+          } else {
+            // For direct properties
+            const varName = `--${prefix}-${key}`;
+            let cssValue = value.value;
+            
+            // Format the value based on its type
+            if (typeof cssValue === 'number') {
+              cssValue = `${cssValue}px`;
+            } else if (typeof cssValue === 'string' && cssValue.startsWith('{') && cssValue.endsWith('}')) {
+              cssValue = `var(--${cssValue.substring(1, cssValue.length - 1).replace(/\./g, '-')})`;
+            }
+            
+            css += `  ${varName}: ${cssValue};\n`;
+          }
+        }
       }
-    });
-  }
-  
-  // Breakpoints
-  if (systemDefaults && systemDefaults.Breakpoints) {
-    const breakpointProps = ['Small', 'Medium', 'Large', 'Extra-Large', 'Extra-Small', 'Extra-Extra-Large'];
+    };
     
-    breakpointProps.forEach(prop => {
-      if (systemDefaults.Breakpoints[prop]) {
-        css += ` --Breakpoints-${prop.replace(' ', '-')}: ${systemDefaults.Breakpoints[prop].value}px;\n`;
+    // Extract variables from each section
+    systemSections.forEach(section => {
+      extractSectionVariables(section, section);
+    });
+    
+    // Add additional variables from your example (if not already included)
+    const additionalVariables = [
+      { name: "--Sizing-Sizing-1", value: "var(--Sizing-1)" },
+      { name: "--Sizing-Sizing-2", value: "var(--Sizing-2)" },
+      { name: "--Sizing-Sizing-3", value: "var(--Sizing-3)" },
+      { name: "--Sizing-Sizing-4", value: "var(--Sizing-4)" },
+      { name: "--Sizing-Sizing-5", value: "var(--Sizing-5)" },
+      { name: "--Sizing-Sizing-6", value: "var(--Sizing-6)" },
+      { name: "--Sizing-Sizing-7", value: "var(--Sizing-7)" },
+      { name: "--Sizing-Sizing-8", value: "var(--Sizing-8)" },
+      { name: "--Sizing-Sizing-9", value: "var(--Sizing-9)" },
+      { name: "--Sizing-Sizing-10", value: "var(--Sizing-10)" },
+      { name: "--Sizing-Sizing-Half", value: "var(--Sizing-Half)" },
+      { name: "--Sizing-Sizing-Quarter", value: "var(--Sizing-Quarter)" },
+      { name: "--Sizing-Sizing-20", value: "var(--Sizing-20)" },
+      { name: "--Sizing-Sizing-30", value: "var(--Sizing-30)" },
+      { name: "--Sizing-Negative-Size-1", value: "var(--Negative-Size-1)" },
+      { name: "--Sizing-Negative-Size-Quarter", value: "var(--Negative-Quarter)" },
+      { name: "--Sizing-Negative-Size-Half", value: "var(--Negative-Half)" },
+      { name: "--Sizing-Sizing-One-And-Half", value: "var(--Sizing-One-And-Half)" },
+      { name: "--Sizing-Negative-Size-2", value: "var(--Negative-Size-2)" },
+      { name: "--Sizing-Sizing-40", value: "var(--Sizing-40)" },
+      { name: "--Sizing-Sizing-24", value: "var(--Sizing-24)" },
+      { name: "--Sizing-Sizing-50", value: "var(--Sizing-50)" },
+      { name: "--Sizing-Minimum Target", value: "var(--Cognitive-Default-Target)" },
+      // More variables can be added here
+    ];
+    
+    // Add any additional variables that weren't extracted from the JSON
+    const existingVars = new Set(css.match(/--[\w-]+/g) || []);
+    additionalVariables.forEach(variable => {
+      if (!existingVars.has(variable.name)) {
+        css += `  ${variable.name}: ${variable.value};\n`;
       }
     });
+    
+    // Close the CSS block
+    css += `}\n`;
+    
+    // Save the file
+    const systemFilename = 'system.css';
+    const systemFilePath = path.join(outputDir, systemFilename);
+    
+    await fs.promises.writeFile(systemFilePath, css, 'utf8');
+    
+    return {
+      file: systemFilename,
+      path: systemFilePath
+    };
   }
-  
-  // Close the CSS block
-  css += `}\n`;
-  
-  return css;
-}
 
 /**
  * Extract all mode variables from the background content
@@ -413,22 +516,50 @@ function processModeTarget(modeTarget, mode, isDefaultMode = false) {
  * @param {boolean} isDefaultMode - Whether this is the default mode (AA-light)
  * @returns {string} - Generated CSS for paragraph spacing
  */
+/**
+ * Process paragraph spacing JSON structure into CSS
+ * @param {Object} paragraphSpacing - The paragraph spacing object
+ * @param {string} mode - The mode name (e.g., "AA-light")
+ * @param {boolean} isDefaultMode - Whether this is the default mode (AA-light)
+ * @returns {string} - Generated CSS for paragraph spacing
+ */
 function processParagraphSpacing(paragraphSpacing, mode, isDefaultMode = false) {
     let css = '';
     
-    // Only process the Default section, ignoring 2x
+    // Add the appropriate PS multiplier for this mode
+    css += `/* ${mode} mode paragraph spacing */\n`;
+    
+    // For AA-light, use just [data-mode] without a value
+    if (isDefaultMode) {
+      css += `[data-mode] {\n`;
+    } else {
+      css += `[data-mode="${mode}"] {\n`;
+    }
+    
+    // Add the PS multiplier based on the mode (AA vs AAA)
+    if (mode.startsWith('AA')) {
+      css += `  --Mode-PS-multiplier: 200%;\n`;
+    } else if (mode.startsWith('AAA')) {
+      css += `  --Mode-PS-multiplier: 300%;\n`;
+    }
+    
+    // Process other spacing values from the Default section but skip the specific ones to be removed
     if (paragraphSpacing.Default) {
-      css += `/* ${mode} mode paragraph spacing */\n`;
+      // List of variables to exclude
+      const excludedVariables = [
+        'Body-Medium',
+        'Body-Small',
+        'Body-Large',
+        'Legal',
+        'Caption'
+      ];
       
-      // For AA-light, use just [data-mode] without a value
-      if (isDefaultMode) {
-        css += `[data-mode] {\n`;
-      } else {
-        css += `[data-mode="${mode}"] {\n`;
-      }
-      
-      // Process all spacing values from the Default section
       for (const [key, valueObj] of Object.entries(paragraphSpacing.Default)) {
+        // Skip the excluded variables
+        if (excludedVariables.includes(key)) {
+          continue;
+        }
+        
         if (valueObj.value !== undefined) {
           // Convert reference format {Cognitive-Default.Body.Medium.AA-Paragraph-Spacing}
           // to CSS variable format --Cognitive-Default-Body-Medium-AA-Paragraph-Spacing
@@ -442,12 +573,12 @@ function processParagraphSpacing(paragraphSpacing, mode, isDefaultMode = false) 
           css += `  --${key}: ${value};\n`;
         }
       }
-      
-      css += '}\n\n';
     }
     
+    css += `}\n\n`;
+    
     return css;
-  }
+}
 
 /**
  * Extract chart-specific variables
@@ -553,78 +684,153 @@ function extractPlatformVariables(platformContent, platformName) {
     return variables;
 }
 
+/**
+ * Generate a typography CSS file that works with all JSON cognitive profiles
+ * @param {Object} jsonContent - The complete JSON content
+ * @param {string} outputDir - The directory to save the file
+ * @returns {Promise<Object>} - Information about the generated file
+ */
+async function generateTypographyCSS(jsonContent, outputDir) {
+    // Start building the CSS
+    let css = `:root, ::after, ::before {\n`;
+    
+    // Add font families first (from the Platform section)
+    css += `  --Typography-Font-Families-Standard: var(--Platform-Font-Families-Standard);\n`;
+    css += `  --Typogrpahy--Font-Families-Decorative: var(--Platform-Font-Families-Decorative);\n`;
+    
+    // Process each cognitive profile to extract typography variables
+    const cognitiveProfiles = [
+      'Cognitive/None', 
+      'Cognitive/ADHD', 
+      'Cognitive/Dyslexia'
+    ];
+    
+    // We'll primarily use the "None" profile for typography variables
+    const noneProfile = jsonContent['Cognitive/None'];
+    if (noneProfile) {
+      // Process the Cognitive-Default section
+      const defaultContent = noneProfile['Cognitive-Default'];
+      
+      if (defaultContent) {
+        // Process each typography section (Body, Buttons, etc.)
+        const sections = [
+          'Body', 'Buttons', 'Captions', 'Subtitles', 'Legal', 
+          'Labels', 'Overline', 'Display', 'Headers', 'Number'
+        ];
+        
+        // Process each section
+        for (const section of sections) {
+          if (defaultContent[section]) {
+            for (const [typeName, typeProps] of Object.entries(defaultContent[section])) {
+              // Format the type name (e.g., "Small-Semibold" to "SmallSemibold")
+              const formattedTypeName = typeName.replace(/-/g, '');
+              
+              // Process each property
+              for (const [propName, propObj] of Object.entries(typeProps)) {
+                if (propObj && propObj.value !== undefined) {
+                  // Create the CSS variable name
+                  const varName = `--Typography-${section}-${formattedTypeName}-${propName}`;
+                  
+                  // Format the value (handle reference format)
+                  let value = propObj.value;
+                  if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+                    // Extract the reference path
+                    const refPath = value.substring(1, value.length - 1);
+                    
+                    // Handle different reference formats
+                    if (refPath.startsWith('Platform-Default.')) {
+                      value = `var(--${refPath.replace(/\./g, '-')})`;
+                    } else if (refPath.startsWith('Platform-Font-Families.')) {
+                      value = `var(--Platform-Font-Families-${refPath.split('.')[1]})`;
+                    } else if (refPath.startsWith('Congnitive-Font-Families.')) {
+                      value = `var(--Congnitive-Font-Families-${refPath.split('.')[1]})`;
+                    } else if (refPath.startsWith('Platform-2x.')) {
+                      value = `var(--${refPath.replace(/\./g, '-')})`;
+                    } else {
+                      value = `var(--${refPath.replace(/\./g, '-')})`;
+                    }
+                  } else if (typeof value === 'number') {
+                    value = `${value}px`;
+                  }
+                  
+                  // Add the variable to the CSS
+                  css += `  ${varName}: ${value};\n`;
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      // Special case for Cognitive font families
+      if (noneProfile['Congnitive-Font-Families']) {
+        const fontFamilies = noneProfile['Congnitive-Font-Families'];
+        if (fontFamilies.Standard && fontFamilies.Standard.value) {
+          // Extract the value (removing quotes if needed)
+          let value = fontFamilies.Standard.value;
+          if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+            value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
+          } else {
+            value = `"${value}"`;
+          }
+          css += `  --Congnitive-Font-Families-Standard: ${value};\n`;
+        }
+        
+        if (fontFamilies.Decorative && fontFamilies.Decorative.value) {
+          // Extract the value (removing quotes if needed)
+          let value = fontFamilies.Decorative.value;
+          if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+            value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
+          } else {
+            value = `"${value}"`;
+          }
+          css += `  --Congnitive-Font-Families-Decorative: ${value};\n`;
+        }
+      }
+    }
+    
+    // Add cognitive target and multiplier
+    css += `  --Cognitive-Target: var(--Platform-Default-Target);\n`;
+    css += `  --Cognitive-Multiplier: 1;\n`;
+    
+    // Close the CSS block
+    css += `}\n`;
+    
+    // Save the file
+    const typographyFilename = 'typography.css';
+    const typographyFilePath = path.join(outputDir, typographyFilename);
+    
+    await fs.promises.writeFile(typographyFilePath, css, 'utf8');
+    
+    return {
+      file: typographyFilename,
+      path: typographyFilePath
+    };
+  }
+
+/**
+ * Extract cognitive variables - simplified to only include the multiplier
+ * This is a direct replacement for the existing function
+ * @param {Object} cognitiveContent - The cognitive profile content
+ * @returns {Array} - Array of CSS variable declarations
+ */
 function extractCognitiveVariables(cognitiveContent) {
     const variables = [];
     
-    // Add Cognitive Font Families
-    if (cognitiveContent['Congnitive-Font-Families']) {
-      const fontFamilies = cognitiveContent['Congnitive-Font-Families'];
-      variables.push(`  --Congnitive-Font-Families-Standard: "${fontFamilies.Standard.value}";\n`);
-      variables.push(`  --Congnitive-Font-Families-Decorative: "${fontFamilies.Decorative.value}";\n`);
-    }
+    // Get the profile name from either Cognitive-Profile or Cognitive-Label
+    const profileName = cognitiveContent['Cognitive-Profile']?.value || 
+                        cognitiveContent['Cognitive-Label']?.value || 
+                        'None';
     
-    // Process Cognitive Default section
-    const defaultContent = cognitiveContent['Cognitive-Default'];
-    
-    // Define sections to process
-    const sections = [
-      'Body', 'Buttons', 'Captions', 'Subtitles', 'Legal', 
-      'Labels', 'Overline', 'Display', 'Headers', 'Number'
-    ];
-    
-    sections.forEach(section => {
-      if (defaultContent[section]) {
-        Object.entries(defaultContent[section]).forEach(([typeName, typeProps]) => {
-          Object.entries(typeProps).forEach(([propName, propObj]) => {
-            // Skip if value is undefined
-            if (propObj.value === undefined) return;
-            
-            // Handle font family references
-            let value = propObj.value;
-            if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-              // Remove braces and convert periods to dashes in CSS variable reference
-              value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
-            }
-            
-            // Format numeric values
-            if (typeof value === 'number') {
-              value = `${value}px`;
-            }
-            
-            // Create variable name
-            const variableName = `--Cognitive-${section}-${typeName.replace('-', '')}-${propName}`;
-            
-            variables.push(`  ${variableName}: ${value};\n`);
-          });
-        });
-      }
-    });
-    
-    // Process Spacing values
-    if (defaultContent?.Spacing) {
-      Object.entries(defaultContent.Spacing).forEach(([spacingName, spacingObj]) => {
-        // Skip entries without a value
-        if (spacingObj.value === undefined) return;
-        
-        // Convert reference or use direct value
-        let value = spacingObj.value;
-        if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-          value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
-        }
-        
-        // Create spacing variable
-        variables.push(`  --Cognitive-Spacing-${spacingName}: ${value};\n`);
-      });
-    }
-    
-    // Add Target if exists
-    if (defaultContent?.Target) {
-      const targetValue = defaultContent.Target.value;
-      variables.push(`  --Cognitive-Target: var(--Platform-Default-Target);\n`);
+    // Add Cognitive Multiplier based on profile type - this is the only variable we're keeping
+    if (profileName.toLowerCase() === 'none') {
+      variables.push(`  --Cognitive-Multiplier: 1;\n`);
+    } else if (profileName.toLowerCase() === 'adhd' || profileName.toLowerCase() === 'dyslexia') {
+      variables.push(`  --Cognitive-Multiplier: 1.5;\n`);
     }
     
     return variables;
-  }
+}
 
 /**
  * Process surface containers JSON structure into CSS
@@ -734,16 +940,17 @@ function processSizingSpacing(jsonContent) {
 async function convertToCssFiles(jsonContent, outputDir) {
     console.log(`Attempting to create output directory: ${outputDir}`);
     
-  const results = {
-    base: null,
-    modes: [],
-    platforms: [],
-    cognitive: [],
-    sizingSpacing: [],
-    surfaceContainers: null,
-    system: null,
-    shadowLevels: null
-  };
+    const results = {
+        base: null,
+        typography: null, // <-- Add this line
+        modes: [],
+        platforms: [],
+        cognitive: [],
+        sizingSpacing: [],
+        surfaceContainers: null,
+        system: null,
+        shadowLevels: null
+    };
   
   // Create the output directory if it doesn't exist
   if (!fs.existsSync(outputDir)) {
@@ -783,6 +990,13 @@ async function convertToCssFiles(jsonContent, outputDir) {
     file: baseFilename,
     path: baseFilePath
   };
+
+  try {
+    results.typography = await generateTypographyCSS(jsonContent, outputDir);
+    console.log(`Successfully wrote ${results.typography.file}`);
+  } catch (err) {
+    console.error(`Error writing typography CSS:`, err);
+  }
   
   // Process system tokens
   if (jsonContent['System/Default']) {
@@ -966,19 +1180,33 @@ const cognitiveProfiles = [
     'Cognitive/ADHD', 
     'Cognitive/Dyslexia'
   ];
-
+  
   for (const profileKey of cognitiveProfiles) {
     if (jsonContent[profileKey]) {
-      const cognitiveCss = `[data-cognitive-profile] {\n${
-        extractCognitiveVariables(jsonContent[profileKey]).join('')
-      }}\n`;
+      // Extract the profile name from the key (e.g., "None" from "Cognitive/None")
+      const profileName = profileKey.split('/')[1];
       
-      const cognitiveFilename = `cognitive-${profileKey.split('/')[1].toLowerCase()}.css`;
+      // Start building the CSS
+      let cognitiveCss = `/* Cognitive profile: ${profileName} */\n`;
+      cognitiveCss += `[data-cognitive-profile="${profileName.toLowerCase()}"] {\n`;
+      
+      // Add the appropriate cognitive multiplier based on profile
+      if (profileName.toLowerCase() === 'none') {
+        cognitiveCss += `  --Cognitive-Multiplier: 1;\n`;
+      } else {
+        cognitiveCss += `  --Cognitive-Multiplier: 1.5;\n`;
+      }
+      
+      // Add the rest of the cognitive variables
+      cognitiveCss += extractCognitiveVariables(jsonContent[profileKey]).join('');
+      cognitiveCss += `}\n`;
+      
+      const cognitiveFilename = `cognitive-${profileName.toLowerCase()}.css`;
       const cognitiveFilePath = path.join(outputDir, cognitiveFilename);
       
       await fs.promises.writeFile(cognitiveFilePath, cognitiveCss, 'utf8');
       results.cognitive.push({
-        profile: profileKey.split('/')[1],
+        profile: profileName,
         file: cognitiveFilename,
         path: cognitiveFilePath
       });
@@ -1073,11 +1301,12 @@ async function generateLoaderScript(outputDir, fileInfo) {
       try {
         // Load base CSS files
         const baseFiles = [
-          { name: 'base.css', id: 'theme-base' },
-          { name: 'system.css', id: 'theme-system' },
-          { name: 'shadow-levels.css', id: 'theme-shadow-levels' },
-          { name: 'sizing-spacing.css', id: 'theme-sizing-spacing' },
-          { name: 'surface-containers.css', id: 'theme-surface-containers' }
+            { name: 'base.css', id: 'theme-base' },
+            { name: 'typography.css', id: 'theme-typography' }, // <-- Add this line
+            { name: 'system.css', id: 'theme-system' },
+            { name: 'shadow-levels.css', id: 'theme-shadow-levels' },
+            { name: 'sizing-spacing.css', id: 'theme-sizing-spacing' },
+            { name: 'surface-containers.css', id: 'theme-surface-containers' }
         ];
   
         for (const file of baseFiles) {
@@ -1242,6 +1471,10 @@ async function convertJsonFileToCssFiles(inputPath, outputDir) {
       
       console.log(`Successfully generated CSS files in ${outputDir}`);
       console.log(`- base.css (common styles)`);
+
+      if (results.typography) {
+        console.log(`- typography.css (typography variables)`);
+      }
       
       if (results.system) {
         console.log(`- system.css (system tokens)`);
@@ -1303,5 +1536,6 @@ export {
   processBackgrounds,
   extractCognitiveVariables, 
   convertJsonFileToCssFiles,
-  processShadowLevels 
+  processShadowLevels,
+  generateTypographyCSS
 };
