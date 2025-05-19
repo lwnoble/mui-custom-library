@@ -37875,7 +37875,7 @@
       "type": "color"
     },
     "Name": {
-      "value": "Lise W Noble TESTing 123",
+      "value": "Lise",
       "type": "text"
     },
     "Color-Theory": {
@@ -37901,6 +37901,18 @@
     "FocusOverlay": {
       "value": 30,
       "type": "number"
+    },
+    "AdminAccess": {
+      "value": "false",
+      "type": "boolean"
+    },
+    "LIbraryBlocked": {
+      "value": "false",
+      "type": "boolean"
+    },
+    "NoLicense": {
+      "value": "false",
+      "type": "boolean"
     }
   },
   "Shadow-Level/L-1": {
@@ -71189,7 +71201,7 @@
       }
     },
     "Minimum Target": {
-      "value": "{Cognitive-Default.Target}",
+      "value": "{Cognitive-Default.Spacing.Target}",
       "type": "number"
     },
     "Buttons": {
@@ -75293,6 +75305,14 @@
         "Spacing-One-And-Half": {
           "value": "{Default.Spacing-Quarter}",
           "type": "number"
+        },
+        "Target": {
+          "value": "{Platform-Default.Target}",
+          "type": "number"
+        },
+        "Cognitive-Multiplier": {
+          "value": 1,
+          "type": "number"
         }
       },
       "Target": {
@@ -76471,6 +76491,10 @@
         "Spacing-12": {
           "value": 0,
           "type": "number"
+        },
+        "Target": {
+          "value": "{Platform-2x.Target}",
+          "type": "number"
         }
       },
       "Spacing-1": {
@@ -77631,15 +77655,23 @@
           "type": "number"
         },
         "Spacing-Half": {
-          "value": "{2x.Spacing-Half}",
+          "value": "{Default.Spacing-Half}",
           "type": "number"
         },
         "Spacing-Quarter": {
-          "value": "{2x.Spacing-Quarter}",
+          "value": "{Default.Spacing-Quarter}",
           "type": "number"
         },
         "Spacing-One-And-Half": {
-          "value": "{2x.Spacing-One-And-Half}",
+          "value": "{Default.Spacing-One-And-Half}",
+          "type": "number"
+        },
+        "Target": {
+          "value": 48,
+          "type": "number"
+        },
+        "Cognitive-Multiplier": {
+          "value": 1.5,
           "type": "number"
         }
       },
@@ -78819,6 +78851,10 @@
         "Spacing-12": {
           "value": 360,
           "type": "number"
+        },
+        "Target": {
+          "value": 96,
+          "type": "number"
         }
       },
       "Spacing-1": {
@@ -79979,15 +80015,23 @@
           "type": "number"
         },
         "Spacing-Half": {
-          "value": "{2x.Spacing-Half}",
+          "value": "{Default.Spacing-Half}",
           "type": "number"
         },
         "Spacing-Quarter": {
-          "value": "{2x.Spacing-Quarter}",
+          "value": "{Default.Spacing-Quarter}",
           "type": "number"
         },
         "Spacing-One-And-Half": {
-          "value": "{2x.Spacing-One-And-Half}",
+          "value": "{Default.Spacing-One-And-Half}",
+          "type": "number"
+        },
+        "Target": {
+          "value": 48,
+          "type": "number"
+        },
+        "Cognitive-Multiplier": {
+          "value": 1.5,
           "type": "number"
         }
       },
@@ -81166,6 +81210,10 @@
         },
         "Spacing-12": {
           "value": 360,
+          "type": "number"
+        },
+        "Target": {
+          "value": 96,
           "type": "number"
         }
       },
@@ -82379,6 +82427,10 @@
     "Number": {
       "value": 0,
       "type": "number"
+    },
+    "Multiplier": {
+      "value": 1,
+      "type": "number"
     }
   },
   "Sizing & Spacing/Expanded": {
@@ -82720,6 +82772,10 @@
     },
     "Number": {
       "value": 0,
+      "type": "number"
+    },
+    "Multiplier": {
+      "value": 1.5,
       "type": "number"
     }
   },
@@ -83063,6 +83119,10 @@
     "Number": {
       "value": 0,
       "type": "number"
+    },
+    "Multiplier": {
+      "value": 0.5,
+      "type": "number"
     }
   },
   "Sizing & Spacing/Standard": {
@@ -83404,6 +83464,10 @@
     },
     "Number": {
       "value": 0,
+      "type": "number"
+    },
+    "Multiplier": {
+      "value": 1,
       "type": "number"
     }
   },
