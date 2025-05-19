@@ -61646,11 +61646,11 @@
     },
     "Platform-Font-Families": {
       "Standard": {
-        "value": "{Congnitive-Font-Families.Standard}",
+        "value": "Roboto",
         "type": "text"
       },
       "Decorative": {
-        "value": "{Congnitive-Font-Families.Decorative}",
+        "value": "Bungee",
         "type": "text"
       }
     },
@@ -74194,11 +74194,11 @@
   "Cognitive/None": {
     "Congnitive-Font-Families": {
       "Standard": {
-        "value": "Roboto",
+        "value": "{Platform-Font-Families.Standard}",
         "type": "text"
       },
       "Decorative": {
-        "value": "Bungee",
+        "value": "{Platform-Font-Families.Decorative}",
         "type": "text"
       }
     },

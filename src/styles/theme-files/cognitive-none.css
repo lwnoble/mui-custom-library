@@ -3,8 +3,8 @@
   --Cognitive-Multiplier: 1;
   --Cognitive-Multiplier: 1;
   --Cognitive-Target: var(--Platform-Default-Target);
-  --Typography-Font-Families-Standard: "Roboto";
-  --Typography-Font-Families-Decorative: "Bungee";
+  --Typography-Font-Families-Standard: "{Platform-Font-Families.Standard}";
+  --Typography-Font-Families-Decorative: "{Platform-Font-Families.Decorative}";
   --Typography-Body-Small-Font-Family: var(--Platform-Default-Body-Small-Font-Family);
   --Typography-Body-Small-Line-Height: var(--Platform-Default-Body-Small-Line-Height);
   --Typography-Body-Small-Font-Size: var(--Platform-Default-Body-Small-Font-Size);

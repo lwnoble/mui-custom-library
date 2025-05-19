@@ -242,8 +242,8 @@
   --Typography-Number-Medium-Character-Spacing: var(--Platform-Default-Number-Medium-Character-Spacing);
   --Typography-Number-Medium-Paragraph-Spacing: var(--Platform-Default-Number-Medium-Paragraph-Spacing);
   --Typography-Number-Medium-SR-Character-Spacing: var(--Platform-Default-Number-Medium-SR-Character-Spacing);
-  --Congnitive-Font-Families-Standard: "Roboto";
-  --Congnitive-Font-Families-Decorative: "Bungee";
+  --Congnitive-Font-Families-Standard: var(--Platform-Font-Families-Standard);
+  --Congnitive-Font-Families-Decorative: var(--Platform-Font-Families-Decorative);
   --Cognitive-Target: var(--Platform-Default-Target);
   --Cognitive-Multiplier: 1;
 }
