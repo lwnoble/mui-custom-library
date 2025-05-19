@@ -999,16 +999,9 @@ async function convertToCssFiles(jsonContent, outputDir) {
   }
   
   // Process system tokens
-  if (jsonContent['System/Default']) {
-    const systemCSS = convertSystemToCss(jsonContent);
-    const systemFilename = 'system.css';
-    const systemFilePath = path.join(outputDir, systemFilename);
-    
-    await fs.promises.writeFile(systemFilePath, systemCSS, 'utf8');
-    results.system = {
-      file: systemFilename,
-      path: systemFilePath
-    };
+  if (jsonContent['System/Default'] || jsonContent['System-Styles/Default']) {
+    const systemCSS = await convertSystemToCss(jsonContent, outputDir);  // Add await here
+    results.system = systemCSS;  // The function now returns the file info object
   }
   
   // Process surface containers
