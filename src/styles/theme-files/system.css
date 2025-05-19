@@ -1,12 +1,15 @@
 :root {
   --Transparent: #00000000;
-  --Name: "Lise W Noble TESTing 123";
+  --Name: "Lise";
   --Color-Theory: "Analogous";
   --Surface-Style: "Light Tonal";
   --Desktop-Target: 24px;
   --Grid: 8px;
   --HoverOverlay: 15px;
   --FocusOverlay: 30px;
+  --AdminAccess: "false";
+  --LIbraryBlocked: "false";
+  --NoLicense: "false";
   --Sizing-Sizing-1: var(--Sizing-1);
   --Sizing-Sizing-2: var(--Sizing-2);
   --Sizing-Sizing-3: var(--Sizing-3);
