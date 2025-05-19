@@ -1398,10 +1398,6 @@
 
 /* AAA-dark mode paragraph spacing */
 [data-mode="AAA-dark"] {
-  --Body-Medium: var(--Cognitive-Default-Body-Medium-AAA-Paragraph-Spacing);
-  --Body-Small: var(--Cognitive-Default-Body-Small-AAA-Paragraph-Spacing);
-  --Body-Large: var(--Cognitive-Default-Body-Large-AAA-Paragraph-Spacing);
-  --Legal: var(--Cognitive-2x-Legal-Standard-AAA-Paragraph-Spacing);
-  --Caption: var(--Cognitive-Default-Captions-Standard-AAA-Paragraph-Spacing);
+  --Mode-PS-multiplier: 200%;
 }
 
