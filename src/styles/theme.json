@@ -76496,58 +76496,6 @@
           "value": "{Platform-2x.Target}",
           "type": "number"
         }
-      },
-      "Spacing-1": {
-        "value": 0,
-        "type": "number"
-      },
-      "Spacing-2": {
-        "value": 0,
-        "type": "number"
-      },
-      "Spacing-3": {
-        "value": 0,
-        "type": "number"
-      },
-      "Spacing-4": {
-        "value": 0,
-        "type": "number"
-      },
-      "Spacing-5": {
-        "value": 0,
-        "type": "number"
-      },
-      "Spacing-6": {
-        "value": 0,
-        "type": "number"
-      },
-      "Spacing-7": {
-        "value": 0,
-        "type": "number"
-      },
-      "Spacing-8": {
-        "value": 0,
-        "type": "number"
-      },
-      "Spacing-9": {
-        "value": 0,
-        "type": "number"
-      },
-      "Spacing-10": {
-        "value": 0,
-        "type": "number"
-      },
-      "Spacing-Half": {
-        "value": 0,
-        "type": "number"
-      },
-      "Spacing-Quarter": {
-        "value": 0,
-        "type": "number"
-      },
-      "Spacing-One-And-Half": {
-        "value": 0,
-        "type": "number"
       }
     }
   },
@@ -78856,58 +78804,6 @@
           "value": 96,
           "type": "number"
         }
-      },
-      "Spacing-1": {
-        "value": 24,
-        "type": "number"
-      },
-      "Spacing-2": {
-        "value": 48,
-        "type": "number"
-      },
-      "Spacing-3": {
-        "value": 72,
-        "type": "number"
-      },
-      "Spacing-4": {
-        "value": 96,
-        "type": "number"
-      },
-      "Spacing-5": {
-        "value": 120,
-        "type": "number"
-      },
-      "Spacing-6": {
-        "value": 144,
-        "type": "number"
-      },
-      "Spacing-7": {
-        "value": 168,
-        "type": "number"
-      },
-      "Spacing-8": {
-        "value": 192,
-        "type": "number"
-      },
-      "Spacing-9": {
-        "value": 216,
-        "type": "number"
-      },
-      "Spacing-10": {
-        "value": 240,
-        "type": "number"
-      },
-      "Spacing-Half": {
-        "value": 12,
-        "type": "number"
-      },
-      "Spacing-Quarter": {
-        "value": 6,
-        "type": "number"
-      },
-      "Spacing-One-And-Half": {
-        "value": 36,
-        "type": "number"
       }
     }
   },
@@ -81216,58 +81112,6 @@
           "value": 96,
           "type": "number"
         }
-      },
-      "Spacing-1": {
-        "value": 24,
-        "type": "number"
-      },
-      "Spacing-2": {
-        "value": 48,
-        "type": "number"
-      },
-      "Spacing-3": {
-        "value": 72,
-        "type": "number"
-      },
-      "Spacing-4": {
-        "value": 96,
-        "type": "number"
-      },
-      "Spacing-5": {
-        "value": 120,
-        "type": "number"
-      },
-      "Spacing-6": {
-        "value": 144,
-        "type": "number"
-      },
-      "Spacing-7": {
-        "value": 168,
-        "type": "number"
-      },
-      "Spacing-8": {
-        "value": 192,
-        "type": "number"
-      },
-      "Spacing-9": {
-        "value": 216,
-        "type": "number"
-      },
-      "Spacing-10": {
-        "value": 240,
-        "type": "number"
-      },
-      "Spacing-Half": {
-        "value": 12,
-        "type": "number"
-      },
-      "Spacing-Quarter": {
-        "value": 6,
-        "type": "number"
-      },
-      "Spacing-One-And-Half": {
-        "value": 36,
-        "type": "number"
       }
     }
   },
