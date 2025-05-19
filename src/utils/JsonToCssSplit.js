@@ -587,6 +587,24 @@ function processParagraphSpacing(paragraphSpacing, mode, isDefaultMode = false) 
 }
 
 /**
+ * Extract chart-specific variables
+ * @param {Object} chartContent - The chart content object
+ * @returns {Array} - Array of CSS variable declarations
+ */
+function extractChartVariables(chartContent) {
+  const variables = [];
+  
+  // Process all chart color variables
+  for (const [key, valueObj] of Object.entries(chartContent)) {
+    if (valueObj.value !== undefined) {
+      variables.push(`  --${key}: ${valueObj.value};\n`);
+    }
+  }
+  
+  return variables;
+}
+
+/**
  * Extract platform typography variables with corrected font family references
  * @param {Object} platformContent - The platform content object
  * @param {String} platformName - The platform name
@@ -802,6 +820,7 @@ async function generateTypographyCSS(jsonContent, outputDir) {
  * @param {Object} cognitiveContent - The cognitive profile content
  * @returns {Array} - Array of CSS variable declarations
  */
+
 function extractCognitiveVariables(cognitiveContent) {
     const variables = new Set();
     
