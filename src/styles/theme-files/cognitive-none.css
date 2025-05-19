@@ -60,7 +60,7 @@
   --Typography-Buttons-Small-Character-Spacing: var(--Platform-Default-Buttons-Small-Character-Spacing);
   --Typography-Buttons-Small-Paragraph-Spacing: var(--Platform-Default-Buttons-Small-Paragraph-Spacing);
   --Typography-Buttons-Small-SR-Character-Spacing: var(--Platform-Default-Buttons-Small-SR-Character-Spacing);
-  --Typography-Buttons-Standard-Font-Family: var(--Congnitive-Font-Families-Standard);
+  --Typography-Buttons-Standard-Font-Family: var(--Typography-Font-Families-Standard);
   --Typography-Buttons-Standard-Font-Size: var(--Platform-Default-Buttons-Standard-Font-Size);
   --Typography-Buttons-Standard-Font-Weight: var(--Platform-Default-Buttons-Standard-Font-Weight);
   --Typography-Buttons-Standard-Line-Height: var(--Platform-Default-Buttons-Standard-Line-Height);
@@ -104,7 +104,7 @@
   --Typography-Subtitles-Large-Character-Spacing: var(--Platform-Default-Subtitles-Large-Character-Spacing);
   --Typography-Subtitles-Large-Paragraph-Spacing: var(--Platform-Default-Subtitles-Large-Paragraph-Spacing);
   --Typography-Subtitles-Large-SR-Character-Spacing: var(--Platform-Default-Subtitles-Large-SR-Character-Spacing);
-  --Typography-Legal-Standard-Font-Family: var(--Congnitive-Font-Families-Standard);
+  --Typography-Legal-Standard-Font-Family: var(--Typography-Font-Families-Standard);
   --Typography-Legal-Standard-Font-Size: var(--Platform-Default-Legal-Standard-Font-Size);
   --Typography-Legal-Standard-Font-Weight: var(--Platform-Default-Legal-Standard-Font-Weight);
   --Typography-Legal-Standard-Line-Height: var(--Platform-Default-Legal-Standard-Line-Height);
@@ -134,14 +134,14 @@
   --Typography-Labels-Small-Character-Spacing: var(--Platform-Default-Labels-Small-Character-Spacing);
   --Typography-Labels-Small-Paragraph-Spacing: var(--Platform-Default-Labels-Extra-Small-Paragraph-Spacing);
   --Typography-Labels-Small-SR-Character-Spacing: var(--Platform-Default-Labels-Small-SR-Character-Spacing);
-  --Typography-Labels-Medium-Font-Family: var(--Congnitive-Font-Families-Standard);
+  --Typography-Labels-Medium-Font-Family: var(--Typography-Font-Families-Standard);
   --Typography-Labels-Medium-Font-Size: var(--Platform-Default-Labels-Medium-Font-Size);
   --Typography-Labels-Medium-Font-Weight: var(--Platform-Default-Labels-Medium-Font-Weight);
   --Typography-Labels-Medium-Line-Height: var(--Platform-Default-Labels-Medium-Line-Height);
   --Typography-Labels-Medium-Character-Spacing: var(--Platform-Default-Labels-Medium-Character-Spacing);
   --Typography-Labels-Medium-Paragraph-Spacing: var(--Platform-Default-Labels-Medium-Paragraph-Spacing);
   --Typography-Labels-Medium-SR-Character-Spacing: var(--Platform-Default-Labels-Medium-SR-Character-Spacing);
-  --Typography-Labels-Large-Font-Family: var(--Congnitive-Font-Families-Standard);
+  --Typography-Labels-Large-Font-Family: var(--Typography-Font-Families-Standard);
   --Typography-Labels-Large-Font-Size: var(--Platform-Default-Labels-Large-Font-Size);
   --Typography-Labels-Large-Font-Weight: var(--Platform-Default-Labels-Large-Font-Weight);
   --Typography-Labels-Large-Line-Height: var(--Platform-Default-Labels-Large-Line-Height);

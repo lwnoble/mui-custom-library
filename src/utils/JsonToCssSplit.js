@@ -822,30 +822,37 @@ function extractCognitiveVariables(cognitiveContent) {
                         cognitiveContent['Cognitive-Label']?.value || 
                         'None';
     
-    // Determine multiplier and target based on profile type
+    // Determine multiplier based on profile type
     let multiplier = 1;
-    let target = 24;  // Default target value
     
     switch (profileName.toLowerCase()) {
         case 'none':
             multiplier = 1;
-            target = 24;  // Standard desktop target
             break;
         case 'adhd':
-            multiplier = 1.33;  // Increased spacing and sizing
-            target = 32;  // Larger interaction areas
-            break;
         case 'dyslexia':
-            multiplier = 1.17;  // Moderate increase for readability
-            target = 28;  // Slightly larger than standard
+            multiplier = 1.33;
             break;
+    }
+    
+    // Get target from the Cognitive-Default section
+    let target = 'var(--Platform-Default-Target)';
+    if (cognitiveContent['Cognitive-Default'] && 
+        cognitiveContent['Cognitive-Default'].Target && 
+        cognitiveContent['Cognitive-Default'].Target.value) {
+        // If the value is a reference, convert it to a var()
+        const targetValue = cognitiveContent['Cognitive-Default'].Target.value;
+        if (typeof targetValue === 'string' && targetValue.startsWith('{') && targetValue.endsWith('}')) {
+            target = `var(--${targetValue.substring(1, targetValue.length - 1).replace(/\./g, '-')})`;
+        }
     }
     
     // Add Cognitive Multiplier and Target
     variables.push(`  --Cognitive-Multiplier: ${multiplier};\n`);
     variables.push(`  --Cognitive-Target: ${target};\n`);
     
-    // Add Typography font families from Congnitive-Font-Families
+    // Rest of the function remains the same as in the previous implementation
+    // Add Typography font families
     if (cognitiveContent['Congnitive-Font-Families']) {
         const fontFamilies = cognitiveContent['Congnitive-Font-Families'];
         
@@ -858,7 +865,7 @@ function extractCognitiveVariables(cognitiveContent) {
         }
     }
     
-    // If Cognitive-Default exists, process its typography sections
+    // Process typography sections
     if (cognitiveContent['Cognitive-Default']) {
         const defaultContent = cognitiveContent['Cognitive-Default'];
         const typographySections = [
@@ -875,7 +882,6 @@ function extractCognitiveVariables(cognitiveContent) {
     
     return variables;
 }
-
 function processTypographySection(sectionContent, sectionName, variables) {
     // Iterate through subsections (Small, Medium, Large, etc.)
     for (const [typeName, typeContent] of Object.entries(sectionContent)) {
@@ -892,7 +898,15 @@ function processTypographySection(sectionContent, sectionName, variables) {
                     // Remove braces and convert dot notation to variable notation
                     value = value.substring(1, value.length - 1)
                         .replace(/\./g, '-');
-                    value = `var(--${value})`;
+                    
+                    // Special handling for Congnitive font families
+                    if (value.includes('Congnitive-Font-Families-Standard')) {
+                        value = 'var(--Typography-Font-Families-Standard)';
+                    } else if (value.includes('Congnitive-Font-Families-Decorative')) {
+                        value = 'var(--Typography-Font-Families-Decorative)';
+                    } else {
+                        value = `var(--${value})`;
+                    }
                 }
                 
                 // Add the variable
