@@ -118,14 +118,21 @@ async function convertSystemToCss(jsonContent, outputDir) {
     // Start building the CSS
     let css = `:root {\n`;
     
-    // Process all properties in the system default section
-    for (const [key, value] of Object.entries(systemDefault)) {
-      if (value && value.value !== undefined) {
-        // Convert variable names with spaces
-        const varName = key.replace(/\s+/g, '-');
-        
+    // Base properties to include from the root level of the system section
+    const rootProperties = [
+      'Transparent',
+      'Name',
+      'Color-Theory',
+      'Surface-Style',
+      'Desktop-Target',
+      'Grid'
+    ];
+    
+    // Add the root level properties
+    for (const key of rootProperties) {
+      if (systemDefault[key] && systemDefault[key].value !== undefined) {
         // Format the value based on its type
-        let cssValue = value.value;
+        let cssValue = systemDefault[key].value;
         if (typeof cssValue === 'number') {
           // Add 'px' to numeric values
           cssValue = `${cssValue}px`;
@@ -143,110 +150,99 @@ async function convertSystemToCss(jsonContent, outputDir) {
         }
         
         // Add the variable to the CSS
-        css += `  --${varName}: ${cssValue};\n`;
+        css += `  --${key}: ${cssValue};\n`;
       }
     }
     
-    // Find common system variables that might be in other sections
-    const systemSections = [
-      'Sizing', 'Buttons', 'Focus', 'Cards', 'Inputs', 'Handles', 
-      'Avatars', 'Accordian', 'Breakpoints', 'Modals', 'Navigation',
-      'Spacing', 'Columns', 'Border', 'StatusBar', 'HoverOverlay'
+    // Process the Sizing section
+    if (systemDefault.Sizing) {
+      // Add all sizing properties
+      for (const [key, value] of Object.entries(systemDefault.Sizing)) {
+        if (value && value.value !== undefined) {
+          // Format the value based on its type
+          let cssValue = value.value;
+          
+          // Check if it's a reference
+          if (typeof cssValue === 'string' && cssValue.startsWith('{') && cssValue.endsWith('}')) {
+            // Convert reference to var() format
+            cssValue = `var(--${cssValue.substring(1, cssValue.length - 1).replace(/\./g, '-')})`;
+          } else if (typeof cssValue === 'number') {
+            cssValue = `${cssValue}px`;
+          }
+          
+          // Add the variable to the CSS
+          css += `  --Sizing-${key}: ${cssValue};\n`;
+        }
+      }
+    }
+    
+    // Add Minimum Target
+    if (systemDefault['Minimum Target'] && systemDefault['Minimum Target'].value) {
+      let targetValue = systemDefault['Minimum Target'].value;
+      if (typeof targetValue === 'string' && targetValue.startsWith('{') && targetValue.endsWith('}')) {
+        targetValue = `var(--${targetValue.substring(1, targetValue.length - 1).replace(/\./g, '-')})`;
+      } else if (typeof targetValue === 'number') {
+        targetValue = `${targetValue}px`;
+      }
+      css += `  --Sizing-Minimum-Target: ${targetValue};\n`;
+    }
+    
+    // Process the following sections
+    const sections = [
+      'Buttons',
+      'Hotlinks',
+      'ListItem',
+      'Focus',
+      'Focus-Blur',
+      'Cards',
+      'Inputs',
+      'Handles',
+      'Focus-Border',
+      'Circle',
+      'Avatars',
+      'Accordian',
+      'Breakpoints',
+      'Modals',
+      'Navigation',
+      'Spacing',
+      'Columns',
+      'Border',
+      'StatusBar',
+      'HoverOverlay'
     ];
     
-    // Function to extract variables from a section
-    const extractSectionVariables = (section, prefix) => {
-      const sectionData = jsonContent[section] || 
-                          jsonContent[`${section}/Default`] ||
-                          systemDefault[section];
-      
-      if (!sectionData) return;
-      
-      // Process each property in the section
-      for (const [key, value] of Object.entries(sectionData)) {
-        if (value && (value.value !== undefined || typeof value === 'object')) {
-          // Convert variable names with spaces
-          const sanitizedKey = key.replace(/\s+/g, '-');
-          
-          // For nested objects
-          if (typeof value === 'object' && !value.value && !value.type) {
-            // Process nested properties
-            for (const [nestedKey, nestedValue] of Object.entries(value)) {
-              if (nestedValue && nestedValue.value !== undefined) {
-                const nestedSanitizedKey = nestedKey.replace(/\s+/g, '-');
-                const nestedVarName = `--${prefix}-${sanitizedKey}-${nestedSanitizedKey}`;
-                let nestedCssValue = nestedValue.value;
-                
-                // Format the value based on its type
-                if (typeof nestedCssValue === 'number') {
-                  nestedCssValue = `${nestedCssValue}px`;
-                } else if (typeof nestedCssValue === 'string' && nestedCssValue.startsWith('{') && nestedCssValue.endsWith('}')) {
-                  nestedCssValue = `var(--${nestedCssValue.substring(1, nestedCssValue.length - 1).replace(/\./g, '-')})`;
-                }
-                
-                css += `  ${nestedVarName}: ${nestedCssValue};\n`;
+    // Process each section
+    for (const section of sections) {
+      if (systemDefault[section]) {
+        // Check if it's a direct value or an object with nested properties
+        if (typeof systemDefault[section] === 'object' && systemDefault[section].value !== undefined) {
+          // Direct value
+          let sectionValue = systemDefault[section].value;
+          if (typeof sectionValue === 'string' && sectionValue.startsWith('{') && sectionValue.endsWith('}')) {
+            sectionValue = `var(--${sectionValue.substring(1, sectionValue.length - 1).replace(/\./g, '-')})`;
+          } else if (typeof sectionValue === 'number') {
+            sectionValue = `${sectionValue}px`;
+          }
+          css += `  --${section}: ${sectionValue};\n`;
+        } else {
+          // Object with nested properties
+          for (const [propName, propValue] of Object.entries(systemDefault[section])) {
+            if (propValue && propValue.value !== undefined) {
+              // Format the value
+              let cssValue = propValue.value;
+              if (typeof cssValue === 'string' && cssValue.startsWith('{') && cssValue.endsWith('}')) {
+                cssValue = `var(--${cssValue.substring(1, cssValue.length - 1).replace(/\./g, '-')})`;
+              } else if (typeof cssValue === 'number') {
+                cssValue = `${cssValue}px`;
               }
+              
+              // Add the variable to the CSS
+              css += `  --${section}-${propName}: ${cssValue};\n`;
             }
-          } else {
-            // For direct properties
-            const varName = `--${prefix}-${sanitizedKey}`;
-            let cssValue = value.value;
-            
-            // Format the value based on its type
-            if (typeof cssValue === 'number') {
-              cssValue = `${cssValue}px`;
-            } else if (typeof cssValue === 'string' && cssValue.startsWith('{') && cssValue.endsWith('}')) {
-              cssValue = `var(--${cssValue.substring(1, cssValue.length - 1).replace(/\./g, '-')})`;
-            }
-            
-            css += `  ${varName}: ${cssValue};\n`;
           }
         }
       }
-    };
-    
-    // Extract variables from each section
-    systemSections.forEach(section => {
-      extractSectionVariables(section, section);
-    });
-    
-    // Add additional variables from your example (if not already included)
-    const additionalVariables = [
-      { name: "--Sizing-Sizing-1", value: "var(--Sizing-1)" },
-      { name: "--Sizing-Sizing-2", value: "var(--Sizing-2)" },
-      { name: "--Sizing-Sizing-3", value: "var(--Sizing-3)" },
-      { name: "--Sizing-Sizing-4", value: "var(--Sizing-4)" },
-      { name: "--Sizing-Sizing-5", value: "var(--Sizing-5)" },
-      { name: "--Sizing-Sizing-6", value: "var(--Sizing-6)" },
-      { name: "--Sizing-Sizing-7", value: "var(--Sizing-7)" },
-      { name: "--Sizing-Sizing-8", value: "var(--Sizing-8)" },
-      { name: "--Sizing-Sizing-9", value: "var(--Sizing-9)" },
-      { name: "--Sizing-Sizing-10", value: "var(--Sizing-10)" },
-      { name: "--Sizing-Sizing-Half", value: "var(--Sizing-Half)" },
-      { name: "--Sizing-Sizing-Quarter", value: "var(--Sizing-Quarter)" },
-      { name: "--Sizing-Sizing-20", value: "var(--Sizing-20)" },
-      { name: "--Sizing-Sizing-30", value: "var(--Sizing-30)" },
-      { name: "--Sizing-Negative-Size-1", value: "var(--Negative-Size-1)" },
-      { name: "--Sizing-Negative-Size-Quarter", value: "var(--Negative-Quarter)" },
-      { name: "--Sizing-Negative-Size-Half", value: "var(--Negative-Half)" },
-      { name: "--Sizing-Sizing-One-And-Half", value: "var(--Sizing-One-And-Half)" },
-      { name: "--Sizing-Negative-Size-2", value: "var(--Negative-Size-2)" },
-      { name: "--Sizing-Sizing-40", value: "var(--Sizing-40)" },
-      { name: "--Sizing-Sizing-24", value: "var(--Sizing-24)" },
-      { name: "--Sizing-Sizing-50", value: "var(--Sizing-50)" },
-      { name: "--Sizing-Minimum-Target", value: "var(--Cognitive-Default-Target)" },
-    ];
-    
-    // Add any additional variables that weren't extracted from the JSON
-    const existingVars = new Set(css.match(/--[\w-]+/g) || []);
-    additionalVariables.forEach(variable => {
-      if (!existingVars.has(variable.name)) {
-        css += `  ${variable.name}: ${variable.value};\n`;
-      }
-    });
-    
-    // Add Breakpoints-Extra-Extra-Large with 'px'
-    css = css.replace('--Breakpoints-Extra-Extra-Large: 1440;', '--Breakpoints-Extra-Extra-Large: 1440px;');
+    }
     
     // Close the CSS block
     css += `}\n`;
@@ -261,7 +257,7 @@ async function convertSystemToCss(jsonContent, outputDir) {
       file: systemFilename,
       path: systemFilePath
     };
-  }
+}
 
 /**
  * Extract all mode variables from the background content
