@@ -4,12 +4,19 @@
  */
 
 :root {
-  /* System font families */
-  --System-Font-Families-Standard: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --System-Font-Families-Decorative: "Georgia", "Times New Roman", serif;
-  
   /* Other global variables */
-  --global-border-radius: 4px;
   --global-transition-duration: 0.2s;
 }
 
+  /* System base tokens */
+  --Transparent: #00000000;
+  --Name: "Lise Noble TESTING";
+  --Color-Theory: "Analogous";
+  --Surface-Style: "Light Tonal";
+  --Desktop-Target: 24px;
+  --Grid: 8px;
+  --HoverOverlay: 15px;
+  --FocusOverlay: 30px;
+  --AdminAccess: "false";
+  --LIbraryBlocked: "false";
+  --NoLicense: "false";
