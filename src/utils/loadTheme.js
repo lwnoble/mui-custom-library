@@ -89,6 +89,9 @@ const loadTheme = (options = {}) => {
     
     // Load CSS files in the specified order
     return Promise.resolve()
+      // 0. Then load surface containers CSS
+      .then(() => loadCssFile('/styles/theme-files/core.css'))
+
       // 1. First load mode CSS
       .then(() => loadCssFile(`/styles/theme-files/mode-${mode.toLowerCase()}.css`))
       

@@ -1,7 +1,7 @@
 /* Desktop platform specific typography */
-[data-platform="Desktop"] {
-  --Platform-Font-Families-Standard: "Roboto";
-  --Platform-Font-Families-Decorative: "Bungee";
+:root, ::after, ::before {
+  --Platform-Font-Families-Standard: "{Congnitive-Font-Families.Standard}";
+  --Platform-Font-Families-Decorative: "{Congnitive-Font-Families.Decorative}";
   --Android: none;
   --IOS: none;
   --Desktop: block;

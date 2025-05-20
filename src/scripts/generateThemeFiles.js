@@ -1,3 +1,5 @@
+// Modified generateThemeFiles.js with added code to copy files to public directory
+
 // src/scripts/generateThemeFiles.js
 const fs = require('fs');
 const path = require('path');
@@ -39,6 +41,24 @@ async function main() {
     );
     
     console.log(`Copied loader script to public/js/theme-loader.js for development use`);
+    
+    // NEW CODE: Copy all CSS files to public directory for direct URL access
+    const publicStylesDir = path.join(__dirname, '../../public/styles/theme-files');
+    if (!fs.existsSync(publicStylesDir)) {
+      fs.mkdirSync(publicStylesDir, { recursive: true });
+    }
+    
+    // Copy all CSS files to public directory
+    fs.readdirSync(outputCssDir)
+      .filter(file => file.endsWith('.css'))
+      .forEach(file => {
+        fs.copyFileSync(
+          path.join(outputCssDir, file),
+          path.join(publicStylesDir, file)
+        );
+      });
+    
+    console.log(`Copied CSS files to public/styles/theme-files for development use`);
     
     // Create a simple index HTML for the generated styles directory
     const indexHtmlContent = `
@@ -105,6 +125,10 @@ loadTheme({
     
     fs.writeFileSync(path.join(outputCssDir, 'index.html'), indexHtmlContent);
     console.log(`Created index.html in the generated styles directory`);
+    
+    // Also copy index.html to public directory
+    fs.writeFileSync(path.join(publicStylesDir, 'index.html'), indexHtmlContent);
+    console.log(`Created index.html in the public styles directory`);
     
     return 0; // Success
   } catch (error) {

@@ -738,130 +738,6 @@ function extractPlatformVariables(platformContent, platformName) {
 }
 
 /**
- * Generate a typography CSS file that works with all JSON cognitive profiles
- * @param {Object} jsonContent - The complete JSON content
- * @param {string} outputDir - The directory to save the file
- * @returns {Promise<Object>} - Information about the generated file
- */
-async function generateTypographyCSS(jsonContent, outputDir) {
-    // Start building the CSS
-    let css = `:root, ::after, ::before {\n`;
-    
-    // Add font families first (from the Platform section)
-    css += `  --Typography-Font-Families-Standard: var(--Platform-Font-Families-Standard);\n`;
-    css += `  --Typogrpahy--Font-Families-Decorative: var(--Platform-Font-Families-Decorative);\n`;
-    
-    // Process each cognitive profile to extract typography variables
-    const cognitiveProfiles = [
-      'Cognitive/None', 
-      'Cognitive/ADHD', 
-      'Cognitive/Dyslexia'
-    ];
-    
-    // We'll primarily use the "None" profile for typography variables
-    const noneProfile = jsonContent['Cognitive/None'];
-    if (noneProfile) {
-      // Process the Cognitive-Default section
-      const defaultContent = noneProfile['Cognitive-Default'];
-      
-      if (defaultContent) {
-        // Process each typography section (Body, Buttons, etc.)
-        const sections = [
-          'Body', 'Buttons', 'Captions', 'Subtitles', 'Legal', 
-          'Labels', 'Overline', 'Display', 'Headers', 'Number'
-        ];
-        
-        // Process each section
-        for (const section of sections) {
-          if (defaultContent[section]) {
-            for (const [typeName, typeProps] of Object.entries(defaultContent[section])) {
-              // Format the type name (e.g., "Small-Semibold" to "SmallSemibold")
-              const formattedTypeName = typeName.replace(/-/g, '');
-              
-              // Process each property
-              for (const [propName, propObj] of Object.entries(typeProps)) {
-                if (propObj && propObj.value !== undefined) {
-                  // Create the CSS variable name
-                  const varName = `--Typography-${section}-${formattedTypeName}-${propName}`;
-                  
-                  // Format the value (handle reference format)
-                  let value = propObj.value;
-                  if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-                    // Extract the reference path
-                    const refPath = value.substring(1, value.length - 1);
-                    
-                    // Handle different reference formats
-                    if (refPath.startsWith('Platform-Default.')) {
-                      value = `var(--${refPath.replace(/\./g, '-')})`;
-                    } else if (refPath.startsWith('Platform-Font-Families.')) {
-                      value = `var(--Platform-Font-Families-${refPath.split('.')[1]})`;
-                    } else if (refPath.startsWith('Congnitive-Font-Families.')) {
-                      value = `var(--Congnitive-Font-Families-${refPath.split('.')[1]})`;
-                    } else if (refPath.startsWith('Platform-2x.')) {
-                      value = `var(--${refPath.replace(/\./g, '-')})`;
-                    } else {
-                      value = `var(--${refPath.replace(/\./g, '-')})`;
-                    }
-                  } else if (typeof value === 'number') {
-                    value = `${value}px`;
-                  }
-                  
-                  // Add the variable to the CSS
-                  css += `  ${varName}: ${value};\n`;
-                }
-              }
-            }
-          }
-        }
-      }
-      
-      // Special case for Cognitive font families
-      if (noneProfile['Congnitive-Font-Families']) {
-        const fontFamilies = noneProfile['Congnitive-Font-Families'];
-        if (fontFamilies.Standard && fontFamilies.Standard.value) {
-          // Extract the value (removing quotes if needed)
-          let value = fontFamilies.Standard.value;
-          if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-            value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
-          } else {
-            value = `"${value}"`;
-          }
-          css += `  --Congnitive-Font-Families-Standard: ${value};\n`;
-        }
-        
-        if (fontFamilies.Decorative && fontFamilies.Decorative.value) {
-          // Extract the value (removing quotes if needed)
-          let value = fontFamilies.Decorative.value;
-          if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-            value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
-          } else {
-            value = `"${value}"`;
-          }
-          css += `  --Congnitive-Font-Families-Decorative: ${value};\n`;
-        }
-      }
-    }
-    
-    // Add cognitive target and multiplier
-    css += `  --Cognitive-Target: var(--Platform-Default-Target);\n`;
-    css += `  --Cognitive-Multiplier: 1;\n`;
-    
-    // Close the CSS block
-    css += `}\n`;
-    
-    // Save the file
-    const typographyFilename = 'typography.css';
-    const typographyFilePath = path.join(outputDir, typographyFilename);
-    
-    await fs.promises.writeFile(typographyFilePath, css, 'utf8');
-    
-    return {
-      file: typographyFilename,
-      path: typographyFilePath
-    };
-  }
-
-/**
  * Extract cognitive variables - simplified to only include the multiplier
  * This is a direct replacement for the existing function
  * @param {Object} cognitiveContent - The cognitive profile content
@@ -1502,7 +1378,6 @@ async function generateLoaderScript(outputDir, fileInfo) {
         // Load base CSS files
         const baseFiles = [
             { name: 'base.css', id: 'theme-base' },
-            { name: 'typography.css', id: 'theme-typography' }, // <-- Add this line
             { name: 'system.css', id: 'theme-system' },
             { name: 'shadow-levels.css', id: 'theme-shadow-levels' },
             { name: 'sizing-spacing.css', id: 'theme-sizing-spacing' },
@@ -1671,10 +1546,6 @@ async function convertJsonFileToCssFiles(inputPath, outputDir) {
       
       console.log(`Successfully generated CSS files in ${outputDir}`);
       console.log(`- base.css (common styles)`);
-
-      if (results.typography) {
-        console.log(`- typography.css (typography variables)`);
-      }
       
       if (results.system) {
         console.log(`- system.css (system tokens)`);

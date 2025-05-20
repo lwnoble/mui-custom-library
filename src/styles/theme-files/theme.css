@@ -1,5 +1,5 @@
 body {
-    font-family: var(--Cognitive-Font-Families-Standard);
+    font-family: var(--Typography-Font-Families-Standard);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -12,4 +12,10 @@ div, header, footer {
 .quiet { 
     color: var(--On-Quiet);
 }
+
+h1 p  {
+    margin-bottom: auto;
+}
+
+
 

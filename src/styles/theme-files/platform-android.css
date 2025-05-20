@@ -1,5 +1,5 @@
 /* Android platform specific typography */
-[data-platform="Android"] {
+:root, ::after, ::before {
   --Platform-Font-Families-Standard: "Roboto";
   --Platform-Font-Families-Decorative: "Roboto";
   --Android: block;
