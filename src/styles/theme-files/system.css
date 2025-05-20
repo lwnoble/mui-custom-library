@@ -1,36 +1,9 @@
 :root {
   --Transparent: #00000000;
-  --Name: "Lise Noble - Test";
+  --Name: "Lise Noble - Testing 123";
   --Color-Theory: "Analogous";
   --Surface-Style: "Light Tonal";
   --Desktop-Target: 24px;
   --Grid: 8px;
   --HoverOverlay: 15px;
-  --FocusOverlay: 30px;
-  --AdminAccess: "false";
-  --LIbraryBlocked: "false";
-  --NoLicense: "false";
-  --Sizing-Sizing-1: var(--Sizing-1);
-  --Sizing-Sizing-2: var(--Sizing-2);
-  --Sizing-Sizing-3: var(--Sizing-3);
-  --Sizing-Sizing-4: var(--Sizing-4);
-  --Sizing-Sizing-5: var(--Sizing-5);
-  --Sizing-Sizing-6: var(--Sizing-6);
-  --Sizing-Sizing-7: var(--Sizing-7);
-  --Sizing-Sizing-8: var(--Sizing-8);
-  --Sizing-Sizing-9: var(--Sizing-9);
-  --Sizing-Sizing-10: var(--Sizing-10);
-  --Sizing-Sizing-Half: var(--Sizing-Half);
-  --Sizing-Sizing-Quarter: var(--Sizing-Quarter);
-  --Sizing-Sizing-20: var(--Sizing-20);
-  --Sizing-Sizing-30: var(--Sizing-30);
-  --Sizing-Negative-Size-1: var(--Negative-Size-1);
-  --Sizing-Negative-Size-Quarter: var(--Negative-Quarter);
-  --Sizing-Negative-Size-Half: var(--Negative-Half);
-  --Sizing-Sizing-One-And-Half: var(--Sizing-One-And-Half);
-  --Sizing-Negative-Size-2: var(--Negative-Size-2);
-  --Sizing-Sizing-40: var(--Sizing-40);
-  --Sizing-Sizing-24: var(--Sizing-24);
-  --Sizing-Sizing-50: var(--Sizing-50);
-  --Sizing-Minimum-Target: var(--Cognitive-Default-Target);
 }
