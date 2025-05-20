@@ -206,10 +206,6 @@ Generated Files:
   "shadowLevels": {
     "file": "shadow-levels.css",
     "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/shadow-levels.css"
-  },
-  "typography": {
-    "file": "typography.css",
-    "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/typography.css"
   }
 }
 
