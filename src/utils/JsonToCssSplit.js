@@ -1051,38 +1051,96 @@ function processSurfaceContainers(jsonContent) {
  * @returns {string} - The generated CSS for sizing and spacing
  */
 function processSizingSpacing(jsonContent) {
-  let css = '';
-  
-  // Process each mode (Default, Expanded, Reduced)
-  for (const [modeName, modeContent] of Object.entries(jsonContent)) {
-    if (modeName.startsWith('Sizing & Spacing/')) {
-      // Extract the mode name (e.g., Default, Expanded, Reduced)
-      const mode = modeName.split('/')[1];
-      
-      // Create the CSS selector
-      if (mode === 'Default') {
-        css += `/* Default sizing and spacing */\n[data-sizing-spacing] {\n`;
-      } else {
-        css += `/* ${mode} sizing and spacing */\n[data-sizing-spacing="${mode.toLowerCase()}"] {\n`;
-      }
-      
-      // Process all sizing and spacing properties
-      if (modeContent.Default) {
-        for (const [propName, propContent] of Object.entries(modeContent.Default)) {
-          if (propContent.value !== undefined) {
-            // Add px suffix to all numeric values
-            css += `  --${propName}: ${propContent.value}px;\n`;
-          }
+    let css = `:root, ::before, ::after {\n`;
+    
+    // Extract multiplier values from each mode
+    const multipliers = {
+      Default: 1,
+      Standard: 1,
+      Expanded: 1.5,
+      Reduced: 0.5
+    };
+    
+    // Override multipliers from the JSON if available
+    Object.keys(jsonContent).forEach(key => {
+      if (key.startsWith('Sizing & Spacing/')) {
+        const mode = key.split('/')[1];
+        if (jsonContent[key].Multiplier && jsonContent[key].Multiplier.value !== undefined) {
+          multipliers[mode] = jsonContent[key].Multiplier.value;
         }
       }
+    });
+    
+    // Add multiplier variables
+    css += `  --Default-Spacing-Multiplier: ${multipliers.Default};\n`;
+    css += `  --Standard-Spacing-Multiplier: ${multipliers.Standard};\n`;
+    css += `  --Expanded-Spacing-Multiplier: ${multipliers.Expanded};\n`;
+    css += `  --Reduced-Spacing-Multiplier: ${multipliers.Reduced};\n`;
+    css += `  --Spacing-multiplier: var(--Default-Spacing-Multiplier);\n`;
+    
+    // Get the default sizing values from the Default mode
+    const defaultSection = jsonContent['Sizing & Spacing/Default'];
+    if (defaultSection && defaultSection.Default) {
+      const defaultValues = defaultSection.Default;
       
-      // Close the CSS block
-      css += `}\n\n`;
+      // Process all sizing properties (not spacing)
+      const sizingProps = Object.keys(defaultValues).filter(
+        key => key.startsWith('Sizing-') || key.startsWith('Negative-')
+      );
+      
+      // Add sizing variables
+      sizingProps.forEach(prop => {
+        if (defaultValues[prop] && defaultValues[prop].value !== undefined) {
+          css += `  --${prop}: ${defaultValues[prop].value}px;\n`;
+        }
+      });
+      
+      // Process spacing properties
+      const spacingProps = Object.keys(defaultValues).filter(
+        key => key.startsWith('Spacing-') && 
+        key !== 'Spacing-multiplier' &&
+        !key.includes('Cognitive')
+      );
+      
+      // Find the corresponding sizing property for each spacing property
+      spacingProps.forEach(spacingProp => {
+        // Convert spacing name to equivalent sizing name if possible
+        let sizingProp = spacingProp.replace('Spacing-', 'Sizing-');
+        
+        // Check if the sizing property exists, otherwise use the direct value
+        if (sizingProps.includes(sizingProp)) {
+          // Use calculations with spacing and cognitive multipliers
+          css += `  --${spacingProp}: min(calc(var(--${sizingProp}) * var(--Spacing-multiplier)), calc(var(--${sizingProp}) * var(--Cognitive-multiplier)));\n`;
+        } else if (defaultValues[spacingProp] && defaultValues[spacingProp].value !== undefined) {
+          // Direct value if no corresponding sizing property
+          css += `  --${spacingProp}: ${defaultValues[spacingProp].value}px;\n`;
+        }
+      });
     }
+    
+    // Close the root block
+    css += `}\n`;
+    
+    // Add data-spacing selectors for different modes
+    css += `/* Correctly placed overrides */\n`;
+    css += `[data-spacing] {\n`;
+    css += `  --Spacing-multiplier: var(--Default-Spacing-Multiplier);\n`;
+    css += `}\n`;
+    
+    css += `[data-spacing="expanded"] {\n`;
+    css += `  --Spacing-multiplier: var(--Expanded-Spacing-Multiplier);\n`;
+    css += `}\n`;
+    
+    css += `[data-spacing="reduced"] {\n`;
+    css += `  --Spacing-multiplier: var(--Reduced-Spacing-Multiplier);\n`;
+    css += `}\n`;
+    
+    css += `[data-spacing="standard"] {\n`;
+    css += `  --Spacing-multiplier: var(--Standard-Spacing-Multiplier);\n`;
+    css += `}\n`;
+    
+    return css;
   }
-  
-  return css;
-}
 
 /**
  * Convert the given JSON content to multiple CSS files with a base file
