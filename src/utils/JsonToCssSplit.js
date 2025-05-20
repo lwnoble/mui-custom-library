@@ -44,7 +44,7 @@ function convertFontFamilyReference(value) {
   }
 
 /**
- * Extract system tokens for base.css
+ * Extract system tokens for base.css in the desired format
  * @param {Object} jsonContent - The complete JSON content
  * @returns {string} - Generated CSS for base system tokens
  */
@@ -58,7 +58,7 @@ function extractBaseSystemTokens(jsonContent) {
     }
   
     // Start building the CSS
-    let css = `  /* System base tokens */\n`;
+    let css = '';
     
     // List of system properties to include in base.css
     const baseSystemProperties = [
@@ -69,10 +69,8 @@ function extractBaseSystemTokens(jsonContent) {
       'Desktop-Target',
       'Grid',
       'HoverOverlay',
-      'FocusOverlay',
-      'AdminAccess',
-      'LIbraryBlocked',
-      'NoLicense'
+      'FocusOverlay'
+      // Removed AdminAccess, LIbraryBlocked, NoLicense as per your example
     ];
     
     // Process the selected system properties
@@ -102,7 +100,7 @@ function extractBaseSystemTokens(jsonContent) {
     }
     
     return css;
-  }
+}
 
 /**
  * Convert System tokens to CSS custom properties
@@ -1115,7 +1113,6 @@ async function convertToCssFiles(jsonContent, outputDir) {
     
     const results = {
         base: null,
-        typography: null,
         modes: [],
         platforms: [],
         cognitive: [],
@@ -1693,6 +1690,5 @@ export {
   processBackgrounds,
   extractCognitiveVariables, 
   convertJsonFileToCssFiles,
-  processShadowLevels,
-  generateTypographyCSS
+  processShadowLevels
 };
