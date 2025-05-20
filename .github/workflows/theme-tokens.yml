@@ -49,19 +49,29 @@ jobs:
               // Read the theme file
               const themeData = JSON.parse(fs.readFileSync(themePath, 'utf8'));
               
-              // Clean the \$themes array if it exists
-              if (themeData.\$themes && Array.isArray(themeData.\$themes)) {
-                themeData.\$themes = [];
-                console.log('Cleaned \$themes array in theme.json');
+              // Log original structure
+              console.log('Original theme.json sections:');
+              console.log(Object.keys(themeData));
+              
+              // Remove \$themes section if it exists (instead of just emptying it)
+              if (themeData.\$themes) {
+                delete themeData.\$themes;
+                console.log('Removed \$themes section from theme.json');
               } else {
-                console.log('No \$themes array found or already empty');
+                console.log('No \$themes section found');
               }
               
               // Remove \$metadata section if it exists
               if (themeData.\$metadata) {
                 delete themeData.\$metadata;
                 console.log('Removed \$metadata section from theme.json');
+              } else {
+                console.log('No \$metadata section found');
               }
+              
+              // Log the remaining sections for debugging
+              console.log('Remaining theme.json sections:');
+              console.log(Object.keys(themeData));
               
               // Write the cleaned file back
               fs.writeFileSync(themePath, JSON.stringify(themeData, null, 2));
