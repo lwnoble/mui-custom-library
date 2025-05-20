@@ -67,10 +67,8 @@ function extractBaseSystemTokens(jsonContent) {
       'Color-Theory',
       'Surface-Style',
       'Desktop-Target',
-      'Grid',
-      'HoverOverlay',
-      'FocusOverlay'
-      // Removed AdminAccess, LIbraryBlocked, NoLicense as per your example
+      'Grid'
+      // Removed HoverOverlay, FocusOverlay, AdminAccess, LIbraryBlocked, NoLicense as per your request
     ];
     
     // Process the selected system properties
@@ -94,7 +92,7 @@ function extractBaseSystemTokens(jsonContent) {
           }
         }
         
-        // Add the variable to the CSS
+        // Add the variable to the CSS with proper indentation
         css += `  --${key}: ${cssValue};\n`;
       }
     }
