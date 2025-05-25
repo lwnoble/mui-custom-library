@@ -8,8 +8,8 @@
 --On-Color: var(--On-Surface);
 --On-Quiet: var(--Container-Highest-Quiet);
 --Button: var(--Surface-Button);
---On-Button: var(--Suface-On-Button);
---On-On-Button: var(--Suface-On-On-Button);
+--On-Button: var(--Surface-On-Button);
+--On-On-Button: var(--Surface-On-On-Button);
 --Hotlink: var(--Surface-Hotlink);
 --Icon-BG: var(--Surface-Icon-BG);
 --Icon-Error: var(--Surface-Icon-Error);
@@ -38,8 +38,8 @@
 --On-Color: var(--On-Surface);
 --On-Quiet: var(--Surface-Dim-Quiet);
 --Button: var(--Surface-Button);
---On-Button: var(--Suface-On-Button);
---On-On-Button: var(--Suface-On-On-Button);
+--On-Button: var(--Surface-On-Button);
+--On-On-Button: var(--Surface-On-On-Button);
 --Hotlink: var(--Surface-Hotlink);
 --Icon-BG: var(--Surface-Icon-BG);
 --Icon-Error: var(--Surface-Icon-Error);
@@ -68,8 +68,8 @@
 --On-Color: var(--On-Surface);
 --On-Quiet: var(--Surface-Bright-Quiet);
 --Button: var(--Surface-Button);
---On-Button: var(--Suface-On-Button);
---On-On-Button: var(--Suface-On-On-Button);
+--On-Button: var(--Surface-On-Button);
+--On-On-Button: var(--Surface-On-On-Button);
 --Hotlink: var(--Surface-Hotlink);
 --Icon-BG: var(--Surface-Icon-BG);
 --Icon-Error: var(--Surface-Icon-Error);

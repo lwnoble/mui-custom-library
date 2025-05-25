@@ -1163,10 +1163,6 @@
 
 /* AA-dark mode targets */
 [data-mode="AA-dark"] {
-  --Mode-Target-Desktop: var(--Desktop-Target);
-  --Mode-Target-Android: 48px;
-  --Mode-Target-IOS-Mobile: 44px;
-  --Mode-Target-IOS-Tablet: 44px;
 }
 
 /* AA-dark mode Red-Weak chart */

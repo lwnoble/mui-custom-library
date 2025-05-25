@@ -1163,10 +1163,6 @@
 
 /* AAA-light mode targets */
 [data-mode="AAA-light"] {
-  --Mode-Target-Desktop: 48px;
-  --Mode-Target-Android: 48px;
-  --Mode-Target-IOS-Mobile: 48px;
-  --Mode-Target-IOS-Tablet: 48px;
 }
 
 /* AAA-light mode Red-Weak chart */

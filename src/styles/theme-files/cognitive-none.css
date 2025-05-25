@@ -237,6 +237,7 @@
   --Typography-Number-Large-Font-Weight: var(--Platform-Default-Number-Large-Font-Weight);
   --Typography-Number-Large-Line-Height: var(--Platform-Default-Number-Large-Line-Height);
   --Typography-Number-Large-Character-Spacing: var(--Platform-Default-Number-Large-Character-Spacing);
+  --Typography-Number-Large-Paragraph-Spacing: 0;
   --Typography-Number-Large-SR-Character-Spacing: var(--Platform-Default-Number-Large-SR-Character-Spacing);
   --Typography-Number-Medium-Font-Family: var(--Platform-Default-Number-Medium-Font-Family);
   --Typography-Number-Medium-Font-Size: var(--Platform-Default-Number-Medium-Font-Size);
