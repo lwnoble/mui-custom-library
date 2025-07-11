@@ -1,0 +1,233 @@
+/* Radio.css - Single Color Design Token System */
+
+/* 
+ * Single Color Design System:
+ * - --Button: The one primary color used for all interactive states
+ * - All other colors derived from system defaults (white, gray, transparent)
+ * - Unchecked: transparent background with gray border (circular)
+ * - Checked: --Button background and border with white dot
+ * - Focus/Hover: --Button for highlights
+ */
+
+/* Base MUI Radio Root - Min Target Area */
+#dds .MuiRadio-root {
+    min-width: var(--Minimum-Target);
+    min-height: var(--Minimum-Target);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    border-radius: 0px;
+    transition: all var(--animation-speed) ease;
+    cursor: pointer;
+  }
+  
+  /* Hide default MUI elements */
+  #dds .MuiRadio-root .MuiSvgIcon-root {
+    display: none;
+  }
+  
+  /* Visual Radio Circle using ::before */
+  #dds .MuiRadio-root::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%; /* Circular for radio buttons */
+    border: var(--Border-Thick) solid var(--Border);
+    background-color: transparent;
+    transition: all var(--animation-speed) ease;
+    box-sizing: border-box;
+  }
+  
+  /* Standard Size */
+  #dds .MuiRadio-root.standard::before {
+    width: var(--Sizing-2);
+    height: var(--Sizing-2);
+  }
+  
+  /* Large Size */
+  #dds .MuiRadio-root.large::before {
+    width: var(--Sizing-3);
+    height: var(--Sizing-3);
+  }
+  
+  /* Checked State - Border only, dot comes from ::after */
+  #dds .MuiRadio-root.Mui-checked::before {
+    border-color: var(--Button);
+  }
+  
+  /* Radio Dot using ::after */
+  #dds .MuiRadio-root.Mui-checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background-color: var(--Button);
+    transition: all var(--animation-speed) ease;
+  }
+  
+  /* Standard Size Dot */
+  #dds .MuiRadio-root.standard.Mui-checked::after {
+    width: calc(var(--Sizing-2) * 0.5);
+    height: calc(var(--Sizing-2) * 0.5);
+  }
+  
+  /* Large Size Dot */
+  #dds .MuiRadio-root.large.Mui-checked::after {
+    width: calc(var(--Sizing-3) * 0.5);
+    height: calc(var(--Sizing-3) * 0.5);
+  }
+  
+  /* Focus-Visible State */
+  #dds .MuiRadio-root.Mui-focusVisible::before {
+    border-color: var(--Button);
+    outline: 2px solid var(--Button);
+    outline-offset: 2px;
+  }
+  
+  /* Hover States */
+  #dds .MuiRadio-root:hover:not(.Mui-disabled)::before {
+    background-color: var(--Background);
+    border-color: var(--Button);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+  }
+  
+  #dds .MuiRadio-root.Mui-checked:hover:not(.Mui-disabled)::before {
+    background-color: var(--Background);
+    border-color: var(--Button);
+  }
+  
+  #dds .MuiRadio-root.Mui-checked:hover:not(.Mui-disabled)::after {
+    background-color: var(--Button);
+  }
+  
+  /* Disabled State */
+  #dds .MuiRadio-root.Mui-disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  #dds .MuiRadio-root.Mui-disabled:hover {
+    background-color: transparent;
+  }
+  
+  #dds .MuiRadio-root.Mui-disabled::before {
+    border-color: var(--Border);
+    background-color: transparent;
+  }
+  
+  #dds .MuiRadio-root.Mui-disabled.Mui-checked::before {
+    border-color: #9ca3af;
+  }
+  
+  #dds .MuiRadio-root.Mui-disabled.Mui-checked::after {
+    background-color: #9ca3af;
+  }
+  
+  /* Radio Group for form layouts */
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .radio-group.horizontal {
+    flex-direction: row;
+    gap: 2rem;
+  }
+  
+  .radio-label {
+    display: flex;
+    align-items: center;
+    gap: var(--Sizing-1);
+    cursor: pointer;
+    padding: var(--Sizing-1);
+    border-radius: var(--Sizing-1);
+    transition: background-color var(--animation-speed) ease;
+    border: 1px solid transparent;
+  }
+  
+  .radio-label:hover {
+    background-color: var(--Surface-Dim);
+    border-color: var(--Transparent);
+  }
+  
+  .radio-label:focus-within {
+    background-color: var(--Surface-Dim);
+    border-color: var(--Button);
+  }
+  
+  .radio-label span {
+    color: var(--On-Color);
+    user-select: none;
+  }
+  
+  /* Disabled label styling */
+  .radio-label[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  .radio-label[aria-disabled="true"]:hover {
+    background-color: transparent;
+    border-color: transparent;
+  }
+  
+  .radio-label[aria-disabled="true"] span {
+    color: #9ca3af;
+  }
+  
+  /* Special demo classes for forced states */
+  #dds .forced-hover.MuiRadio-root {
+    background-color: rgba(59, 130, 246, 0.04);
+  }
+  
+  #dds .forced-hover.MuiRadio-root::before {
+    border-color: var(--Button);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+  }
+  
+  #dds .forced-focus.MuiRadio-root::before {
+    border-color: var(--Button);
+  }
+  
+  #dds .forced-focus-visible.MuiRadio-root {
+    outline: 2px solid var(--Button);
+    outline-offset: 2px;
+  }
+  
+  #dds .forced-focus-visible.MuiRadio-root::before {
+    border-color: var(--Button);
+  }
+  
+  /* Print Styles */
+  @media print {
+    #dds .MuiRadio-root {
+      background: #fff !important;
+    }
+    
+    #dds .MuiRadio-root::before {
+      background: transparent !important;
+      border: 2px solid #000 !important;
+    }
+    
+    #dds .MuiRadio-root.Mui-checked::before {
+      border-color: #000 !important;
+    }
+    
+    #dds .MuiRadio-root.Mui-checked::after {
+      background-color: #000 !important;
+    }
+    
+    .radio-label {
+      background: none !important;
+      border: none !important;
+    }
+  }

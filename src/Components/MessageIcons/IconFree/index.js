@@ -1,0 +1,1 @@
+export { IconFree } from './IconFree.jsx';

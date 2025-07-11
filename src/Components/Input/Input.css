@@ -1,0 +1,5 @@
+.state-default-type {
+    align-self: stretch !important;
+    flex: 0 0 auto !important;
+    width: 100% !important;
+  }

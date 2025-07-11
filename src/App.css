@@ -1,27 +1,92 @@
+/* App.css - Add these styles to your existing App.css file */
+
+/* App Container - Flexbox Layout */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Main Content Container */
+.main-content-container {
+  flex: 1; /* This makes it expand to fill remaining space */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 100vh;
+  transition: all 0.3s ease; /* Smooth transitions */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* Component Content Area */
+.component-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto; /* Allow vertical scrolling if content is long */
+}
+
+/* Settings Toggle Button */
 .settings-toggle-button {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--Container-Button, #3a6661);
-    color: var(--Container-On-Button, #ffffff);
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    z-index: 100;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s;
+  position: absolute !important;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(10px);
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Hover effect for settings button */
+.settings-toggle-button:hover {
+  background: rgba(255, 255, 255, 1) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  transform: translateY(-1px);
+}
+
+/* Dark theme adjustments for settings button */
+
+/* Ensure the left navigation doesn't shrink */
+.left-navigation {
+  flex-shrink: 0; /* Prevent the nav from shrinking */
+  transition: width var(--Animation-Speed) ease;
+}
+
+/* Component placeholder styling */
+.component-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  font-size: 18px;
+  color: #666;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+  border: 2px dashed #ddd;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
   }
   
-  .settings-toggle-button:hover {
-    background-color: var(--Container-Button-Hover, #d95c49);
+  .component-content {
+    padding: 15px;
   }
   
-  .main-content {
-    padding: 20px;
+  .settings-toggle-button {
+    top: 15px;
+    right: 15px;
   }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .main-content-container,
+  .left-navigation,
+  .settings-toggle-button {
+    transition: none;
+  }
+}

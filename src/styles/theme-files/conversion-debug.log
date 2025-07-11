@@ -1,6 +1,7 @@
 
 Theme Tokens Conversion Debug Log
 =================================
+Generated: 2025-07-11T11:25:55.967Z
 
 Input Theme Structure:
 [
@@ -120,97 +121,100 @@ Input Theme Structure:
   "Sizing & Spacing/Default",
   "Sizing & Spacing/Expanded",
   "Sizing & Spacing/Reduced",
-  "Sizing & Spacing/Standard",
-  "$themes"
+  "Sizing & Spacing/Standard"
 ]
 
 Generated Files:
 {
   "base": {
     "file": "base.css",
-    "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/base.css"
+    "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/base.css"
   },
   "modes": [
     {
       "mode": "AA-light",
       "file": "mode-aa-light.css",
-      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/mode-aa-light.css"
+      "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/mode-aa-light.css"
     },
     {
       "mode": "AA-dark",
       "file": "mode-aa-dark.css",
-      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/mode-aa-dark.css"
+      "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/mode-aa-dark.css"
     },
     {
       "mode": "AAA-light",
       "file": "mode-aaa-light.css",
-      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/mode-aaa-light.css"
+      "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/mode-aaa-light.css"
     },
     {
       "mode": "AAA-dark",
       "file": "mode-aaa-dark.css",
-      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/mode-aaa-dark.css"
+      "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/mode-aaa-dark.css"
     }
   ],
   "platforms": [
     {
       "platform": "Desktop",
       "file": "platform-desktop.css",
-      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/platform-desktop.css"
+      "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/platform-desktop.css"
     },
     {
       "platform": "IOS-Tablet",
       "file": "platform-ios-tablet.css",
-      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/platform-ios-tablet.css"
+      "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/platform-ios-tablet.css"
     },
     {
       "platform": "Android",
       "file": "platform-android.css",
-      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/platform-android.css"
+      "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/platform-android.css"
     },
     {
       "platform": "IOS-Mobile",
       "file": "platform-ios-mobile.css",
-      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/platform-ios-mobile.css"
+      "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/platform-ios-mobile.css"
     }
   ],
   "cognitive": [
     {
-      "profile": "None",
+      "profile": "none",
       "file": "cognitive-none.css",
-      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/cognitive-none.css"
+      "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/cognitive-none.css"
     },
     {
-      "profile": "ADHD",
+      "profile": "adhd",
       "file": "cognitive-adhd.css",
-      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/cognitive-adhd.css"
+      "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/cognitive-adhd.css"
     },
     {
-      "profile": "Dyslexia",
+      "profile": "dyslexia",
       "file": "cognitive-dyslexia.css",
-      "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/cognitive-dyslexia.css"
+      "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/cognitive-dyslexia.css"
     }
   ],
   "sizingSpacing": {
     "file": "sizing-spacing.css",
-    "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/sizing-spacing.css"
+    "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/sizing-spacing.css"
   },
   "surfaceContainers": {
     "file": "surface-containers.css",
-    "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/surface-containers.css"
+    "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/surface-containers.css"
   },
   "system": {
     "file": "system.css",
-    "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/system.css"
+    "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/system.css"
   },
   "shadowLevels": {
     "file": "shadow-levels.css",
-    "path": "/home/runner/work/mui-custom-library/mui-custom-library/src/styles/theme-files/shadow-levels.css"
+    "path": "/Users/lisenoble/Documents/custom-mui-library/src/styles/theme-files/shadow-levels.css"
   }
 }
 
-Processed Sections:
+Expected Sections:
+- System-Styles/Default: Present
+- System/Default: Present
 - Modes: Modes/AA-light, Modes/AA-dark, Modes/AAA-light, Modes/AAA-dark
 - Platforms: Platform/Desktop, Platform/IOS-Tablet, Platform/Android, Platform/IOS-Mobile
-- System Tokens: Present
-- Cognitive Tokens: Present
+- Cognitive: Cognitive/None, Cognitive/ADHD, Cognitive/Dyslexia
+- Surface and Containers: Surface and Containers/Surface, Surface and Containers/Surface-Dim, Surface and Containers/Surface-Bright, Surface and Containers/Container, Surface and Containers/Container-Low, Surface and Containers/Container-Lowest, Surface and Containers/Container-High, Surface and Containers/Container-HIghest
+- Shadow-Level: Shadow-Level/L-1, Shadow-Level/L-2, Shadow-Level/L-3, Shadow-Level/L-4, Shadow-Level/L-5, Shadow-Level/Buttons, Shadow-Level/Buttons-Hover, Shadow-Level/Buttons-Raised, Shadow-Level/Buttons-Raised-Hover, Shadow-Level/Cards & Bottom Sheet, Shadow-Level/Cards-Hover, Shadow-Level/Navigation, Shadow-Level/Floating-Action, Shadow-Level/Floating-Action-Hover
+- Sizing & Spacing: Sizing & Spacing/Default, Sizing & Spacing/Expanded, Sizing & Spacing/Reduced, Sizing & Spacing/Standard

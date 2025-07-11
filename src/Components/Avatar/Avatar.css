@@ -1,0 +1,197 @@
+/* Avatar Size Variants */
+.avatar-size-xxxs {
+    width: var(--Sizing-2) !important;
+    height: var(--Sizing-2) !important;
+    font-size: calc(var(--Sizing-2) * .5) !important;
+  }
+  
+  .avatar-size-xxxs .avatar-default-icon {
+    font-size: calc(var(--Sizing-2) * .5) !important;
+  }
+  
+  .avatar-size-xxs {
+    width: var(--Sizing-3) !important;
+    height: var(--Sizing-3) !important;
+    font-size: calc(var(--Sizing-3) * .5) !important;
+  }
+  
+  .avatar-size-xxs .avatar-default-icon {
+    font-size: calc(var(--Sizing-3) * .5) !important;
+  }
+  
+  .avatar-size-xs {
+    width: var(--Sizing-4) !important;
+    height: var(--Sizing-4) !important;
+    font-size: calc(var(--Sizing-4) * .5) !important;
+  }
+  
+  .avatar-size-xs .avatar-default-icon {
+    font-size: calc(var(--Sizing-4) * .5) !important;
+  }
+  
+  .avatar-size-s {
+    width: var(--Sizing-5) !important;
+    height: var(--Sizing-5) !important;
+    font-size: calc(var(--Sizing-5) * .5) !important;
+  }
+  
+  .avatar-size-s .avatar-default-icon {
+    font-size: calc(var(--Sizing-5) * .5) !important;
+  }
+  
+  .avatar-size-m {
+    width: var(--Sizing-6) !important;
+    height: var(--Sizing-6) !important;
+    font-size: calc(var(--Sizing-6) * .5) !important;
+  }
+  
+  .avatar-size-m .avatar-default-icon {
+    font-size: calc(var(--Sizing-6) * .5) !important;
+  }
+  
+  .avatar-size-l {
+    width: var(--Sizing-7) !important;
+    height: var(--Sizing-7) !important;
+    font-size: calc(var(--Sizing-7) * .5) !important;
+  }
+  
+  .avatar-size-l .avatar-default-icon {
+    font-size: calc(var(--Sizing-7) * .5) !important;
+  }
+  
+  .avatar-size-xl {
+    width: var(--Sizing-8) !important;
+    height: var(--Sizing-8) !important;
+    font-size: calc(var(--Sizing-8) * .5) !important;
+  }
+  
+  .avatar-size-xl .avatar-default-icon {
+    font-size: calc(var(--Sizing-8) * .5) !important;
+  }
+  
+  .avatar-size-xxl {
+    width: var(--Sizing-9) !important;
+    height: var(--Sizing-9) !important;
+    font-size: calc(var(--Sizing-9) * .5) !important;
+  }
+  
+  .avatar-size-xxl .avatar-default-icon {
+    font-size: calc(var(--Sizing-9) * .5) !important;
+  }
+  
+  /* Clickable Avatar Styles */
+  .avatar-clickable {
+    cursor: pointer;
+    transition: all var(--Animation-Speed, 0.2s) ease-in-out;
+  }
+  
+  .avatar-clickable:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .avatar-clickable:active {
+    transform: scale(0.98);
+  }
+  
+  .avatar-clickable:focus {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .avatar-clickable:focus-visible {
+    outline: 2px solid var(--Button);
+    outline-offset: 2px;
+  }
+  
+  /* Disabled Avatar Styles */
+  .avatar-disabled {
+    opacity: .38;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  .avatar-disabled:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* Clickable wrapper for accessibility */
+  .avatar-clickable-wrapper {
+    display: inline-block;
+    min-width: var(--Minimum-Target, 44px);
+    min-height: var(--Minimum-Target, 44px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color var(--Animation-Speed, 0.2s) ease-in-out;
+  }
+  
+  .avatar-clickable-wrapper:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+  
+  .avatar-clickable-wrapper:focus {
+    outline: 2px solid var(--Button);
+    outline-offset: 2px;
+  }
+  
+  .avatar-clickable-wrapper[aria-disabled="true"] {
+    background-color: transparent;
+    cursor: not-allowed;
+  }
+  
+  /* Base avatar styles */
+  .custom-avatar {
+    position: relative;
+  }
+  
+  .custom-avatar .avatar-default-icon {
+    color: var(--Border);
+  }
+  
+  /* Avatar with badge positioning */
+  .avatar-with-badge {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Badge container positioning - ensure no style interference */
+  .avatar-with-badge .badge-container {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    pointer-events: none;
+    /* Ensure container doesn't affect badge styling */
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+  }
+  
+  /* Badge position variants */
+  .badge-position-top-right .badge-container {
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+  }
+  
+  .badge-position-top-left .badge-container {
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+  }
+  
+  .badge-position-bottom-right .badge-container {
+    bottom: 0;
+    right: 0;
+    transform: translate(50%, 50%);
+  }
+  
+  .badge-position-bottom-left .badge-container {
+    bottom: 0;
+    left: 0;
+    transform: translate(-50%, 50%);
+  }

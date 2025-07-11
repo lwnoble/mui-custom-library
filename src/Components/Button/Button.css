@@ -1,0 +1,409 @@
+/* Button.css */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--Button-Border-Radius, 4px);
+  cursor: pointer;
+  transition: all var(--Animation-Speed, 0.2s) ease-in-out;
+  position: relative;
+  font-family: inherit;
+  text-decoration: none;
+  outline: none;
+  min-width: var(--Minimum-Target, 44px);
+  min-height: var(--Minimum-Target, 44px);
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--Negative-Sizing-Half);
+  width: 100%;
+  background: unset;
+  color: unset;
+}
+.button-text  {
+  padding: 0 var(--Sizing-1);;
+}
+
+/* Size variants */
+.button--standard {
+  padding: 0 var(--Sizing-Half);
+  min-height: max(var(--Button-Height), var(--Minimum-Target));
+  min-width: max(var(--Button-Height), var(--Minimum-Target));
+}
+
+.button--small {
+  /* Accessibility touch target */
+  min-height: var(--Minimum-Target);
+  min-width: var(--Minimum-Target);
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+/* Small button visual styling on button-content */
+.button--small .button-content {
+  min-height: var(--Button-Small-Height, 36px);
+  min-width: var(--Button-Small-Height, 36px);
+  border-radius: var(--Button-Border-Radius, 4px);
+  transition: all var(--Animation-Speed, 0.2s) ease-in-out;
+  padding: 0 var(--Sizing-Half);
+}
+
+/* Variant styles - Solid */
+.button--solid:not(.button--small) {
+  background-color: var(--Button);
+  color: var(--On-Button);
+  border: var(--Border-Thick) solid var(--Button);
+}
+
+/* Small solid button - main button transparent, styling on button-content */
+.button--solid.button--small {
+  background: transparent;
+  border: none;
+}
+
+.button--solid.button--small .button-content {
+  background-color: var(--Button);
+  border: var(--Border-Thick) solid var(--Button);
+}
+
+.button--solid .icon--small i::before {
+ color: var(--On-Button)
+} 
+
+.button--solid:not(.button--small):hover:not(:disabled) {
+  background-color: color-mix(in oklab, var(--Button) 85%, var(--On-On-Button));
+  border-color: var(--Button);
+  box-shadow: var(--Box-Shadow-Hover);
+  transform: translateY(-1px);
+}
+
+.button--solid.button--small:hover:not(:disabled) .button-content {
+  background-color: color-mix(in oklab, var(--Button) 85%, var(--On-On-Button));
+  border-color: var(--Button);
+  box-shadow: var(--Box-Shadow-Hover);
+  transform: translateY(-1px);
+}
+
+.button--solid:not(.button--small):focus:not(:disabled) {
+  background-color: color-mix(in oklab, var(--Button) 70%, var(--On-On-Button));
+  border-color: var(--Button);
+  box-shadow: var(--Box-Shadow-Hover);
+  transform: translateY(-1px);
+}
+
+.button--solid.button--small:focus:not(:disabled) .button-content {
+  background-color: color-mix(in oklab, var(--Button) 70%, var(--On-On-Button));
+  border-color: var(--Button);
+  box-shadow: var(--Box-Shadow-Hover);
+  transform: translateY(-1px);
+}
+
+.button--solid:focus-visible:not(:disabled) {
+  outline: 2px solid var(--Button);
+  outline-offset: 2px;
+}
+
+.button--solid:not(.button--small):active:not(:disabled) {
+  background-color: var(--Background);
+  border-color: var(--Button);
+  transform: translateY(0);
+}
+
+.button--solid.button--small:active:not(:disabled) .button-content {
+  background-color: var(--Background);
+  border-color: var(--Button);
+  transform: translateY(0);
+}
+
+/* Variant styles - Outline */
+.button--outline:not(.button--small) {
+  background-color: var(--Background);
+  color: var(--On-Color);
+  border: var(--Border-Thick) solid var(--Button);
+}
+
+.button--outline.button--small {
+  background: transparent;
+  border: none;
+}
+
+.button--outline.button--small .button-content {
+  background-color: var(--Background);
+  border: var(--Border-Thick) solid var(--Button);
+}
+
+.button--outline .icon--small i::before {
+  color: var(--On-Color)
+ } 
+
+.button--outline:not(.button--small):hover:not(:disabled) {
+  box-shadow: var(--Box-Shadow-Hover);
+}
+
+.button--outline.button--small:hover:not(:disabled) .button-content {
+  box-shadow: var(--Box-Shadow-Hover);
+}
+
+.button--outline:not(.button--small):focus:not(:disabled) {
+  box-shadow: var(--Box-Shadow-Hover);
+}
+
+.button--outline.button--small:focus:not(:disabled) .button-content {
+  box-shadow: var(--Box-Shadow-Hover);
+}
+
+.button--outline:focus-visible:not(:disabled) {
+  outline: 2px solid var(--Button);
+  outline-offset: 2px;
+}
+
+.button--outline:not(.button--small):active:not(:disabled) {
+  background-color: var(--Button);
+  border-color: var(--Button);
+  color: var(--Button-Light-Text);
+}
+
+.button--outline.button--small:active:not(:disabled) .button-content {
+  background-color: var(--Button);
+  border-color: var(--Button);
+}
+
+.button--outline:active .icon--small i::before {
+  color: var(--On-Button)
+ } 
+ 
+
+/* Variant styles - Text (Hotlink styling) */
+.button--text {
+  background-color: var(--Background);
+  color: var(--Hotlink);
+  border: var(--Border-Thick) solid transparent;
+}
+
+.button--text.button--small .button-content {
+  background-color: var(--Background);
+  border: var(--Border-Thick) solid transparent;
+}
+
+.button--text .button-text {
+  color: var(--Hotlink);
+}
+
+.button--text .icon--small i::before {
+  color: var(--Hotlink);
+} 
+
+.button--text:hover:not(:disabled) {
+  background-color: var(--Button-Hover-Light, rgba(25, 118, 210, 0.04));
+  color: var(--Button-Hover, #1565c0);
+}
+
+.button--text.button--small:hover:not(:disabled) .button-content {
+  background-color: var(--Button-Hover-Light, rgba(25, 118, 210, 0.04));
+}
+
+.button--text:hover:not(:disabled) .button-text {
+  color: var(--Button-Hover, #1565c0);
+}
+
+.button--text:focus:not(:disabled) {
+  background-color: var(--Button-Focus-Light, rgba(25, 118, 210, 0.08));
+  color: var(--Button-Focus, #1565c0);
+}
+
+.button--text.button--small:focus:not(:disabled) .button-content {
+  background-color: var(--Button-Focus-Light, rgba(25, 118, 210, 0.08));
+}
+
+.button--text:focus:not(:disabled) .button-text {
+  color: var(--Button-Focus, #1565c0);
+}
+
+.button--text:focus-visible:not(:disabled) {
+  outline: 2px solid var(--Button-Focus-Ring, rgba(25, 118, 210, 0.5));
+  outline-offset: 2px;
+}
+
+.button--text:active:not(:disabled) {
+  background-color: var(--Background);
+  color: var(--Hotlink);
+  border: var(--Border-Thick) solid var(--Button);
+}
+
+.button--text.button--small:active:not(:disabled) .button-content {
+  background-color: var(--Background);
+  border: var(--Border-Thick) solid var(--Button);
+}
+
+.button--text:active:not(:disabled) .button-text {
+  color: var(--Hotlink);
+}
+
+/* Variant styles - Light */
+.button--light:not(.button--small) {
+  background-color: var(--Button-Light);
+  color: var(--Button-Light-Text);
+  border: var(--Border-Thick) solid var(--Button);
+}
+
+.button--light.button--small {
+  background: transparent;
+  border: none;
+}
+
+.button--light.button--small .button-content {
+  background-color: var(--Button-Light);
+  border: var(--Border-Thick) solid var(--Button);
+}
+
+.button--light .icon--small i::before {
+  color: var(--Button-Light-Text)
+ } 
+
+.button--light:not(.button--small):hover:not(:disabled) {
+  background-color: color-mix(in oklab, var(--Button) 15%, #ffffff);
+  border-color: var(--Button);
+  color: var(--Button-Light-Text);
+}
+
+.button--light.button--small:hover:not(:disabled) .button-content {
+  background-color: color-mix(in oklab, var(--Button) 15%, #ffffff);
+  border-color: var(--Button);
+}
+
+.button--light:not(.button--small):focus:not(:disabled) {
+  background-color: color-mix(in oklab, var(--Button) 30%, #ffffff);
+  border-color: var(--Button);
+  color: var(--Button-Light-Text);
+}
+
+.button--light.button--small:focus:not(:disabled) .button-content {
+  background-color: color-mix(in oklab, var(--Button) 30%, #ffffff);
+  border-color: var(--Button);
+}
+
+.button--light:focus-visible:not(:disabled) {
+  outline: 2px solid var(--Button);
+  outline-offset: 2px;
+}
+
+.button--light:not(.button--small):active:not(:disabled) {
+  background-color: var(--Button);
+  border-color: var(--Button, #757575);
+  color: var(--On-Button, #333333);
+}
+
+.button--light.button--small:active:not(:disabled) .button-content {
+  background-color: var(--Button);
+  border-color: var(--Button, #757575);
+}
+
+.button--light:active .icon--small i::before {
+  color: var(--On-Button)
+} 
+
+/* Full width variant */
+.button--full-width {
+  width: 100%;
+  justify-content: center;
+}
+.button--icon-only {
+  padding: 0;
+  min-width: var(--Minimum-Target, 44px);
+  aspect-ratio: 1;
+}
+
+.button--icon-only.button--small {
+  min-width: var(--Minimum-Target);
+  min-height: var(--Minimum-Target);
+  aspect-ratio: 1;
+}
+
+.button--icon-only.button--small .button-content {
+  min-width: var(--Button-Small-Height);
+  min-height: var(--Button-Small-Height);
+  aspect-ratio: 1;
+}
+
+.button--letter,
+.button--number {
+  padding: 0 var(--Sizing-Half);
+  min-width: var(--Minimum-Target, 44px);
+  aspect-ratio: 1;
+}
+
+.button--letter.button--small,
+.button--number.button--small {
+  min-width: var(--Minimum-Target);
+  min-height: var(--Minimum-Target);
+  aspect-ratio: 1;
+  padding: 0;
+}
+
+.button--letter.button--small .button-content,
+.button--number.button--small .button-content {
+  min-width: var(--Button-Small-Height, 36px);
+  min-height: var(--Button-Small-Height, 36px);
+  aspect-ratio: 1;
+}
+
+/* Text underline for text variant */
+.button-text--underlined {
+  text-decoration: underline;
+}
+
+/* Icon positioning */
+.button-icon-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: var(--Sizing-Half);
+  background: transparent;
+}
+.button-icon-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--Sizing-Half);
+  background: transparent;
+}
+
+.button-icon {
+  flex-shrink: 0;
+}
+
+/* Disabled state */
+.button--disabled,
+.button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Remove all interactive effects when disabled */
+.button--disabled:hover,
+.button--disabled:focus,
+.button--disabled:focus-visible,
+.button--disabled:active,
+.button:disabled:hover,
+.button:disabled:focus,
+.button:disabled:focus-visible,
+.button:disabled:active {
+  background-color: inherit !important;
+  border-color: inherit !important;
+  color: inherit !important;
+  transform: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Shadow level support */
+.button[data-shadow-level-mode="l-1"] {
+  box-shadow: var(--Box-Shadow-L1, 0 1px 3px rgba(0, 0, 0, 0.12));
+}

@@ -105,166 +105,121 @@ function extractBaseSystemTokens(jsonContent) {
  * @param {string} outputDir - The directory to save the file
  * @returns {Promise<Object>} - Information about the generated file
  */
-async function convertSystemToCss(jsonContent, outputDir) {
-    // Specifically look for 'System/Default' for system.css
-    const systemDefault = jsonContent['System/Default'];
+function convertSystemToCss(jsonContent) {
+    const systemDefaults = jsonContent['System/Default'];
     
-    if (!systemDefault) {
-      console.error('System/Default section not found in JSON content');
-      return null;
-    }
+    // Helper function to clean up variable names
+    const cleanVariableName = (name) => {
+        // Remove redundant repeated prefixes and section names
+        return name
+        .replace(/^Sizing-Sizing-/, 'Sizing-')
+        .replace(/^Focus-Focus-/, 'Focus-')
+        .replace(/^Buttons-Buttons-/, '')
+        .replace(/^Buttons-Button-/, '')
+        .replace(/^Card-Card-/, '')
+        .replace(/^Cards-Card-/, '')
+        .replace(/^Input-Input-/, '')
+        .replace(/^Inputs-Input-/, '')
+        .replace(/^Handle-Handle-/, '')
+        .replace(/^Handles-Handle-/, '')
+        .replace(/^Avatars-Small-/, 'Small-')
+        .replace(/^Modals-Modal-/, '')
+        .replace(/^Navigation-LeftNav-/, 'LeftNav-')
+        // Replace references to 'Default-' with direct reference
+        .replace(/^Default-/, '');
+    };
+
   
-    // Start building the CSS
+    // Start building CSS
     let css = `:root {\n`;
     
-    // Base properties to include from the root level of the system section
-    const rootProperties = [
-      'Transparent',
-      'Name',
-      'Color-Theory',
-      'Surface-Style',
-      'Desktop-Target',
-      'Grid'
-    ];
-    
-    // Add the root level properties
-    for (const key of rootProperties) {
-      if (systemDefault[key] && systemDefault[key].value !== undefined) {
-        // Format the value based on its type
-        let cssValue = systemDefault[key].value;
-        if (typeof cssValue === 'number') {
-          // Add 'px' to numeric values
-          cssValue = `${cssValue}px`;
-        } else if (typeof cssValue === 'string') {
-          // Check if it's a reference
-          if (cssValue.startsWith('{') && cssValue.endsWith('}')) {
-            // Convert reference to var() format
-            cssValue = `var(--${cssValue.substring(1, cssValue.length - 1).replace(/\./g, '-')})`;
-          } else if (cssValue.startsWith('#') || cssValue.startsWith('rgb') || cssValue.startsWith('hsl')) {
-            // Color values don't need quotes
-          } else {
-            // Add quotes to string values
-            cssValue = `"${cssValue}"`;
-          }
-        }
-        
-        // Add the variable to the CSS
-        css += `  --${key}: ${cssValue};\n`;
-      }
-    }
-    
-    // Process the Sizing section
-    if (systemDefault.Sizing) {
-      // Add all sizing properties
-      for (const [key, value] of Object.entries(systemDefault.Sizing)) {
-        if (value && value.value !== undefined) {
-          // Format the value based on its type
-          let cssValue = value.value;
-          
-          // Check if it's a reference
-          if (typeof cssValue === 'string' && cssValue.startsWith('{') && cssValue.endsWith('}')) {
-            // Convert reference to var() format
-            cssValue = `var(--${cssValue.substring(1, cssValue.length - 1).replace(/\./g, '-')})`;
-          } else if (typeof cssValue === 'number') {
-            cssValue = `${cssValue}px`;
-          }
-          
-          // Add the variable to the CSS
-          css += `  --Sizing-${key}: ${cssValue};\n`;
-        }
-      }
-    }
-    
-    // Add Minimum Target
-    if (systemDefault['Minimum Target'] && systemDefault['Minimum Target'].value) {
-      let targetValue = systemDefault['Minimum Target'].value;
-      if (typeof targetValue === 'string' && targetValue.startsWith('{') && targetValue.endsWith('}')) {
-        targetValue = `var(--${targetValue.substring(1, targetValue.length - 1).replace(/\./g, '-')})`;
-      } else if (typeof targetValue === 'number') {
-        targetValue = `${targetValue}px`;
-      }
-      css += `  --Sizing-Minimum-Target: ${targetValue};\n`;
-    }
-    
-    // Process the following sections
-    const sections = [
-      'Buttons',
-      'Hotlinks',
-      'ListItem',
-      'Focus',
-      'Focus-Blur',
-      'Cards',
-      'Inputs',
-      'Handles',
-      'Focus-Border',
-      'Circle',
-      'Avatars',
-      'Accordian',
-      'Breakpoints',
-      'Modals',
-      'Navigation',
-      'Spacing',
-      'Columns',
-      'Border',
-      'StatusBar',
-      'HoverOverlay'
-    ];
-    
-    // Process each section
-    for (const section of sections) {
-      if (systemDefault[section]) {
-        // Check if it's a direct value or an object with nested properties
-        if (typeof systemDefault[section] === 'object' && systemDefault[section].value !== undefined) {
-          // Direct value
-          let sectionValue = systemDefault[section].value;
-          if (typeof sectionValue === 'string' && sectionValue.startsWith('{') && sectionValue.endsWith('}')) {
-            sectionValue = `var(--${sectionValue.substring(1, sectionValue.length - 1).replace(/\./g, '-')})`;
-          } else if (typeof sectionValue === 'number') {
-            sectionValue = `${sectionValue}px`;
-          }
-          css += `  --${section}: ${sectionValue};\n`;
+    // Mode Target calculation with dynamic handling
+    if (systemDefaults['Mode-Target']) {
+      if (typeof systemDefaults['Mode-Target'].value === 'string') {
+        if (systemDefaults['Mode-Target'].value.startsWith('{') && systemDefaults['Mode-Target'].value.endsWith('}')) {
+          const refValue = systemDefaults['Mode-Target'].value.substring(1, systemDefaults['Mode-Target'].value.length - 1).replace(/\./g, '-');
+          css += `  --Mode-Target: var(--${refValue});\n\n`;
         } else {
-          // Object with nested properties
-          for (const [propName, propValue] of Object.entries(systemDefault[section])) {
-            if (propValue && propValue.value !== undefined) {
-              // Format the value
-              let cssValue = propValue.value;
-              if (typeof cssValue === 'string' && cssValue.startsWith('{') && cssValue.endsWith('}')) {
-                cssValue = `var(--${cssValue.substring(1, cssValue.length - 1).replace(/\./g, '-')})`;
-              } else if (typeof cssValue === 'number') {
-                cssValue = `${cssValue}px`;
-              }
-              
-              // Add the variable to the CSS
-              css += `  --${section}-${propName}: ${cssValue};\n`;
-            }
-          }
+          css += `  --Mode-Target: ${systemDefaults['Mode-Target'].value}px;\n\n`;
         }
+      } else if (typeof systemDefaults['Mode-Target'] === 'object' && systemDefaults['Mode-Target'].Desktop) {
+        const platforms = ['Desktop', 'Android', 'IOS-Mobile', 'IOS-Tablet'];
+        platforms.forEach(platform => {
+          if (systemDefaults['Mode-Target'][platform]) {
+            css += `  --Mode-Target-${platform.replace(/-/g, '-')}: ${systemDefaults['Mode-Target'][platform].value}px;\n`;
+          }
+        });
+        css += '\n';
       }
     }
     
+    // Minimum Target calculation
+    css += `  --Minimum-Target: min(var(--Cognitive-Target), var(--Platform-Target), var(--Mode-Target));\n`;
+    css += `  --Min-Target: min(var(--Desktop-Target), var(--Platform-Target), var(--Cognitive-Target));\n\n`;
+    
+    // Hotlinks and ListItem with calc() using Sizing-1
+    css += `  --Hotlinks-Minimum-Hotlink-Area: calc(var(--Minimum-Target) - var(--Sizing-1));\n`;
+    css += `  --ListItem-Minimum-List-Item: calc(var(--Minimum-Target) - var(--Sizing-1));\n\n`;
+
+
+  
+    // Recursive function to process nested objects
+    const processSection = (section, sectionName = '') => {
+        Object.entries(section).forEach(([key, valueObj]) => {
+        // Skip label or non-value entries
+        if (key === 'SurfaceContainer-Label' || !valueObj || valueObj.value === undefined) return;
+
+        // Skip Buttons-Button-Overlay-Radius
+        if (sectionName === 'Buttons' && key === 'Button Overlay Radius') return;
+
+        // Create full property name with cleaned-up section and key
+        const prop = cleanVariableName(sectionName ? `${sectionName}-${key.replace(/ /g, '-')}` : key.replace(/ /g, '-'));
+        
+        if (typeof valueObj.value === 'string' && valueObj.value.startsWith('{') && valueObj.value.endsWith('}')) {
+            // Reference value
+            const refValue = valueObj.value.substring(1, valueObj.value.length - 1).replace(/\./g, '-');
+            css += `  --${prop}: var(--${cleanVariableName(refValue)});\n`;
+        } else if (typeof valueObj.value === 'number' || (typeof valueObj.value === 'string' && !isNaN(Number(valueObj.value)))) {
+            // Numeric value
+            css += `  --${prop}: ${Number(valueObj.value)}px;\n`;
+        } else {
+            // Direct value
+            css += `  --${prop}: ${valueObj.value};\n`;
+        }
+        });
+        css += '\n';
+    };
+
+    // List of sections to process
+const sectionsToProcess = [
+    'Buttons', 
+    'Focus', 
+    'Cards', 
+    'Inputs', 
+    'Handles', 
+    'Avatars', 
+    'Breakpoints', 
+    'Modals', 
+    'Navigation', 
+    'StatusBar'
+  ];
+  
+  // Border section - hardcode the values
+  css += `  --Border-Standard: 1px;\n`;
+  css += `  --Border-Thick: 2px;\n\n`;
+  
+  // Process each section
+  sectionsToProcess.forEach(sectionName => {
+    if (systemDefaults[sectionName]) {
+      processSection(systemDefaults[sectionName], sectionName);
+    }
+  });
     // Close the CSS block
     css += `}\n`;
     
-    // Save the file
-    const systemFilename = 'system.css';
-    const systemFilePath = path.join(outputDir, systemFilename);
-    
-    await fs.promises.writeFile(systemFilePath, css, 'utf8');
-    
-    return {
-      file: systemFilename,
-      path: systemFilePath
-    };
-}
+    return css;
+  }
 
-/**
- * Extract all mode variables from the background content
- * @param {Object} bgContent - The background content object
- * @param {string} mode - The mode name (e.g., "AA-dark")
- * @param {string} backgroundType - The background type (e.g., "Default", "Primary")
- * @returns {Array} - Array of CSS variable declarations
- */
 /**
  * Extract all mode variables from the background content
  * @param {Object} bgContent - The background content object
@@ -356,12 +311,6 @@ function extractModeVariables(bgContent, mode, backgroundType = 'default') {
     return orderedVariables;
   }
 
-  /**
- * Process each background in the mode
- * @param {Object} backgrounds - The backgrounds object
- * @param {string} mode - The mode name
- * @returns {string} - Generated CSS for backgrounds
- */
 /**
  * Process each background in the mode
  * @param {Object} backgrounds - The backgrounds object
@@ -369,31 +318,15 @@ function extractModeVariables(bgContent, mode, backgroundType = 'default') {
  * @returns {string} - Generated CSS for backgrounds
  */
 function processBackgrounds(backgrounds, mode) {
-  let css = '';
-  
-  // Process default background
-  if (backgrounds.Default) {
-    css += `/* ${mode} mode default background */\n`;
-    css += `[data-mode="${mode}"] [data-background] {\n`;
+    let css = '';
     
-    const variables = extractModeVariables(backgrounds.Default, mode);
-    variables.forEach(variable => {
-      css += variable;
-    });
-    
-    css += '}\n\n';
-  }
-  
-  // Process other named backgrounds
-  for (const [bgName, bgContent] of Object.entries(backgrounds)) {
-    // Handle standard backgrounds
-    if (bgName !== 'Default' && !bgName.startsWith('StatusBar/')) {
-      const bgNameLower = bgName.toLowerCase();
+    // Process default background
+    if (backgrounds.Default) {
+      css += `/* ${mode} mode default background */\n`;
+      // Drop the data-mode attribute, just use data-background
+      css += `[data-background] {\n`;
       
-      css += `/* ${mode} mode specific background */\n`;
-      css += `[data-mode="${mode}"] [data-background="${bgNameLower}"] {\n`;
-      
-      const variables = extractModeVariables(bgContent, mode, bgNameLower);
+      const variables = extractModeVariables(backgrounds.Default, mode);
       variables.forEach(variable => {
         css += variable;
       });
@@ -401,35 +334,54 @@ function processBackgrounds(backgrounds, mode) {
       css += '}\n\n';
     }
     
-    // Handle StatusBar backgrounds
-    if (bgName.startsWith('StatusBar/')) {
-      // Find which color/variant is set to "true"
-      for (const [colorKey, colorValue] of Object.entries(bgContent)) {
-        if (colorValue.value === 'true' && colorKey !== 'StatusBar-Label') {
-          const statusBarLabel = bgContent['StatusBar-Label'].value;
-          const colorLower = colorKey.toLowerCase();
-          
-          css += `/* ${mode} mode ${statusBarLabel} background */\n`;
-          css += `[data-mode="${mode}"] [data-background="${statusBarLabel}"],\n`;
-          css += `[data-mode="${mode}"] [data-background="${colorLower}"] {\n`;
-          
-          // You can add specific styles for these backgrounds here if needed
-          css += `  /* ${statusBarLabel} ${colorKey} background styles */\n`;
-          
-          css += '}\n\n';
+    // Process other named backgrounds
+    for (const [bgName, bgContent] of Object.entries(backgrounds)) {
+      // Handle standard backgrounds
+      if (bgName !== 'Default' && !bgName.startsWith('StatusBar/')) {
+        const bgNameLower = bgName.toLowerCase();
+        
+        css += `/* ${mode} mode specific background */\n`;
+        // Drop the data-mode attribute, just use data-background with specific value
+        css += `[data-background="${bgNameLower}"] {\n`;
+        
+        const variables = extractModeVariables(bgContent, mode, bgNameLower);
+        variables.forEach(variable => {
+          css += variable;
+        });
+        
+        css += '}\n\n';
+      }
+      
+      // Handle StatusBar backgrounds
+      if (bgName.startsWith('StatusBar/')) {
+        // Find which color/variant is set to "true"
+        for (const [colorKey, colorValue] of Object.entries(bgContent)) {
+          if (colorValue.value === 'true' && colorKey !== 'StatusBar-Label') {
+            const statusBarLabel = bgContent['StatusBar-Label']?.value || bgName.split('/')[1];
+            const colorLower = colorKey.toLowerCase();
+            
+            css += `/* ${mode} mode ${statusBarLabel} background */\n`;
+            // Drop the data-mode attribute, just use data-background with specific values
+            css += `[data-background="${statusBarLabel}"],\n`;
+            css += `[data-background="${colorLower}"] {\n`;
+            
+            // You can add specific styles for these backgrounds here if needed
+            css += `  /* ${statusBarLabel} ${colorKey} background styles */\n`;
+            
+            css += '}\n\n';
+          }
         }
       }
     }
+    
+    return css;
   }
-  
-  return css;
-}
 
 function processShadowLevels(shadowLevels) {
     let css = '';
     
     // Start a :root block for the shadow variables
-    css += `/* Box Shadow Variables */\n:root, ::after, ::before {\n`;
+    css += `/* Box Shadow Variables */\n:root {\n`;
     
     // Add the default shadow
     css += `  --Box-Shadow-0: none;\n`;
@@ -534,41 +486,40 @@ function generateBoxShadowValue(shadowLevel, level) {
 function processModeTarget(modeTarget, mode, isDefaultMode = false) {
     let css = `/* ${mode} mode targets */\n`;
     
-    // Determine the appropriate selector
-    const selector = isDefaultMode ? `[data-mode]` : `[data-mode="${mode}"]`;
+    // Always start with root selector
+    css += `:root {\n`;
     
-    css += `${selector} {\n`;
-    
-    // Process all target values
-    for (const [platform, valueObj] of Object.entries(modeTarget)) {
-      if (valueObj.value !== undefined) {
-        // Convert reference format {Desktop-Target}
-        // to CSS variable format --Desktop-Target
-        let value = valueObj.value;
-        if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-          // Remove braces and convert dot notation to variable notation
-          value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
-        } else if (typeof value === 'number') {
-          value = `${value}px`;
+    // Check if Mode-Target is present
+    if (modeTarget && modeTarget.value !== undefined) {
+        // Single value scenario
+        if (typeof modeTarget.value === 'string') {
+            // Check if it's a reference or direct value
+            if (modeTarget.value.startsWith('{') && modeTarget.value.endsWith('}')) {
+                // Reference case (e.g., "{Desktop-Target}")
+                const refValue = modeTarget.value.substring(1, modeTarget.value.length - 1).replace(/\./g, '-');
+                css += `  --Mode-Target: var(--${refValue});\n`;
+            } else {
+                // Direct numeric value case
+                css += `  --Mode-Target: ${modeTarget.value}px;\n`;
+            }
+        } else if (typeof modeTarget.value === 'number') {
+            // Direct numeric value
+            css += `  --Mode-Target: ${modeTarget.value}px;\n`;
         }
-        
-        css += `  --Mode-Target-${platform}: ${value};\n`;
-      }
     }
     
-    css += '}\n\n';
+    // Add paragraph spacing multiplier based on mode
+    if (mode.startsWith('AA')) {
+        css += `  --Mode-PS-multiplier: 2em;\n`;
+    } else if (mode.startsWith('AAA')) {
+        css += `  --Mode-PS-multiplier: 3em;\n`;
+    }
+    
+    css += `}\n\n`;
     
     return css;
-  }
+}
   
-
-/**
- * Process paragraph spacing JSON structure into CSS
- * @param {Object} paragraphSpacing - The paragraph spacing object
- * @param {string} mode - The mode name (e.g., "AA-light")
- * @param {boolean} isDefaultMode - Whether this is the default mode (AA-light)
- * @returns {string} - Generated CSS for paragraph spacing
- */
 /**
  * Process paragraph spacing JSON structure into CSS
  * @param {Object} paragraphSpacing - The paragraph spacing object
@@ -582,18 +533,13 @@ function processParagraphSpacing(paragraphSpacing, mode, isDefaultMode = false) 
     // Add the appropriate PS multiplier for this mode
     css += `/* ${mode} mode paragraph spacing */\n`;
     
-    // For AA-light, use just [data-mode] without a value
-    if (isDefaultMode) {
-      css += `[data-mode] {\n`;
-    } else {
-      css += `[data-mode="${mode}"] {\n`;
-    }
+    // Remove selector entirely, just output the variables
     
     // Add the PS multiplier based on the mode (AA vs AAA)
     if (mode.startsWith('AA')) {
-      css += `  --Mode-PS-multiplier: 200%;\n`;
+      css += `--Mode-PS-multiplier: 2em;\n`;
     } else if (mode.startsWith('AAA')) {
-      css += `  --Mode-PS-multiplier: 300%;\n`;
+      css += `--Mode-PS-multiplier: 3em;\n`;
     }
     
     // Process other spacing values from the Default section but skip the specific ones to be removed
@@ -623,15 +569,15 @@ function processParagraphSpacing(paragraphSpacing, mode, isDefaultMode = false) 
             value = `${value}px`;
           }
           
-          css += `  --${key}: ${value};\n`;
+          css += `--${key}: ${value};\n`;
         }
       }
     }
     
-    css += `}\n\n`;
+    css += '\n';
     
     return css;
-}
+  }
 
 /**
  * Extract chart-specific variables
@@ -658,208 +604,338 @@ function extractChartVariables(chartContent) {
  * @returns {Array} - Array of CSS variable declarations
  */
 function extractPlatformVariables(platformContent, platformName) {
-    const variables = [];
+  const variables = [];
+  
+  // Add platform-specific font family variables explicitly
+  if (platformContent['Platform-Font-Families']) {
+    const fontFamilies = platformContent['Platform-Font-Families'];
     
-    // Add platform-specific font family variables explicitly
-    if (platformContent['Platform-Font-Families']) {
-      const fontFamilies = platformContent['Platform-Font-Families'];
-      
-      // Standard font family
-      if (fontFamilies.Standard && fontFamilies.Standard.value) {
-        variables.push(`  --Platform-Font-Families-Standard: "${fontFamilies.Standard.value}";\n`);
-      }
-      
-      // Decorative font family
-      if (fontFamilies.Decorative && fontFamilies.Decorative.value) {
-        variables.push(`  --Platform-Font-Families-Decorative: "${fontFamilies.Decorative.value}";\n`);
-      }
+    // Standard font family
+    if (fontFamilies.Standard && fontFamilies.Standard.value) {
+      variables.push(`  --Platform-Font-Families-Standard: "${fontFamilies.Standard.value}";\n`);
     }
     
-    // Add platform visibility variables
-    const platforms = ['Android', 'IOS', 'Desktop'];
-    platforms.forEach(platform => {
-      // Check if the platform exists in the content and has a boolean value
-      const platformValue = platformContent[platform] && platformContent[platform].value;
-      variables.push(`  --${platform}: ${platformValue === 'true' ? 'block' : 'none'};\n`);
-    });
-    
-    // Determine the correct section to process platform-specific variables
-    const defaultContent = platformContent['Platform-Default'] || platformContent['Default'] || platformContent;
-    
-    // Recursive function to flatten nested objects into CSS variables
-    const processPlatformVariables = (obj, prefix = 'Platform') => {
-      for (const [key, value] of Object.entries(obj)) {
-        // Skip non-object or null values
-        if (value === null || typeof value !== 'object') continue;
-        
-        // Handle reference values
-        if (value.value !== undefined) {
-          let cssValue = value.value;
-          
-          // Convert reference format {Something.Something} to var(--Something-Something)
-          if (typeof cssValue === 'string' && cssValue.startsWith('{') && cssValue.endsWith('}')) {
-            // Special handling for font families with consistent formatting
-            if (cssValue.includes('Cognitive-Font-Families') || cssValue.includes('Congnitive-Font-Families')) {
-              // Fix the spelling if needed (Congnitive → Cognitive)
-              cssValue = cssValue
-                .replace('Congnitive-Font-Families', 'Cognitive-Font-Families')
-                .replace(/[{}]/g, '') // Remove both braces
-                .replace(/\./g, '-'); // Replace dots with dashes
-              
-              cssValue = `var(--${cssValue})`;
-            } else {
-              // Generic handling for other references
-              cssValue = cssValue.replace(/[{}]/g, '').replace(/\./g, '-');
-              cssValue = `var(--${cssValue})`;
-            }
-          }
-          
-          // Add px for numeric values
-          if (typeof cssValue === 'number') {
-            cssValue = `${cssValue}px`;
-          }
-          
-          // Create variable name, replacing dots and handling special cases
-          const variableName = `--${prefix}-${key.replace(/\./g, '-')}`;
-          variables.push(`  ${variableName}: ${cssValue};\n`);
+    // Decorative font family
+    if (fontFamilies.Decorative && fontFamilies.Decorative.value) {
+      variables.push(`  --Platform-Font-Families-Decorative: "${fontFamilies.Decorative.value}";\n`);
+    }
+  }
+  
+  // Add platform visibility variables
+  const platforms = ['Android', 'IOS', 'Desktop'];
+  platforms.forEach(platform => {
+    // Check if the platform exists in the content and has a boolean value
+    const platformValue = platformContent[platform] && platformContent[platform].value;
+    variables.push(`  --${platform}: ${platformValue === 'true' ? 'block' : 'none'};\n`);
+  });
+  
+  // Determine the correct section to process platform-specific variables
+  const defaultContent = platformContent['Platform-Default'] || platformContent['Default'] || platformContent;
+  
+  // Recursive function to flatten nested objects into CSS variables
+  const processPlatformVariables = (obj, prefix = 'Platform') => {
+    for (const [key, value] of Object.entries(obj)) {
+      // Skip non-object or null values
+      if (value === null || typeof value !== 'object') continue;
+      
+      // Handle reference values
+      if (value.value !== undefined) {
+        // Filter out unwanted properties before processing
+        if (key.includes('SR-Character-Spacing') || 
+            key.includes('AAA-Paragraph-Spacing') || 
+            key.includes('Paragraph-Spacing')) {
+          console.log(`Skipping platform property: ${key}`);
+          continue;
         }
         
-        // Recursively process nested objects
-        if (typeof value === 'object' && value !== null) {
-          processPlatformVariables(value, `${prefix}-${key}`);
+        let cssValue = value.value;
+        
+        // Convert reference format {Something.Something} to var(--Something-Something)
+        if (typeof cssValue === 'string' && cssValue.startsWith('{') && cssValue.endsWith('}')) {
+          // Special handling for font families with consistent formatting
+          if (cssValue.includes('Cognitive-Font-Families') || cssValue.includes('Congnitive-Font-Families')) {
+            // Fix the spelling if needed (Congnitive → Cognitive)
+            cssValue = cssValue
+              .replace('Congnitive-Font-Families', 'Cognitive-Font-Families')
+              .replace(/[{}]/g, '') // Remove both braces
+              .replace(/\./g, '-'); // Replace dots with dashes
+            
+            cssValue = `var(--${cssValue})`;
+          } else {
+            // Generic handling for other references
+            cssValue = cssValue.replace(/[{}]/g, '').replace(/\./g, '-');
+            cssValue = `var(--${cssValue})`;
+          }
         }
+        
+        // Add px for numeric values
+        if (typeof cssValue === 'number') {
+          cssValue = `${cssValue}px`;
+        }
+        
+        // Create variable name, replacing dots and handling special cases
+        const variableName = `--${prefix}-${key.replace(/\./g, '-')}`;
+        variables.push(`  ${variableName}: ${cssValue};\n`);
       }
-    };
-    
-    // Start processing from the default content
-    processPlatformVariables(defaultContent);
-    
-    return variables;
+      
+      // Recursively process nested objects
+      if (typeof value === 'object' && value !== null) {
+        processPlatformVariables(value, `${prefix}-${key}`);
+      }
+    }
+  };
+  
+  // Start processing from the default content
+  processPlatformVariables(defaultContent);
+  
+  return variables;
 }
 
 /**
- * Extract cognitive variables - simplified to only include the multiplier
- * This is a direct replacement for the existing function
+ * Extract cognitive variables - updated to match the exact desired output format
  * @param {Object} cognitiveContent - The cognitive profile content
+ * @param {string} cognitiveType - The cognitive type ('none', 'adhd', 'dyslexia')
  * @returns {Array} - Array of CSS variable declarations
  */
-
-function extractCognitiveVariables(cognitiveContent) {
-    const variables = new Set();
-    
-    // Get the profile name from either Cognitive-Profile or Cognitive-Label
-    const profileName = cognitiveContent['Cognitive-Profile']?.value || 
-                        cognitiveContent['Cognitive-Label']?.value || 
-                        'None';
-    
-    // Determine multiplier based on profile type
-    let multiplier = 1;
-    
-    switch (profileName.toLowerCase()) {
-        case 'none':
-            multiplier = 1;
-            break;
-        case 'adhd':
-        case 'dyslexia':
-            multiplier = 1.33;
-            break;
-    }
-    
-    // Get target from the Cognitive-Default section
-    let target = 'var(--Platform-Default-Target)';
-    if (cognitiveContent['Cognitive-Default'] && 
-        cognitiveContent['Cognitive-Default'].Target && 
-        cognitiveContent['Cognitive-Default'].Target.value) {
-        // If the value is a reference, convert it to var()
-        const targetValue = cognitiveContent['Cognitive-Default'].Target.value;
-        if (typeof targetValue === 'string' && targetValue.startsWith('{') && targetValue.endsWith('}')) {
-            target = `var(--${targetValue.substring(1, targetValue.length - 1).replace(/\./g, '-')})`;
-        }
-    }
-    
-    // Add Cognitive Multiplier and Target
-    variables.add(`  --Cognitive-Multiplier: ${multiplier};\n`);
-    variables.add(`  --Cognitive-Target: ${target};\n`);
-    
-    // Add Typography font families
-    if (cognitiveContent['Congnitive-Font-Families']) {
-        const fontFamilies = cognitiveContent['Congnitive-Font-Families'];
-        
-        if (fontFamilies.Standard && fontFamilies.Standard.value) {
-            let standardFontValue = fontFamilies.Standard.value;
-            // Check if the value is a reference
-            if (typeof standardFontValue === 'string' && standardFontValue.startsWith('{') && standardFontValue.endsWith('}')) {
-                standardFontValue = `var(--${standardFontValue.substring(1, standardFontValue.length - 1).replace(/\./g, '-')})`;
-            } else {
-                standardFontValue = `"${standardFontValue}"`;
-            }
-            variables.add(`  --Typography-Font-Families-Standard: ${standardFontValue};\n`);
-        }
-        
-        if (fontFamilies.Decorative && fontFamilies.Decorative.value) {
-            let decorativeFontValue = fontFamilies.Decorative.value;
-            // Check if the value is a reference
-            if (typeof decorativeFontValue === 'string' && decorativeFontValue.startsWith('{') && decorativeFontValue.endsWith('}')) {
-                decorativeFontValue = `var(--${decorativeFontValue.substring(1, decorativeFontValue.length - 1).replace(/\./g, '-')})`;
-            } else {
-                decorativeFontValue = `"${decorativeFontValue}"`;
-            }
-            variables.add(`  --Typography-Font-Families-Decorative: ${decorativeFontValue};\n`);
-        }
-    }
-    
-    // Process typography sections
-    if (cognitiveContent['Cognitive-Default']) {
-        const defaultContent = cognitiveContent['Cognitive-Default'];
-        const typographySections = [
-            'Body', 'Buttons', 'Captions', 'Subtitles', 'Legal', 
-            'Labels', 'Overline', 'Display', 'Headers', 'Number'
-        ];
-        
-        typographySections.forEach(section => {
-            if (defaultContent[section]) {
-                processTypographySection(defaultContent[section], section, variables);
-            }
-        });
-    }
-    
-    // Convert Set back to array for return
-    return Array.from(variables);
+function extractCognitiveVariables(cognitiveContent, cognitiveType = 'none') {
+  const variables = [];
+  
+  // Add Typography Font Families - handle both "Congnitive" and "Cognitive" spellings
+  const fontFamiliesKey = cognitiveContent['Congnitive-Font-Families'] || cognitiveContent['Cognitive-Font-Families'];
+  if (fontFamiliesKey) {
+      if (fontFamiliesKey.Standard && fontFamiliesKey.Standard.value) {
+          let value = fontFamiliesKey.Standard.value;
+          // Handle different cognitive types differently
+          if (cognitiveType === 'none') {
+              // For 'none' profile, convert reference to var() format if it's a reference
+              if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+                  const varName = value.substring(1, value.length - 1).replace(/\./g, '-');
+                  value = `var(--${varName})`;
+              }
+          } else {
+              // For 'adhd' and 'dyslexia' profiles, add quotes around font names
+              if (typeof value === 'string' && !value.startsWith('"') && !value.endsWith('"')) {
+                  value = `"${value}"`;
+              }
+          }
+          variables.push(`  --Typography-Font-Families-Standard: ${value};\n`);
+      }
+      if (fontFamiliesKey.Decorative && fontFamiliesKey.Decorative.value) {
+          let value = fontFamiliesKey.Decorative.value;
+          // Handle different cognitive types differently
+          if (cognitiveType === 'none') {
+              // For 'none' profile, convert reference to var() format if it's a reference
+              if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+                  const varName = value.substring(1, value.length - 1).replace(/\./g, '-');
+                  value = `var(--${varName})`;
+              }
+          } else {
+              // For 'adhd' and 'dyslexia' profiles, add quotes around font names
+              if (typeof value === 'string' && !value.startsWith('"') && !value.endsWith('"')) {
+                  value = `"${value}"`;
+              }
+          }
+          variables.push(`  --Typography-Font-Families-Decorative: ${value};\n`);
+      }
+  }
+  
+  // Process Cognitive Default or Cognitive-Default section
+  const defaultContent = cognitiveContent['Cognitive-Default'] || cognitiveContent['Default'];
+  
+  if (defaultContent) {
+      // Define sections to process in the correct order
+      const sections = [
+          'Body', 'Buttons', 'Captions', 'Subtitles', 'Legal', 
+          'Labels', 'Overline', 'Display', 'Headers', 'Number'
+      ];
+      
+      sections.forEach(section => {
+          if (defaultContent[section]) {
+              Object.entries(defaultContent[section]).forEach(([typeName, typeProps]) => {
+                  // Skip 2x variants
+                  if (typeName.includes('-2x') || typeName.includes('2x')) {
+                      console.log(`Skipping 2x variant: ${typeName}`);
+                      return;
+                  }
+                  
+                  Object.entries(typeProps).forEach(([propName, propObj]) => {
+                      // Skip if value is undefined
+                      if (!propObj || propObj.value === undefined) return;
+                      
+                      // Skip properties with AA, SR, or AAA in the name - more comprehensive check
+                      if (propName.includes('AA') || propName.includes('SR') || propName.includes('AAA')) {
+                          console.log(`Skipping AA/SR/AAA property: ${propName}`);
+                          return;
+                      }
+                      
+                      // Skip paragraph spacing variables
+                      if (propName.includes('Paragraph-Spacing')) {
+                          console.log(`Skipping paragraph spacing property: ${propName}`);
+                          return;
+                      }
+                      
+                      // Handle different value types
+                      let value = propObj.value;
+                      
+                      // Handle reference values - keep some as references, convert others to var()
+                      if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+                          // Convert all references to var() format
+                          let varName = value.substring(1, value.length - 1).replace(/\./g, '-');
+                          
+                          // For Congnitive/Cognitive font family references, change to Typography
+                          if (varName.includes('Congnitive-Font-Families') || varName.includes('Cognitive-Font-Families')) {
+                              const correctedVarName = varName.replace('Congnitive-Font-Families', 'Typography-Font-Families').replace('Cognitive-Font-Families', 'Typography-Font-Families');
+                              value = `var(--${correctedVarName})`;
+                          }
+                          // For Platform-Default references, remove the "Default" part
+                          else if (varName.includes('Platform-Default-')) {
+                              varName = varName.replace('Platform-Default-', 'Platform-');
+                              value = `var(--${varName})`;
+                          }
+                          // For all other references, convert to var()
+                          else {
+                              value = `var(--${varName})`;
+                          }
+                      }
+                      
+                      // Add px to specific numeric properties
+                      if (typeof value === 'number') {
+                          // Properties that should have px units
+                          const pxProperties = ['Font-Size', 'Line-Height', 'Character-Spacing', 'Paragraph-Spacing'];
+                          const shouldAddPx = pxProperties.some(prop => propName.includes(prop));
+                          if (shouldAddPx) {
+                              value = `${value}px`;
+                          }
+                      }
+                      
+                      // Create variable name in the format --Typography-Section-Type-Property
+                      // Handle special type name formatting to match your desired output
+                      let cleanTypeName = typeName;
+                      
+                      // Handle specific naming patterns with proper dashes
+                      if (typeName.includes('Small-Semibold')) {
+                          cleanTypeName = 'Small-Semibold';
+                      } else if (typeName.includes('Medium-Semibold')) {
+                          cleanTypeName = 'Medium-Semibold';
+                      } else if (typeName.includes('Large-Semibold')) {
+                          cleanTypeName = 'Large-Semibold';
+                      } else if (typeName.includes('Extra-Small')) {
+                          cleanTypeName = 'Extra-Small';
+                      } else if (typeName.includes('Semibold')) {
+                          // Handle any other Semibold variants by adding dash before Semibold
+                          cleanTypeName = typeName.replace('Semibold', '-Semibold');
+                      } else if (typeName.includes('ExtraSmall')) {
+                          cleanTypeName = 'Extra-Small';
+                      } else {
+                          // Keep original formatting for other cases
+                          cleanTypeName = typeName;
+                      }
+                      
+                      const variableName = `--Typography-${section}-${cleanTypeName}-${propName.replace(/\s+/g, '-')}`;
+                      
+                      variables.push(`  ${variableName}: ${value};\n`);
+                  });
+              });
+          }
+      });
+      
+      // Add Cognitive Multiplier if it exists
+      if (defaultContent.Spacing && defaultContent.Spacing['Cognitive-Multiplier']) {
+          const multiplierValue = defaultContent.Spacing['Cognitive-Multiplier'].value || 1;
+          variables.push(`  --Cognitive-Multiplier: ${multiplierValue};\n`);
+      } else {
+          // Default multiplier
+          variables.push(`  --Cognitive-Multiplier: 1;\n`);
+      }
+      
+      // Add Cognitive Target
+      if (defaultContent.Target) {
+          let targetValue = defaultContent.Target.value;
+          if (typeof targetValue === 'string' && targetValue.startsWith('{') && targetValue.endsWith('}')) {
+              let varName = targetValue.substring(1, targetValue.length - 1).replace(/\./g, '-');
+              // Remove Platform-Default- and replace with Platform-
+              if (varName.includes('Platform-Default-')) {
+                  varName = varName.replace('Platform-Default-', 'Platform-');
+              }
+              targetValue = `var(--${varName})`;
+          } else if (typeof targetValue === 'number') {
+              // Add px to numeric target values
+              targetValue = `${targetValue}px`;
+          }
+          variables.push(`  --Cognitive-Target: ${targetValue};\n`);
+      } else {
+          // For 'none' cognitive type, use Mode-Target; others use Platform-Target
+          if (cognitiveType === 'none') {
+              variables.push(`  --Cognitive-Target: var(--Mode-Target);\n`);
+          } else {
+              variables.push(`  --Cognitive-Target: var(--Platform-Target);\n`);
+          }
+      }
+  }
+  
+  // Final cleanup: replace any remaining Platform-Default- with Platform- in all variables
+  const cleanedVariables = variables.map(variable => {
+      return variable.replace(/--Platform-Default-/g, '--Platform-');
+  });
+  
+  return cleanedVariables;
 }
 
-function processTypographySection(sectionContent, sectionName, variables) {
-    // Iterate through subsections (Small, Medium, Large, etc.)
-    for (const [typeName, typeContent] of Object.entries(sectionContent)) {
-        // Process each property in the subsection
-        for (const [propName, propContent] of Object.entries(typeContent)) {
-            if (propContent.value) {
-                // Determine the variable name
-                const formattedTypeName = typeName.replace(/-/g, '');
-                const variableName = `--Typography-${sectionName}-${formattedTypeName}-${propName}`;
-                
-                // Convert reference format
-                let value = propContent.value;
-                if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-                    // Remove braces and convert dot notation to variable notation
-                    value = value.substring(1, value.length - 1)
-                        .replace(/\./g, '-');
-                    
-                    // Special handling for Congnitive font families
-                    if (value.includes('Congnitive-Font-Families-Standard')) {
-                        value = 'var(--Typography-Font-Families-Standard)';
-                    } else if (value.includes('Congnitive-Font-Families-Decorative')) {
-                        value = 'var(--Typography-Font-Families-Decorative)';
-                    } else {
-                        value = `var(--${value})`;
-                    }
-                }
-                
-                // Add the variable
-                variables.add(`  ${variableName}: ${value};\n`);
-            }
-        }
-    }
+/**
+* Process cognitive profiles and generate CSS files - Updated selector handling
+* Updated to use :root for all profiles
+*/
+async function processCognitiveProfiles(jsonContent, outputDir) {
+  const results = [];
+  
+  // Process cognitive variables for different profiles
+  const cognitiveProfiles = [
+      { key: 'Cognitive/None', name: 'none' },
+      { key: 'Cognitive/ADHD', name: 'adhd' }, 
+      { key: 'Cognitive/Dyslexia', name: 'dyslexia' }
+  ];
+
+  for (const profile of cognitiveProfiles) {
+      if (jsonContent[profile.key]) {
+          console.log(`Processing cognitive profile: ${profile.name}`);
+          
+          // Generate CSS with proper selector
+          const variables = extractCognitiveVariables(jsonContent[profile.key], profile.name);
+          
+          let css = `/**
+* Cognitive Variables - ${profile.name.charAt(0).toUpperCase() + profile.name.slice(1)} Profile
+* Generated by JsonToCss
+*/
+`;
+          
+          // Use :root for all profiles (not data attributes)
+          css += `:root {\n`;
+          
+          // Add all variables
+          variables.forEach(variable => {
+              css += variable;
+          });
+          
+          css += `}\n`;
+          
+          // Save to file
+          const cognitiveFilename = `cognitive-${profile.name}.css`;
+          const cognitiveFilePath = path.join(outputDir, cognitiveFilename);
+          
+          await fs.promises.writeFile(cognitiveFilePath, css, 'utf8');
+          results.push({
+              profile: profile.name,
+              file: cognitiveFilename,
+              path: cognitiveFilePath
+          });
+          
+          console.log(`Generated ${cognitiveFilename} with ${variables.length} variables`);
+      }
+  }
+  
+  return results;
 }
+
 
 /**
  * Process surface containers JSON structure into CSS
@@ -867,67 +943,65 @@ function processTypographySection(sectionContent, sectionName, variables) {
  * @returns {string} - Generated CSS for surface containers
  */
 function processSurfaceContainers(jsonContent) {
-  let css = `/**
- * Surface and Container variables
- * Generated by JsonToCss
- */\n\n`;
-  
-  // Process each surface/container entry
-  for (const [key, content] of Object.entries(jsonContent)) {
-    if (key.startsWith('Surface and Containers/')) {
-      // Extract the container name (e.g., Surface, Surface-Dim, etc.)
-      const containerName = key.split('/')[1];
-      
-      // Get the label value if available, otherwise use the container name
-      const labelValue = content['SurfaceContainer-Label'] && content['SurfaceContainer-Label'].value 
-        ? content['SurfaceContainer-Label'].value 
-        : containerName;
-      
-      // Create the CSS selector, default is without value
-      if (containerName === 'Surface') {
-        css += `[data-surfaceContainer] {\n`;
-      } else {
-        css += `[data-surfaceContainer="${labelValue}"] {\n`;
-      }
-      
-      // Process all properties
-      for (const [propName, propObj] of Object.entries(content)) {
-        // Skip the label property as it's used for the selector
-        if (propName === 'SurfaceContainer-Label') {
-          continue;
+    let css = `/**
+   * Surface and Container variables
+   * Generated by JsonToCss
+   */\n\n`;
+    
+    // Process each surface/container entry
+    for (const [key, content] of Object.entries(jsonContent)) {
+      if (key.startsWith('Surface and Containers/')) {
+        // Extract the container name (e.g., Surface, Surface-Dim, etc.)
+        const containerName = key.split('/')[1];
+        
+        // Get the label value if available, otherwise use the container name
+        const labelValue = content['SurfaceContainer-Label'] && content['SurfaceContainer-Label'].value 
+          ? content['SurfaceContainer-Label'].value 
+          : containerName;
+        
+        // Create the CSS selector, default is without value
+        if (containerName === 'Surface') {
+          css += `[data-surface-container] {\n`;
+        } else {
+          css += `[data-surface-container="${labelValue.toLowerCase()}"] {\n`;
         }
         
-        if (propObj.value !== undefined) {
-          // Handle different value types
-          let value = propObj.value;
-          
-          // Convert reference format {Something} to var(--Something)
-          if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-            value = `var(--${value.substring(1, value.length - 1)})`;
-          } else if (typeof value === 'number') {
-            value = `${value}px`;
-          } else if (typeof value === 'boolean') {
-            value = value ? 'true' : 'false';
+        // Process all properties
+        for (const [propName, propObj] of Object.entries(content)) {
+          // Skip the label property as it's used for the selector
+          if (propName === 'SurfaceContainer-Label') {
+            continue;
           }
           
-          css += `--${propName}: ${value};\n`;
+          if (propObj.value !== undefined) {
+            // Handle different value types
+            let value = propObj.value;
+            
+            // Convert reference format {Something} to var(--Something)
+            if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+              value = `var(--${value.substring(1, value.length - 1)})`;
+            } else if (typeof value === 'number') {
+              value = `${value}px`;
+            } else if (typeof value === 'boolean') {
+              value = value ? 'true' : 'false';
+            }
+            
+            css += `--${propName}: ${value};\n`;
+          }
         }
+        
+        css += `}\n\n`;
       }
-      
-      css += `}\n\n`;
     }
+    
+    return css;
   }
-  
-  return css;
-}
 
-/**
- * Process sizing and spacing sections from JSON and convert to CSS
- * @param {Object} jsonContent - The parsed JSON content
- * @returns {string} - The generated CSS for sizing and spacing
- */
-function processSizingSpacing(jsonContent) {
-    let css = `:root, ::before, ::after {\n`;
+  function processSizingSpacing(jsonContent) {
+    let css = '';
+    
+    // Start the CSS block
+    css += ':root {\n';
     
     // Extract multiplier values from each mode
     const multipliers = {
@@ -947,76 +1021,79 @@ function processSizingSpacing(jsonContent) {
       }
     });
     
-    // Add multiplier variables
-    css += `  --Default-Spacing-Multiplier: ${multipliers.Default};\n`;
-    css += `  --Standard-Spacing-Multiplier: ${multipliers.Standard};\n`;
-    css += `  --Expanded-Spacing-Multiplier: ${multipliers.Expanded};\n`;
-    css += `  --Reduced-Spacing-Multiplier: ${multipliers.Reduced};\n`;
-    css += `  --Spacing-multiplier: var(--Default-Spacing-Multiplier);\n`;
+    // Add multiplier variables with clean formatting
+    css += '  --Default-Spacing-Multiplier: ' + multipliers.Default + ';\n';
+    css += '  --Standard-Spacing-Multiplier: ' + multipliers.Standard + ';\n';
+    css += '  --Expanded-Spacing-Multiplier: ' + multipliers.Expanded + ';\n';
+    css += '  --Reduced-Spacing-Multiplier: ' + multipliers.Reduced + ';\n';
+    
+    // Use the variable directly without min()
+    css += '  --Spacing-multiplier: var(--Default-Spacing-Multiplier);\n';
     
     // Get the default sizing values from the Default mode
     const defaultSection = jsonContent['Sizing & Spacing/Default'];
     if (defaultSection && defaultSection.Default) {
       const defaultValues = defaultSection.Default;
       
-      // Process all sizing properties (not spacing)
-      const sizingProps = Object.keys(defaultValues).filter(
-        key => key.startsWith('Sizing-') || key.startsWith('Negative-')
-      );
-      
-      // Add sizing variables
-      sizingProps.forEach(prop => {
+      // Process sizing and spacing properties
+      const processProp = (prop) => {
         if (defaultValues[prop] && defaultValues[prop].value !== undefined) {
-          css += `  --${prop}: ${defaultValues[prop].value}px;\n`;
+          // Direct numeric value or reference
+          let value = defaultValues[prop].value;
+          
+          // Convert reference format
+          if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+            value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
+          } else if (typeof value === 'number') {
+            value = `${value}px`;
+          }
+          
+          // For spacing, use multiplier calculation
+          if (prop.startsWith('Spacing-')) {
+            css += `  --${prop}: calc(${value} * var(--Spacing-multiplier));\n`;
+          } else {
+            css += `  --${prop}: ${value};\n`;
+          }
         }
-      });
+      };
       
-      // Process spacing properties
-      const spacingProps = Object.keys(defaultValues).filter(
-        key => key.startsWith('Spacing-') && 
-        key !== 'Spacing-multiplier' &&
-        !key.includes('Cognitive')
-      );
+      // Process various property types
+      const propTypes = [
+        'Sizing-',
+        'Negative-',
+        'Spacing-'
+      ];
       
-      // Find the corresponding sizing property for each spacing property
-      spacingProps.forEach(spacingProp => {
-        // Convert spacing name to equivalent sizing name if possible
-        let sizingProp = spacingProp.replace('Spacing-', 'Sizing-');
-        
-        // Check if the sizing property exists, otherwise use the direct value
-        if (sizingProps.includes(sizingProp)) {
-          // Use calculations with spacing and cognitive multipliers
-          css += `  --${spacingProp}: min(calc(var(--${sizingProp}) * var(--Spacing-multiplier)), calc(var(--${sizingProp}) * var(--Cognitive-multiplier)));\n`;
-        } else if (defaultValues[spacingProp] && defaultValues[spacingProp].value !== undefined) {
-          // Direct value if no corresponding sizing property
-          css += `  --${spacingProp}: ${defaultValues[spacingProp].value}px;\n`;
-        }
+      propTypes.forEach(type => {
+        Object.keys(defaultValues)
+          .filter(prop => prop.startsWith(type))
+          .forEach(processProp);
       });
     }
     
     // Close the root block
-    css += `}\n`;
+    css += '}\n\n';
     
     // Add data-spacing selectors for different modes
-    css += `/* Correctly placed overrides */\n`;
-    css += `[data-spacing] {\n`;
-    css += `  --Spacing-multiplier: var(--Default-Spacing-Multiplier);\n`;
-    css += `}\n`;
+    css += '/* Spacing mode overrides */\n';
+    css += '[data-spacing] {\n';
+    css += '  --Spacing-multiplier: min(var(--Cognitive-Multiplier), var(--Default-Spacing-Multiplier));\n';
+    css += '}\n\n';
     
-    css += `[data-spacing="expanded"] {\n`;
-    css += `  --Spacing-multiplier: var(--Expanded-Spacing-Multiplier);\n`;
-    css += `}\n`;
+    css += '[data-spacing="expanded"] {\n';
+    css += '  --Spacing-multiplier: min(var(--Cognitive-Multiplier), var(--Expanded-Spacing-Multiplier));\n';
+    css += '}\n\n';
     
-    css += `[data-spacing="reduced"] {\n`;
-    css += `  --Spacing-multiplier: var(--Reduced-Spacing-Multiplier);\n`;
-    css += `}\n`;
+    css += '[data-spacing="reduced"] {\n';
+    css += '  --Spacing-multiplier: min(var(--Cognitive-Multiplier), var(--Reduced-Spacing-Multiplier));\n';
+    css += '}\n\n';
     
-    css += `[data-spacing="standard"] {\n`;
-    css += `  --Spacing-multiplier: var(--Standard-Spacing-Multiplier);\n`;
-    css += `}\n`;
+    css += '[data-spacing="standard"] {\n';
+    css += '  --Spacing-multiplier: min(var(--Cognitive-Multiplier), var(--Standard-Spacing-Multiplier));\n';
+    css += '}\n\n';
     
     return css;
-  }
+}
 
 /**
  * Convert the given JSON content to multiple CSS files with a base file
@@ -1078,13 +1155,28 @@ async function convertToCssFiles(jsonContent, outputDir) {
     };
   
     // Process system tokens from System/Default
+
     if (jsonContent['System/Default']) {
         try {
-        const systemCSS = await convertSystemToCss(jsonContent, outputDir);
-        results.system = systemCSS;
+        console.log('Generating system CSS...');
+        const systemCSS = convertSystemToCss(jsonContent);
+        console.log('System CSS generated successfully');
+        
+        const systemFilename = 'system.css';
+        const systemFilePath = path.join(outputDir, systemFilename);
+        
+        await fs.promises.writeFile(systemFilePath, systemCSS, 'utf8');
+        console.log(`Successfully wrote ${systemFilename}`);
+        
+        results.system = {
+            file: systemFilename,
+            path: systemFilePath
+        };
         } catch (err) {
-        console.error(`Error writing system CSS:`, err);
+        console.error(`Error generating system CSS:`, err);
         }
+    } else {
+        console.warn('No System/Default section found in JSON');
     }
   
     // Process surface containers
@@ -1113,130 +1205,203 @@ async function convertToCssFiles(jsonContent, outputDir) {
         };
     }
 
-    // Process each mode
-    for (const [modeName, modeContent] of Object.entries(jsonContent)) {
-        if (modeName.startsWith('Modes/')) {
-            // Get the mode name (e.g., AA-light from Modes/AA-light)
-            const mode = modeName.split('/')[1];
-            let css = '';
-      
-            // Process backgrounds with separate selectors per background type
-            if (modeContent.Backgrounds) {
-                // Determine the selector based on whether it's the default mode (AA-light)
-                const isDefaultMode = mode === 'AA-light';
+// Process each mode
+for (const [modeName, modeContent] of Object.entries(jsonContent)) {
+    if (modeName.startsWith('Modes/')) {
+        // Get the mode name (e.g., AA-light from Modes/AA-light)
+        const mode = modeName.split('/')[1];
         
-                // Process default background (no specific background attribute)
-                if (modeContent.Backgrounds.Default) {
-                    css += `/* ${mode} mode specific backgrounds */\n`;
-                    // For AA-light, use just [data-mode] without a value
-                    if (isDefaultMode) {
-                        css += `[data-mode] [data-background] {\n`;
-                    } else {
-                        css += `[data-mode="${mode}"] [data-background] {\n`;
+        // Start each mode CSS file with the root selector and common variables
+        let css = `/* ${mode} mode CSS */\n`;
+        css += `:root {\n`;
+        
+        // Add Mode-Target based on AA or AAA
+        if (mode.toLowerCase().startsWith('aa-') && !mode.toLowerCase().startsWith('aaa-')) {
+            // AA modes get Desktop-Target reference
+            css += `  --Mode-Target: var(--Desktop-Target);\n`;
+        } else if (mode.toLowerCase().startsWith('aaa-')) {
+            // AAA modes get 48px
+            css += `  --Mode-Target: 48px;\n`;
+        }
+        
+        // Process mode targets if they exist in the JSON (this will override the above if present)
+        if (modeContent['Mode-Target']) {
+            css += `  /* ${mode} mode targets from JSON */\n`;
+            
+            // Check if Mode-Target is a single value
+            if (modeContent['Mode-Target'].value !== undefined) {
+                let value = modeContent['Mode-Target'].value;
+                
+                // Handle reference values
+                if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+                    // Convert reference to var()
+                    value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
+                } else if (typeof value === 'number') {
+                    // Convert numeric values to pixels
+                    value = `${value}px`;
+                }
+                
+                // Override the Mode-Target with JSON value
+                css += `  --Mode-Target: ${value};\n`;
+            }
+        }
+        
+        // Add paragraph spacing multiplier if needed
+        if (mode.startsWith('AA')) {
+            css += `  --Mode-PS-multiplier: 2em;\n`;
+        } else if (mode.startsWith('AAA')) {
+            css += `  --Mode-PS-multiplier: 3em;\n`;
+        }
+        
+        // Process paragraph spacing variables if present
+        if (modeContent['Mode-Paragraph-Spacing'] && modeContent['Mode-Paragraph-Spacing'].Default) {
+            // List of variables to exclude
+            const excludedVariables = [
+                'Body-Medium',
+                'Body-Small',
+                'Body-Large',
+                'Legal',
+                'Caption'
+            ];
+            
+            for (const [key, valueObj] of Object.entries(modeContent['Mode-Paragraph-Spacing'].Default)) {
+                // Skip the excluded variables
+                if (excludedVariables.includes(key)) {
+                    continue;
+                }
+                
+                if (valueObj.value !== undefined) {
+                    // Convert reference format {Cognitive-Default.Body.Medium.AA-Paragraph-Spacing}
+                    // to CSS variable format --Cognitive-Default-Body-Medium-AA-Paragraph-Spacing
+                    let value = valueObj.value;
+                    if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+                        value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
+                    } else if (typeof value === 'number') {
+                        value = `${value}px`;
                     }
-          
-                    const variables = extractModeVariables(modeContent.Backgrounds.Default);
+                    
+                    css += `  --${key}: ${value};\n`;
+                }
+            }
+        }
+        
+        // Close the root selector
+        css += `}\n\n`;
+        
+        // Process backgrounds with separate selectors per background type
+        if (modeContent.Backgrounds) {
+            // Process default background (no specific background attribute)
+            if (modeContent.Backgrounds.Default) {
+                css += `/* ${mode} mode specific backgrounds */\n`;
+                // Drop the data-mode attribute, just use data-background
+                css += `[data-background] {\n`;
+      
+                const variables = extractModeVariables(modeContent.Backgrounds.Default);
+                variables.forEach(variable => {
+                    css += variable;
+                });
+      
+                css += '}\n\n';
+            }
+    
+            // Process other named backgrounds
+            for (const [bgName, bgContent] of Object.entries(modeContent.Backgrounds)) {
+                if (bgName !== 'Default' && !bgName.startsWith('StatusBar/')) {
+                    const bgNameLower = bgName.toLowerCase();
+        
+                    css += `/* ${mode} mode specific backgrounds */\n`;
+                    // Drop the data-mode attribute, just use data-background with value
+                    css += `[data-background="${bgNameLower}"] {\n`;
+        
+                    const variables = extractModeVariables(bgContent);
                     variables.forEach(variable => {
                         css += variable;
                     });
-          
+        
                     css += '}\n\n';
                 }
-        
-                // Process other named backgrounds
-                for (const [bgName, bgContent] of Object.entries(modeContent.Backgrounds)) {
-                    if (bgName !== 'Default') {
-                        const bgNameLower = bgName.toLowerCase();
-            
-                        css += `/* ${mode} mode specific backgrounds */\n`;
-                        // For AA-light, use just [data-mode] without a value
-                        if (isDefaultMode) {
-                            css += `[data-mode] [data-background="${bgNameLower}"] {\n`;
-                        } else {
-                            css += `[data-mode="${mode}"] [data-background="${bgNameLower}"] {\n`;
+                
+                // Handle StatusBar backgrounds
+                if (bgName.startsWith('StatusBar/')) {
+                    // Find which color/variant is set to "true"
+                    for (const [colorKey, colorValue] of Object.entries(bgContent)) {
+                        if (colorValue.value === 'true' && colorKey !== 'StatusBar-Label') {
+                            const statusBarLabel = bgContent['StatusBar-Label']?.value || bgName.split('/')[1];
+                            const colorLower = colorKey.toLowerCase();
+                            
+                            css += `/* ${mode} mode ${statusBarLabel} background */\n`;
+                            // Drop the data-mode attribute
+                            css += `[data-background="${statusBarLabel}"],\n`;
+                            css += `[data-background="${colorLower}"] {\n`;
+                            
+                            // Add specific styles for these backgrounds if needed
+                            css += `  /* ${statusBarLabel} ${colorKey} background styles */\n`;
+                            
+                            css += '}\n\n';
                         }
-            
-                        const variables = extractModeVariables(bgContent);
-                        variables.forEach(variable => {
-                            css += variable;
-                        });
-            
-                        css += '}\n\n';
                     }
                 }
             }
-      
-            // Process mode targets if present
-            if (modeContent['Mode-Target']) {
-                css += processModeTarget(modeContent['Mode-Target'], mode, mode === 'AA-light');
-            }
-      
-            // Process charts
-            if (modeContent.Charts) {
-                for (const [chartType, chartContent] of Object.entries(modeContent.Charts)) {
-                    css += `/* ${mode} mode ${chartType} chart */\n`;
-          
-                    // For AA-light, use just [data-mode] without a value
-                    if (mode === 'AA-light') {
-                        css += `[data-mode] [charts="${chartType}"] {\n`;
-                    } else {
-                        css += `[data-mode="${mode}"] [charts="${chartType}"] {\n`;
-                    }
-          
-                    // Extract chart color variables
-                    const chartVars = extractChartVariables(chartContent);
-                    chartVars.forEach(variable => {
-                        css += variable;
-                    });
-          
-                    css += `}\n\n`;
-                }
-            }
-      
-            // Process paragraph spacing if present
-            if (modeContent['Mode-Paragraph-Spacing']) {
-                css += processParagraphSpacing(modeContent['Mode-Paragraph-Spacing'], mode, mode === 'AA-light');
-            }
-      
-            // Save mode-specific CSS to a file
-            const modeFilename = `mode-${mode.toLowerCase()}.css`;
-            const modeFilePath = path.join(outputDir, modeFilename);
-      
-            await fs.promises.writeFile(modeFilePath, css, 'utf8');
-            results.modes.push({
-                mode,
-                file: modeFilename,
-                path: modeFilePath
-            });
-        } else if (modeName.startsWith('Platform/')) {
-            // Get the platform name (e.g., Desktop from Platform/Desktop)
-            const platform = modeName.split('/')[1];
-            let css = '';
-      
-            // Process platform typography
-            css += `/* ${platform} platform specific typography */\n`;
-            css += `[data-platform="${platform}"] {\n`;
-      
-            // Extract platform variables
-            const platformVars = extractPlatformVariables(modeContent, platform);
-            platformVars.forEach(variable => {
-                css += variable;
-            });
-      
-            css += '}\n\n';
-      
-            // Save platform-specific CSS to a file
-            const platformFilename = `platform-${platform.toLowerCase()}.css`;
-            const platformFilePath = path.join(outputDir, platformFilename);
-      
-            await fs.promises.writeFile(platformFilePath, css, 'utf8');
-            results.platforms.push({
-                platform,
-                file: platformFilename,
-                path: platformFilePath
-            });
         }
+  
+        // Process charts
+        if (modeContent.Charts) {
+            for (const [chartType, chartContent] of Object.entries(modeContent.Charts)) {
+                css += `/* ${mode} mode ${chartType} chart */\n`;
+      
+                // Drop the data-mode attribute, just use charts attribute
+                css += `[charts="${chartType}"] {\n`;
+      
+                // Extract chart color variables
+                const chartVars = extractChartVariables(chartContent);
+                chartVars.forEach(variable => {
+                    css += variable;
+                });
+      
+                css += `}\n\n`;
+            }
+        }
+  
+        // Save mode-specific CSS to a file
+        const modeFilename = `mode-${mode.toLowerCase()}.css`;
+        const modeFilePath = path.join(outputDir, modeFilename);
+  
+        await fs.promises.writeFile(modeFilePath, css, 'utf8');
+        results.modes.push({
+            mode,
+            file: modeFilename,
+            path: modeFilePath
+        });
+    } else if (modeName.startsWith('Platform/')) {
+        // Get the platform name (e.g., Desktop from Platform/Desktop)
+        const platform = modeName.split('/')[1];
+        let css = '';
+        
+        // Process platform typography
+        css += `/* ${platform} platform specific typography */\n`;
+        // Use :root selector instead of data-platform
+        css += `:root {\n`;
+        
+        // Extract platform variables
+        const platformVars = extractPlatformVariables(modeContent, platform);
+        platformVars.forEach(variable => {
+          css += variable;
+        });
+        
+        css += '}\n\n';
+        
+        // Save platform-specific CSS to a file
+        const platformFilename = `platform-${platform.toLowerCase()}.css`;
+        const platformFilePath = path.join(outputDir, platformFilename);
+        
+        await fs.promises.writeFile(platformFilePath, css, 'utf8');
+        results.platforms.push({
+          platform,
+          file: platformFilename,
+          path: platformFilePath
+        });
     }
+}
   
     // Add sizing and spacing section
     const sizingSpacingCSS = processSizingSpacing(jsonContent);
@@ -1251,46 +1416,13 @@ async function convertToCssFiles(jsonContent, outputDir) {
         };
     }
   
-    // Process cognitive variables for different profiles
-    const cognitiveProfiles = [
-        'Cognitive/None', 
-        'Cognitive/ADHD', 
-        'Cognitive/Dyslexia'
-    ];
+    // Use the new cognitive processing function
+    results.cognitive = await processCognitiveProfiles(jsonContent, outputDir);
+    
+
+
   
-    for (const profileKey of cognitiveProfiles) {
-        if (jsonContent[profileKey]) {
-            // Extract the profile name from the key (e.g., "None" from "Cognitive/None")
-            const profileName = profileKey.split('/')[1];
-      
-            // Start building the CSS
-            let cognitiveCss = `/* Cognitive profile: ${profileName} */\n`;
-            cognitiveCss += `[data-cognitive-profile="${profileName.toLowerCase()}"] {\n`;
-      
-            // Add the appropriate cognitive multiplier based on profile
-            if (profileName.toLowerCase() === 'none') {
-                cognitiveCss += `  --Cognitive-Multiplier: 1;\n`;
-            } else {
-                cognitiveCss += `  --Cognitive-Multiplier: 1.5;\n`;
-            }
-      
-            // Add the rest of the cognitive variables
-            cognitiveCss += extractCognitiveVariables(jsonContent[profileKey]).join('');
-            cognitiveCss += `}\n`;
-      
-            const cognitiveFilename = `cognitive-${profileName.toLowerCase()}.css`;
-            const cognitiveFilePath = path.join(outputDir, cognitiveFilename);
-      
-            await fs.promises.writeFile(cognitiveFilePath, cognitiveCss, 'utf8');
-            results.cognitive.push({
-                profile: profileName,
-                file: cognitiveFilename,
-                path: cognitiveFilePath
-            });
-        }
-    }
-  
-    return results;
+  return results;
 }
 /**
  * Generate a JavaScript loader script to dynamically load the appropriate CSS files
@@ -1378,6 +1510,7 @@ async function generateLoaderScript(outputDir, fileInfo) {
         // Load base CSS files
         const baseFiles = [
             { name: 'base.css', id: 'theme-base' },
+            { name: 'typography.css', id: 'theme-typography' }, // <-- Add this line
             { name: 'system.css', id: 'theme-system' },
             { name: 'shadow-levels.css', id: 'theme-shadow-levels' },
             { name: 'sizing-spacing.css', id: 'theme-sizing-spacing' },
@@ -1546,6 +1679,10 @@ async function convertJsonFileToCssFiles(inputPath, outputDir) {
       
       console.log(`Successfully generated CSS files in ${outputDir}`);
       console.log(`- base.css (common styles)`);
+
+      if (results.typography) {
+        console.log(`- typography.css (typography variables)`);
+      }
       
       if (results.system) {
         console.log(`- system.css (system tokens)`);
@@ -1606,7 +1743,8 @@ export {
   processSizingSpacing,
   convertToCssFiles,
   processBackgrounds,
-  extractCognitiveVariables, 
+  extractCognitiveVariables,
+  processCognitiveProfiles,
   convertJsonFileToCssFiles,
   processShadowLevels
 };

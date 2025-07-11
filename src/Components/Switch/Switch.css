@@ -1,0 +1,532 @@
+/* Switch.css - Multi-Variant Design Token System */
+
+/* 
+ * Multi-Variant Switch Design System:
+ * - --Button: Primary color for active states
+ * - Five variants: small, large, icon, ios, android
+ * - Each variant has unique styling and behavior
+ * - Consistent min-target areas and accessibility
+ */
+
+/* Base MUI Switch Root */
+#dds .MuiSwitch-root {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    transition: all var(--animation-speed) ease;
+    min-width: var(--Minimum-Target);
+    min-height: var(--Minimum-Target);
+    width: var(--Sizing-4);
+    overflow: visible;
+    padding: 0 var(--Sizing-1);
+  }
+  
+  #dds .MuiSwitch-root .MuiSwitch-track {
+    background: var(--Border);
+    height: calc(var(--Sizing-2) * .8);
+    border-radius: calc(var(--Sizing-2) * .8);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: block;
+    position: absolute;
+    opacity: 1;
+  }
+
+  #dds .MuiSwitch-root .MuiSwitch-thumb {
+    width: var(--Sizing-2);
+    height: var(--Sizing-2);
+    background: var(--On-Color);
+    top: 50%;
+    transform: translateY(-50%);
+    display: block;
+    position: absolute;
+    left:0;
+    border: 1px solid var(--Background);
+  }
+
+  #dds .MuiSwitch-root .Mui-checked .MuiSwitch-thumb {
+    border: 1px solid var(--Button);
+    background: color-mix(in srgb, var(--Button) 60%, white 40%);
+
+  }
+  
+  #dds .MuiSwitch-root .MuiSwitch-switchBase {
+    width: var(--Sizing-4);
+    height: var(--Sizing-2);
+    background:  transparent;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  
+  /* Small Active State */
+  #dds .MuiSwitch-root.small.Mui-checked::before {
+    background-color: var(--Button);
+  }
+  
+  #dds .MuiSwitch-root.small.Mui-checked::after {
+    left: calc(var(--Sizing-3) * 1.0);
+  }
+
+
+  
+  /* ===== LARGE VARIANT ===== */
+  #dds .MuiSwitch-root.large {
+    min-width: var(--Minimum-Target);
+    min-height: var(--Minimum-Target);
+    width: var(--Sizing-6);
+    height: var(--Sizing-4);
+  }
+
+  #dds .MuiSwitch-root.large .MuiSwitch-switchBase {
+    width: var(--Sizing-6);
+  }
+
+
+  #dds .MuiSwitch-root.large .MuiSwitch-track {
+    background: var(--Border);
+    height: calc(var(--Sizing-3) * .8);
+    border-radius: calc(var(--Sizing-3) * .8);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: block;
+    position: absolute;
+  }
+
+
+  
+  #dds .MuiSwitch-root.large  .MuiSwitch-thumb {
+    width: var(--Sizing-3);
+    height: var(--Sizing-3);
+    background: var(--On-Color);
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    display: block;
+    position: absolute;
+    border: 1px solid var(--Background);
+  }
+  
+  
+  /* ===== ICON VARIANT ===== */
+  #dds .MuiSwitch-root.icon {
+    width: var(--Sizing-8);
+    height: var(--Sizing-4);
+    border-radius: var(--Sizing-4);
+  }
+
+  #dds .MuiSwitch-root.icon .MuiSwitch-switchBase {
+    width: var(--Sizing-8);
+  }
+  
+  #dds .MuiSwitch-root.icon  .MuiSwitch-track {
+    background: var(--Border);
+    height: calc(var(--Sizing-4) * .8);
+    border-radius: calc(var(--Sizing-4) * .8);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: block;
+    position: absolute;
+  }
+  
+  #dds .MuiSwitch-root.icon   .MuiSwitch-thumb {
+    width: var(--Sizing-4);
+    height: var(--Sizing-4);
+    background: var(--On-Color);
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    display: block;
+    position: absolute;
+    border: 1px solid var(--Background);
+  }
+
+  #dds .MuiSwitch-root .Mui-checked .MuiSwitch-thumb {
+    background-color: var(--Button) !important;
+    left: unset;
+    right: 0;
+    border: 1px solid var(--Background);
+  }
+  
+  #dds .MuiSwitch-root .Mui-checked ~ .MuiSwitch-track {
+    background: color-mix(in srgb, var(--Button) 100%, var(--On-Color) 40%);
+    box-shadow: inset 0 0 0 1px var(--Button);
+  }
+  
+  /* Icon Active State with Check */
+  #dds .MuiSwitch-root.icon.Mui-checked::before {
+    background-color: var(--Button);
+  }
+  
+  #dds .MuiSwitch-root.icon.Mui-checked::after {
+    content: '\f00c'; /* Font Awesome check icon */
+    left: calc(var(--Sizing-3) * 1.25);
+    color: var(--Button);
+  }
+  
+  /* ===== iOS VARIANT ===== */
+  #dds .MuiSwitch-root.ios {
+    width: calc(var(--Sizing-3) * 2.0);
+    height: calc(var(--Sizing-3) * 1.2);
+  }
+  
+  /* iOS Track */
+  #dds .MuiSwitch-root.ios::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--Border);
+    border-radius: calc(var(--Sizing-3) * 0.6);
+    transition: all var(--animation-speed) ease;
+    border: 2px solid #e5e7eb;
+  }
+  
+  /* iOS Thumb */
+  #dds .MuiSwitch-root.ios::after {
+    content: '';
+    position: absolute;
+    width: calc(var(--Sizing-3) * 1.1);
+    height: calc(var(--Sizing-3) * 1.1);
+    background-color: white;
+    border-radius: 50%;
+    transition: all var(--animation-speed) cubic-bezier(0.4, 0, 0.2, 1);
+    left: calc(var(--Sizing-3) * -0.05);
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), 0 3px 1px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* iOS Active State */
+  #dds .MuiSwitch-root.ios.Mui-checked::before {
+    background-color: var(--Button);
+    border-color: var(--Button);
+  }
+  
+  #dds .MuiSwitch-root.ios.Mui-checked::after {
+    left: calc(var(--Sizing-3) * 0.85);
+  }
+  
+  /* ===== ANDROID VARIANT ===== */
+  #dds .MuiSwitch-root.android {
+    width: calc(var(--Sizing-3) * 2.4);
+    height: calc(var(--Sizing-3) * 1.4);
+  }
+  
+  /* Android Track */
+  #dds .MuiSwitch-root.android::before {
+    content: '';
+    position: absolute;
+    width: calc(var(--Sizing-3) * 2.0);
+    height: calc(var(--Sizing-3) * 0.8);
+    background-color: var(--Border);
+    border-radius: calc(var(--Sizing-3) * 0.4);
+    transition: all var(--animation-speed) ease;
+    left: calc(var(--Sizing-3) * 0.2);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  /* Android Thumb */
+  #dds .MuiSwitch-root.android::after {
+    content: '';
+    position: absolute;
+    width: calc(var(--Sizing-3) * 1.2);
+    height: calc(var(--Sizing-3) * 1.2);
+    background-color: white;
+    border-radius: calc(var(--Sizing-3) * 0.2);
+    transition: all var(--animation-speed) cubic-bezier(0.4, 0, 0.2, 1);
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
+  }
+  
+  /* Android Active State */
+  #dds .MuiSwitch-root.android.Mui-checked::before {
+    background-color: rgba(var(--Button-rgb, 59, 130, 246), 0.5);
+  }
+  
+  #dds .MuiSwitch-root.android.Mui-checked::after {
+    background-color: var(--Button);
+    left: calc(var(--Sizing-3) * 1.2);
+  }
+  
+  /* ===== HOVER STATES ===== */
+  #dds .MuiSwitch-root:hover:not(.Mui-disabled)::after {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  #dds .MuiSwitch-root.ios:hover:not(.Mui-disabled)::after {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 4px 2px rgba(0, 0, 0, 0.08);
+  }
+
+
+  
+  /* ===== FOCUS STATES ===== */
+
+#dds .MuiSwitch-root.Mui-checked.Mui-focusVisible {
+    outline: 2px solid var(--Button);
+
+    }
+
+  
+  /* ===== DISABLED STATES ===== */
+  #dds .MuiSwitch-root.Mui-disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  #dds .MuiSwitch-root.Mui-disabled::before {
+    background-color: #f3f4f6 !important;
+  }
+  
+  #dds .MuiSwitch-root.Mui-disabled::after {
+    background-color: #e5e7eb !important;
+    box-shadow: none !important;
+  }
+  
+  /* ===== SWITCH GROUP LAYOUTS ===== */
+  .switch-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .switch-group.horizontal {
+    flex-direction: row;
+    gap: 2rem;
+  }
+  
+  .switch-label {
+    display: flex;
+    align-items: center;
+    gap: var(--Sizing-1);
+    cursor: pointer;
+    padding: var(--Sizing-1);
+    border-radius: var(--Sizing-1);
+    transition: background-color var(--animation-speed) ease;
+    border: 1px solid transparent;
+  }
+  
+  .switch-label:hover {
+    background-color: var(--Surface-Dim);
+    border-color: var(--Transparent);
+  }
+  
+  .switch-label:focus-within {
+    background-color: var(--Surface-Dim);
+    border-color: var(--Button);
+  }
+  
+  .switch-label span {
+    color: var(--On-Color);
+    user-select: none;
+  }
+  
+  /* Disabled label styling */
+  .switch-label[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  .switch-label[aria-disabled="true"]:hover {
+    background-color: transparent;
+    border-color: transparent;
+  }
+  
+  .switch-label[aria-disabled="true"] span {
+    color: #9ca3af;
+  }
+  
+  /* ===== FORCED DEMO STATES ===== */
+
+  #dds .forced-focus-visible.MuiSwitch-root {
+    outline: 2px solid var(--On-Color);
+    outline-offset: 2px;
+  }
+  
+  /* ===== PRINT STYLES ===== */
+  @media print {
+    #dds .MuiSwitch-root::before {
+      background: #f3f4f6 !important;
+      border: 1px solid #000 !important;
+    }
+    
+    #dds .MuiSwitch-root::after {
+      background: #fff !important;
+      border: 1px solid #000 !important;
+      box-shadow: none !important;
+    }
+    
+    #dds .MuiSwitch-root.Mui-checked::before {
+      background: #000 !important;
+    }
+    
+    #dds .MuiSwitch-root.Mui-checked::after {
+      background: #fff !important;
+    }
+    
+    .switch-label {
+      background: none !important;
+      border: none !important;
+    }
+  }
+
+/* Icon Switch Wrapper */
+#dds .switch-icon-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(var(--Sizing-3) * 2.2);
+    height: var(--Sizing-3);
+    cursor: pointer;
+    min-width: var(--Minimum-Target);
+    min-height: var(--Minimum-Target);
+    padding: calc((var(--Minimum-Target) - var(--Sizing-3)) / 2);
+  }
+  
+  /* Hide the actual MUI switch for icon variant */
+  #dds .switch-icon-wrapper .icon-switch {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    z-index: 10;
+  }
+  
+  /* Icon Switch Track */
+  #dds .switch-icon-wrapper .switch-icon-track {
+    position: absolute;
+    width: calc(var(--Sizing-3) * 2.2);
+    height: var(--Sizing-3);
+    background-color: var(--Border);
+    border-radius: calc(var(--Sizing-3) * 0.5);
+    transition: all var(--animation-speed) ease;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  /* Icon Switch Thumb */
+  #dds .switch-icon-wrapper .switch-icon-thumb {
+    position: absolute;
+    width: calc(var(--Sizing-3) * 0.9);
+    height: calc(var(--Sizing-3) * 0.9);
+    background-color: white;
+    border-radius: 50%;
+    transition: all var(--animation-speed) ease;
+    left: calc(var(--Sizing-3) * 0.05);
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+  }
+  
+  /* Icon styling within thumb */
+  #dds .switch-icon-wrapper .switch-icon-thumb .icon {
+    width: calc(var(--Sizing-3) * 0.4);
+    height: calc(var(--Sizing-3) * 0.4);
+  }
+  
+  /* Times icon (unchecked state) styling */
+  #dds .switch-icon-wrapper .switch-icon-times {
+    color: #ef4444;
+  }
+  
+  /* Check icon (checked state) styling */
+  #dds .switch-icon-wrapper .switch-icon-check {
+    color: var(--Button);
+  }
+  
+  /* Checked state for icon variant */
+  #dds .switch-icon-wrapper:has(.icon-switch:checked) .switch-icon-track {
+    background-color: var(--Button);
+  }
+  
+  #dds .switch-icon-wrapper:has(.icon-switch:checked) .switch-icon-thumb {
+    left: calc(var(--Sizing-3) * 1.25);
+  }
+  
+  /* Hover states for icon variant */
+  #dds .switch-icon-wrapper:hover:not(:has(.icon-switch:disabled)) .switch-icon-thumb {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Focus states for icon variant */
+  #dds .switch-icon-wrapper:has(.icon-switch:focus-visible) {
+    outline: 2px solid var(--Button);
+    outline-offset: 2px;
+    border-radius: calc(var(--Sizing-3) * 0.6);
+  }
+  
+  /* Disabled states for icon variant */
+  #dds .switch-icon-wrapper:has(.icon-switch:disabled) {
+    opacity: 0.38;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  #dds .switch-icon-wrapper:has(.icon-switch:disabled) .switch-icon-track {
+    background-color: #f3f4f6 !important;
+  }
+  
+  #dds .switch-icon-wrapper:has(.icon-switch:disabled) .switch-icon-thumb {
+    background-color: #e5e7eb !important;
+    box-shadow: none !important;
+  }
+  
+  #dds .switch-icon-wrapper:has(.icon-switch:disabled) .icon {
+    color: #9ca3af !important;
+  }
+  
+  /* Forced demo states for icon variant */
+  #dds .switch-icon-wrapper.forced-hover .switch-icon-thumb {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  #dds .switch-icon-wrapper.forced-focus {
+    outline: 2px solid var(--Button);
+    outline-offset: 2px;
+    border-radius: calc(var(--Sizing-3) * 0.6);
+  }
+  
+  #dds .switch-icon-wrapper.forced-focus-visible {
+    outline: 2px solid var(--Button);
+    outline-offset: 2px;
+    border-radius: calc(var(--Sizing-3) * 0.6);
+  }
+  
+  /* Print styles for icon variant */
+  @media print {
+    #dds .switch-icon-wrapper .switch-icon-track {
+      background: #f3f4f6 !important;
+      border: 1px solid #000 !important;
+    }
+    
+    #dds .switch-icon-wrapper .switch-icon-thumb {
+      background: #fff !important;
+      border: 1px solid #000 !important;
+      box-shadow: none !important;
+    }
+    
+    #dds .switch-icon-wrapper:has(.icon-switch:checked) .switch-icon-track {
+      background: #000 !important;
+    }
+    
+    #dds .switch-icon-wrapper .icon {
+      color: #000 !important;
+    }
+  }

@@ -1,0 +1,60 @@
+.message-icons {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-small, 8px);
+  height: var(--size-medium, 24px);
+  justify-content: center;
+  position: relative;
+  width: var(--size-medium, 24px);
+}
+
+.message-icons .frame {
+  align-items: center;
+  border-radius: var(--border-radius-medium, 6px);
+  display: flex;
+  gap: var(--spacing-small, 8px);
+  height: var(--size-small, 20px);
+  justify-content: center;
+  position: relative;
+  width: var(--size-small, 20px);
+}
+
+.message-icons .v-icon-free {
+  color: var(--color-light, #ffffff) !important;
+  font-size: var(--font-size-small, 12px) !important;
+}
+
+.message-icons .v6-icon-free {
+  border-radius: var(--border-radius-small, 4px) !important;
+  flex: 0 0 auto !important;
+  height: unset !important;
+  overflow: hidden !important;
+}
+
+.message-icons.info {
+  flex-direction: column;
+}
+
+.message-icons.success {
+  flex-direction: column;
+}
+
+.message-icons.error {
+  padding: var(--spacing-xsmall, 4px);
+}
+
+.message-icons.warning .frame {
+  background-color: var(--color-warning, #f59e0b);
+}
+
+.message-icons.info .frame {
+  background-color: var(--color-info, #3b82f6);
+}
+
+.message-icons.success .frame {
+  background-color: var(--color-success, #10b981);
+}
+
+.message-icons.error .frame {
+  background-color: var(--color-error, #ef4444);
+}

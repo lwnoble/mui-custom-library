@@ -1,0 +1,109 @@
+.card {
+  /* Base card styles using design system CSS variables */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  /* Layout */
+  border-radius: var(--Card-Border-Radius, 8px);
+  padding: var(--Card-Padding, 16px);
+  
+  /* Transitions */
+  transition: all var(--animation-speed) ease;
+  
+  /* Remove default styles */
+  margin: 0;
+  border: none;
+  background: var(--Background);
+  text-align: left;
+  font-family: inherit;
+  outline: none;
+  
+  /* Prevent text selection on clickable cards */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  /* Min Width */
+  min-width: var(--Sizing-40);
+}
+
+/* Card content wrapper */
+.card__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--Sizing-1);
+  width: 100%;
+  height: 100%;
+}
+
+/* Variant Styles */
+.card--elevated {
+  /* Default elevated card */
+  border: var(--Card-Border, 1px solid transparent);
+  box-shadow: var(--Box-Shadow-Cards, 0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+.card--outlined {
+  /* Outlined card */
+  background-color: var(--Background);
+  border: 1px solid var(--Border);
+  box-shadow: none;
+}
+
+/* Clickable Card States */
+.card--clickable {
+  /* Make it clear this is interactive */
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Hover States - only for clickable cards */
+.card--clickable:hover:not(:disabled):not(.card--disabled) {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb,  var(--Button) 50%, transparent);
+  box-shadow: var(--Box-Shadow-Cards-Hover, 0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+/* Focus States - only for clickable cards */
+.card--clickable:focus:not(:disabled):not(.card--disabled) {
+  border-color: var(--Button);
+}
+
+/* Focus-Visible States - for keyboard navigation */
+.card--clickable:focus-visible:not(:disabled):not(.card--disabled) {
+  outline: 2px solid var(--Button);
+  outline-offset: 2px;
+}
+
+/* Active States - only for clickable cards */
+.card--clickable:active:not(:disabled):not(.card--disabled) {
+  transform: translateY(0px);
+}
+
+
+/* Disabled State - only for clickable cards */
+.card--clickable:disabled,
+.card--clickable.card--disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove focus styles when not using keyboard */
+.card--clickable:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Link cards */
+.card[href] {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card[href]:visited {
+  color: inherit;
+}

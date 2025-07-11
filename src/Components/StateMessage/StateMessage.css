@@ -1,0 +1,53 @@
+.state-message {
+    align-items: center;
+    border-radius: var(--Sizing-Half);
+    display: flex;
+    gap: var(--Sizing-Half);
+    position: relative;
+    width: 100%;
+    padding: var(--Message-Padding);
+    background: var(--Icon-BG);
+  }
+  
+  .state-message .icon {
+    height: var(--Sizing-2) !important;
+    width: var(--Sizing-2) !important;
+  }
+  
+  /* Icon background colors for different states */
+  .state-message .warning-icon {
+    background-color: var(--Icon-Warning) !important;
+  }
+  
+  .state-message .info-icon {
+    background-color: var(--Icon-Info) !important;
+  }
+  
+  .state-message .success-icon {
+    background-color: var(--Icon-Success) !important;
+  }
+  
+  .state-message .error-icon {
+    background-color: var(--Icon-Error) !important;
+  }
+  
+  .state-message .typography-instance {
+    flex: 0 0 auto !important;
+  }
+  
+  /* Text colors for different states */
+  .state-message .success-text {
+    color: var(--Text-Success) !important;
+  }
+  
+  .state-message .warning-text {
+    color: var(--Text-Warning) !important;
+  }
+  
+  .state-message .info-text {
+    color: var(--Text-Info) !important;
+  }
+  
+  .state-message .error-text {
+    color: var(--Text-Error) !important;
+  }

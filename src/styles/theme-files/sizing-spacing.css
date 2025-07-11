@@ -1,4 +1,4 @@
-:root, ::before, ::after {
+:root {
   --Default-Spacing-Multiplier: 1;
   --Standard-Spacing-Multiplier: 1;
   --Expanded-Spacing-Multiplier: 1.5;
@@ -20,40 +20,45 @@
   --Sizing-30: 240px;
   --Sizing-40: 320px;
   --Sizing-One-And-Half: 12px;
+  --Sizing-24: 192px;
+  --Sizing-50: 400px;
   --Negative-Size-1: -8px;
   --Negative-Size-2: -16px;
   --Negative-Half: -4px;
   --Negative-Quarter: -2px;
-  --Sizing-24: 192px;
-  --Sizing-50: 400px;
   --Negative-Size-Half: -4px;
   --Negative-Size-Quarter: -2px;
-  --Spacing-1: min(calc(var(--Sizing-1) * var(--Spacing-multiplier)), calc(var(--Sizing-1) * var(--Cognitive-multiplier)));
-  --Spacing-2: min(calc(var(--Sizing-2) * var(--Spacing-multiplier)), calc(var(--Sizing-2) * var(--Cognitive-multiplier)));
-  --Spacing-3: min(calc(var(--Sizing-3) * var(--Spacing-multiplier)), calc(var(--Sizing-3) * var(--Cognitive-multiplier)));
-  --Spacing-4: min(calc(var(--Sizing-4) * var(--Spacing-multiplier)), calc(var(--Sizing-4) * var(--Cognitive-multiplier)));
-  --Spacing-5: min(calc(var(--Sizing-5) * var(--Spacing-multiplier)), calc(var(--Sizing-5) * var(--Cognitive-multiplier)));
-  --Spacing-6: min(calc(var(--Sizing-6) * var(--Spacing-multiplier)), calc(var(--Sizing-6) * var(--Cognitive-multiplier)));
-  --Spacing-7: min(calc(var(--Sizing-7) * var(--Spacing-multiplier)), calc(var(--Sizing-7) * var(--Cognitive-multiplier)));
-  --Spacing-8: min(calc(var(--Sizing-8) * var(--Spacing-multiplier)), calc(var(--Sizing-8) * var(--Cognitive-multiplier)));
-  --Spacing-9: min(calc(var(--Sizing-9) * var(--Spacing-multiplier)), calc(var(--Sizing-9) * var(--Cognitive-multiplier)));
-  --Spacing-10: min(calc(var(--Sizing-10) * var(--Spacing-multiplier)), calc(var(--Sizing-10) * var(--Cognitive-multiplier)));
-  --Spacing-Half: min(calc(var(--Sizing-Half) * var(--Spacing-multiplier)), calc(var(--Sizing-Half) * var(--Cognitive-multiplier)));
-  --Spacing-Quarter: min(calc(var(--Sizing-Quarter) * var(--Spacing-multiplier)), calc(var(--Sizing-Quarter) * var(--Cognitive-multiplier)));
-  --Spacing-One-And-Half: min(calc(var(--Sizing-One-And-Half) * var(--Spacing-multiplier)), calc(var(--Sizing-One-And-Half) * var(--Cognitive-multiplier)));
-  --Spacing-11: 88px;
-  --Spacing-12: 96px;
+  --Spacing-1: calc(8px * var(--Spacing-multiplier));
+  --Spacing-2: calc(16px * var(--Spacing-multiplier));
+  --Spacing-3: calc(24px * var(--Spacing-multiplier));
+  --Spacing-4: calc(32px * var(--Spacing-multiplier));
+  --Spacing-5: calc(40px * var(--Spacing-multiplier));
+  --Spacing-6: calc(48px * var(--Spacing-multiplier));
+  --Spacing-7: calc(56px * var(--Spacing-multiplier));
+  --Spacing-8: calc(64px * var(--Spacing-multiplier));
+  --Spacing-9: calc(72px * var(--Spacing-multiplier));
+  --Spacing-10: calc(80px * var(--Spacing-multiplier));
+  --Spacing-Half: calc(4px * var(--Spacing-multiplier));
+  --Spacing-Quarter: calc(2px * var(--Spacing-multiplier));
+  --Spacing-One-And-Half: calc(12px * var(--Spacing-multiplier));
+  --Spacing-11: calc(88px * var(--Spacing-multiplier));
+  --Spacing-12: calc(96px * var(--Spacing-multiplier));
 }
-/* Correctly placed overrides */
+
+/* Spacing mode overrides */
 [data-spacing] {
-  --Spacing-multiplier: var(--Default-Spacing-Multiplier);
+  --Spacing-multiplier: min(var(--Cognitive-Multiplier), var(--Default-Spacing-Multiplier));
 }
+
 [data-spacing="expanded"] {
-  --Spacing-multiplier: var(--Expanded-Spacing-Multiplier);
+  --Spacing-multiplier: min(var(--Cognitive-Multiplier), var(--Expanded-Spacing-Multiplier));
 }
+
 [data-spacing="reduced"] {
-  --Spacing-multiplier: var(--Reduced-Spacing-Multiplier);
+  --Spacing-multiplier: min(var(--Cognitive-Multiplier), var(--Reduced-Spacing-Multiplier));
 }
+
 [data-spacing="standard"] {
-  --Spacing-multiplier: var(--Standard-Spacing-Multiplier);
+  --Spacing-multiplier: min(var(--Cognitive-Multiplier), var(--Standard-Spacing-Multiplier));
 }
+

@@ -1,10 +1,9 @@
-:root, ::after, ::before {
-  /* AA-light mode targets */
-    --Mode-Target-Desktop: var(--Desktop-Target);
-    --Mode-Target-Android: 48px;
-    --Mode-Target-IOS-Mobile: 44px;
-    --Mode-Target-IOS-Tablet: 44px;
-    --Mode-PS-multiplier: 200%;
+/* AA-dark mode CSS */
+:root {
+  --Mode-Target: var(--Desktop-Target);
+  /* AA-dark mode targets from JSON */
+  --Mode-PS-multiplier: 2em;
+}
 
 /* AA-dark mode specific backgrounds */
 [data-background] {
@@ -1395,7 +1394,4 @@
   --Chart-Axis-Color: rgba(255,255,255,0.75);
   --Chart-Grid-Color: rgba(255,255,255,0.15);
 }
-}
-
-
 

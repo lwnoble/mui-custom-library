@@ -1,0 +1,38 @@
+.divider {
+    background-color: var(--Border);
+    opacity: 0.5;
+    position: relative;
+  }
+  
+  .divider.horizontal {
+    width: 100%;
+  }
+  
+  .divider.vertical {
+    height: 100%;
+  }
+  
+  .divider.medium.vertical {
+    width: var(--border-standard);
+  }
+
+  .divider.horizontal.medium {
+    height: var(--border-thick);
+  }
+  
+  .divider.large.vertical {
+    width: var(--Sizing-Half);
+  }
+  
+  
+  .divider.default.horizontal {
+    height: var(--border-standard);
+  }
+  
+  .divider.horizontal.large {
+    height: var(--border-thick);
+  }
+  
+  .divider.default.vertical {
+    width: var(--Sizing-Half);
+  }

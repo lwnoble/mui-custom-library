@@ -1,0 +1,160 @@
+/* MenuItem.css - Add these styles to your existing MenuItem.css */
+
+/* Base menu item styles */
+.menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    width: 100%;
+  }
+  
+  /* Clickable MenuItem states */
+  .menu-item--clickable {
+    transition: all var(--Animation-Speed, 0.2s) ease-in-out;
+    border-radius: var(--Border-Radius, 4px);
+  }
+  
+  .menu-item--clickable:not(.disabled):hover {
+    background-color: var(--Surface-Container-Hover, rgba(0, 0, 0, 0.04));
+  }
+  
+  .menu-item--clickable:not(.disabled):focus {
+    background-color: var(--Surface-Container-Focus, rgba(0, 0, 0, 0.08));
+  }
+  
+  .menu-item--clickable:not(.disabled):focus-visible {
+    outline: 2px solid var(--Primary, #1976d2);
+    outline-offset: 2px;
+    background-color: var(--Surface-Container-Focus, rgba(0, 0, 0, 0.08));
+  }
+  
+  .menu-item--clickable:not(.disabled):active {
+    background-color: var(--Surface-Container-Active, rgba(0, 0, 0, 0.12));
+    transform: scale(0.98);
+  }
+  
+  /* Disabled clickable state */
+  .menu-item--clickable.disabled {
+    cursor: not-allowed;
+    opacity: 0.38;
+    pointer-events: none;
+  }
+  
+  /* Remove default focus outline when we have focus-visible */
+  .menu-item--clickable:focus:not(:focus-visible) {
+    outline: none;
+  }
+  
+  /* List holder and content layout */
+  .list-holder {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+  
+  .nav-content {
+    display: flex;
+    align-items: center;
+    gap: var(--Spacing-1);
+    padding: var(--Sizing-One-And-Half);
+    width: 100%;
+    min-height: var(--Minimum-Target, 44px);
+  }
+  
+  /* Typography wrapper */
+  .typography-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Icon instances */
+  .mui-icon-instance {
+    flex-shrink: 0;
+  }
+  
+  /* Expand instance */
+  .expand-instance {
+    flex-shrink: 0;
+  }
+  
+  /* Checkbox instance */
+  .checkbox-instance {
+    flex-shrink: 0;
+  }
+  
+  /* Avatar instance */
+  .avatar-instance {
+    flex-shrink: 0;
+  }
+  
+  /* Divider instance */
+  .divider-instance {
+    width: 100%;
+  }
+  
+  
+  .menu-item.hover {
+    background-color: var(--Surface-Container-Hover, rgba(0, 0, 0, 0.04));
+  }
+  
+  .menu-item.focus {
+    background-color: var(--Surface-Container-Focus, rgba(0, 0, 0, 0.08));
+  }
+  
+  .menu-item.focus-visible {
+    outline: 2px solid var(--Primary, #1976d2);
+    outline-offset: 2px;
+  }
+  
+  .menu-item.active {
+    background-color: var(--Primary-Container, rgba(25, 118, 210, 0.1));
+    color: var(--On-Primary-Container, #1976d2);
+  }
+  
+  .menu-item.disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  
+  .menu-item.two {
+    /* Level two menu item styles - typically indented */
+    padding-left: var(--Spacing-6, 24px);
+  }
+  
+  
+  .menu-item.center {
+    /* Center-aligned menu items */
+    justify-content: center;
+  }
+  
+  .menu-item.right {
+    /* Right-aligned menu items */
+    justify-content: flex-end;
+  }
+  
+  /* Typography class overrides */
+  .menu-item .class-2 {
+    /* Default state typography */
+    color: var(--On-Surface, #000000);
+  }
+  
+  .menu-item .class-3 {
+    /* Non-default state typography */
+    color: var(--On-Surface-Variant, #666666);
+  }
+  
+  .menu-item.active .class-2,
+  .menu-item.active .class-3 {
+    color: var(--On-Primary-Container, #1976d2);
+  }
+  
+  .menu-item.disabled .class-2,
+  .menu-item.disabled .class-3 {
+    color: var(--On-Surface-Disabled, rgba(0, 0, 0, 0.38));
+  }
+  
