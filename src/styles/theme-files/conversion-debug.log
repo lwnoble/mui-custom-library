@@ -117,6 +117,8 @@ Input Theme Structure:
   "Responsive-Styling/NoGutter-NoMargin-With-LeftNav",
   "Responsive-Styling/Standard-With-Rail",
   "Responsive-Styling/NoGutter-NoMargin-With-Rail",
+  "Responsive-Styling/Standard-With-LeftNav-and-Rail",
+  "Responsive-Styling/NoGutter-NoMargin-With-LeftNav-and-Rail",
   "Sizing & Spacing/Default",
   "Sizing & Spacing/Expanded",
   "Sizing & Spacing/Reduced",
