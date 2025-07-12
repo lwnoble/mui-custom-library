@@ -1,5 +1,5 @@
 /* AAA-dark mode CSS */
-:root, ::after, ::before {
+:root {
   --Mode-Target: 48px;
   /* AAA-dark mode targets from JSON */
   --Mode-Target: 48px;

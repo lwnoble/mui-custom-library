@@ -1,5 +1,5 @@
 /* AAA-light mode CSS */
-:root, ::after, ::before  {
+:root {
   --Mode-Target: 48px;
   /* AAA-light mode targets from JSON */
   --Mode-Target: 48px;

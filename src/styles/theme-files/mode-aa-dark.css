@@ -1,5 +1,5 @@
 /* AA-dark mode CSS */
-:root, ::after, ::before {
+:root {
   --Mode-Target: var(--Desktop-Target);
   /* AA-dark mode targets from JSON */
   --Mode-Target: var(--Desktop-Target);
