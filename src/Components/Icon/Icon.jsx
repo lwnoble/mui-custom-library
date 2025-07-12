@@ -5,7 +5,7 @@ import './Icon.css';
 
 /**
  * Icon component that renders Font Awesome icons with design system styling
- * Uses a wrapper div structure for consistent sizing and background
+ * Supports all design system color variants and sizes
  * 
  * @example
  * // Basic usage
@@ -14,6 +14,11 @@ import './Icon.css';
  * // Different sizes
  * <Icon name="heart" size="xs" />
  * <Icon name="user" size="large" />
+ * 
+ * // Different colors/variants
+ * <Icon name="check" variant="success" />
+ * <Icon name="warning" variant="warning" />
+ * <Icon name="info" variant="info" />
  * 
  * // Different Font Awesome styles
  * <Icon name="star" style="solid" />    // fas fa-star (default)
@@ -27,6 +32,8 @@ const Icon = ({
   style = 'solid',
   variant = 'default',
   className = '',
+  onClick,
+  disabled = false,
   ...props 
 }) => {
   // Font Awesome style prefixes
@@ -43,6 +50,9 @@ const Icon = ({
   const wrapperClasses = [
     'icon',
     `icon--${size}`,
+    variant !== 'default' && `icon--${variant}`,
+    disabled && 'icon--disabled',
+    onClick && 'icon--interactive',
     className
   ].filter(Boolean).join(' ');
 
@@ -52,13 +62,23 @@ const Icon = ({
     `fa-${name}`
   ].join(' ');
 
+  const handleClick = (e) => {
+    if (!disabled && onClick) {
+      onClick(e);
+    }
+  };
+
   return (
     <div 
       className={wrapperClasses} 
-      data-icon={variant !== 'default' ? variant : undefined}
+      data-icon={variant}
+      onClick={handleClick}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick && !disabled ? 0 : undefined}
+      aria-disabled={disabled}
       {...props}
     >
-      <i className={iconClasses}></i>
+      <i className={iconClasses} aria-hidden="true"></i>
     </div>
   );
 };
@@ -67,10 +87,20 @@ Icon.propTypes = {
   /** Name of the Font Awesome icon (without fa- prefix) */
   name: PropTypes.string.isRequired,
   /** Size of the icon wrapper */
-  size: PropTypes.oneOf(['xs', 'small', 'medium', 'large', 'xl', 'xxl']),
+  size: PropTypes.oneOf([
+    'extra-small', 
+    'xs', 
+    'small', 
+    'medium', 
+    'large', 
+    'extra-large', 
+    'xl', 
+    'extra-extra-large', 
+    'xxl'
+  ]),
   /** Font Awesome icon style */
   style: PropTypes.oneOf(['solid', 'regular', 'light', 'thin', 'duotone', 'brands']),
-  /** Visual variant of the icon */
+  /** Visual variant/color of the icon */
   variant: PropTypes.oneOf([
     'default',
     'quiet', 
@@ -85,6 +115,10 @@ Icon.propTypes = {
   ]),
   /** Additional CSS class names */
   className: PropTypes.string,
+  /** Click handler - makes icon interactive */
+  onClick: PropTypes.func,
+  /** Disabled state */
+  disabled: PropTypes.bool,
 };
 
 export default Icon;

@@ -1,0 +1,359 @@
+/* Slider.css - Multi-Size Design Token System */
+
+/* 
+ * Multi-Size Slider Design System:
+ * - --Button: Primary color for active states
+ * - Two sizes: default and small
+ * - Horizontal and vertical orientations
+ * - Marks, labels, and range support
+ * - Consistent accessibility and interaction
+ */
+
+/* ===== BASE SLIDER STYLING ===== */
+#dds .MuiSlider-root {
+  color: var(--Button);
+  height: calc(var(--Sizing-1) * 0.5);
+  padding: var(--Sizing-2) 0;
+  cursor: pointer;
+  touch-action: none;
+  position: relative;
+  display: inline-block;
+}
+
+/* ===== SLIDER RAIL (Background Track) ===== */
+#dds .MuiSlider-rail {
+  display: block;
+  position: absolute;
+  border-radius: calc(var(--Sizing-1) * 0.25);
+  background-color: var(--Border);
+  opacity: 1;
+}
+
+/* Horizontal rail */
+#dds .MuiSlider-root:not(.vertical) .MuiSlider-rail {
+  width: 100%;
+  height: calc(var(--Sizing-1) * 0.5);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Vertical rail */
+#dds .MuiSlider-root.vertical .MuiSlider-rail {
+  height: 100%;
+  width: calc(var(--Sizing-1) * 0.5);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ===== SLIDER TRACK (Active Portion) ===== */
+#dds .MuiSlider-track {
+  display: block;
+  position: absolute;
+  border-radius: calc(var(--Sizing-1) * 0.25);
+  background-color: var(--Button);
+  transition: all var(--animation-speed) ease;
+}
+
+/* Horizontal track */
+#dds .MuiSlider-root:not(.vertical) .MuiSlider-track {
+  height: calc(var(--Sizing-1) * 0.5);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Vertical track */
+#dds .MuiSlider-root.vertical .MuiSlider-track {
+  width: calc(var(--Sizing-1) * 0.5);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ===== SLIDER THUMB ===== */
+#dds .MuiSlider-thumb {
+  position: absolute;
+  width: var(--Sizing-3);
+  height: var(--Sizing-3);
+  margin-left: calc(var(--Sizing-3) * -0.5);
+  margin-top: calc(var(--Sizing-3) * -0.5);
+  box-sizing: border-box;
+  border-radius: 50%;
+  outline: 0;
+  background-color: var(--Button);
+  border: 2px solid var(--Background);
+  transition: all var(--animation-speed) cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: grab;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Vertical thumb positioning */
+#dds .MuiSlider-root.vertical .MuiSlider-thumb {
+  margin-left: calc(var(--Sizing-3) * -0.5);
+  margin-bottom: calc(var(--Sizing-3) * -0.5);
+  margin-top: 0;
+}
+
+/* Thumb hover state */
+#dds .MuiSlider-thumb:hover,
+#dds .MuiSlider-thumb.Mui-focusVisible {
+  box-shadow: 0 0 0 8px rgba(var(--Button-rgb, 59, 130, 246), 0.16);
+}
+
+/* Active thumb */
+#dds .MuiSlider-thumb.Mui-active {
+  cursor: grabbing;
+  box-shadow: 0 0 0 12px rgba(var(--Button-rgb, 59, 130, 246), 0.16);
+}
+
+/* ===== SMALL SIZE VARIANT ===== */
+#dds .MuiSlider-root.small {
+  height: calc(var(--Sizing-1) * 0.25);
+  padding: var(--Sizing-1) 0;
+}
+
+/* Small rail */
+#dds .MuiSlider-root.small .MuiSlider-rail {
+  height: calc(var(--Sizing-1) * 0.25);
+  border-radius: calc(var(--Sizing-1) * 0.125);
+}
+
+#dds .MuiSlider-root.small.vertical .MuiSlider-rail {
+  width: calc(var(--Sizing-1) * 0.25);
+  height: 100%;
+}
+
+/* Small track */
+#dds .MuiSlider-root.small .MuiSlider-track {
+  height: calc(var(--Sizing-1) * 0.25);
+  border-radius: calc(var(--Sizing-1) * 0.125);
+}
+
+#dds .MuiSlider-root.small.vertical .MuiSlider-track {
+  width: calc(var(--Sizing-1) * 0.25);
+}
+
+/* Small thumb */
+#dds .MuiSlider-root.small .MuiSlider-thumb {
+  width: var(--Sizing-2);
+  height: var(--Sizing-2);
+  margin-left: calc(var(--Sizing-2) * -0.5);
+  margin-top: calc(var(--Sizing-2) * -0.5);
+}
+
+#dds .MuiSlider-root.small.vertical .MuiSlider-thumb {
+  margin-left: calc(var(--Sizing-2) * -0.5);
+  margin-bottom: calc(var(--Sizing-2) * -0.5);
+  margin-top: 0;
+}
+
+/* ===== MARKS ===== */
+#dds .MuiSlider-mark {
+  position: absolute;
+  width: calc(var(--Sizing-1) * 0.25);
+  height: calc(var(--Sizing-1) * 0.25);
+  border-radius: 50%;
+  background-color: var(--Border);
+  transform: translate(-50%, -50%);
+}
+
+/* Horizontal marks */
+#dds .MuiSlider-root:not(.vertical) .MuiSlider-mark {
+  top: 50%;
+}
+
+/* Vertical marks */
+#dds .MuiSlider-root.vertical .MuiSlider-mark {
+  left: 50%;
+}
+
+/* Active marks */
+#dds .MuiSlider-markActive {
+  background-color: var(--Button);
+}
+
+/* Small marks */
+#dds .MuiSlider-root.small .MuiSlider-mark {
+  width: calc(var(--Sizing-1) * 0.125);
+  height: calc(var(--Sizing-1) * 0.125);
+}
+
+/* ===== MARK LABELS ===== */
+#dds .MuiSlider-markLabel {
+  position: absolute;
+  font-family: var(--font-family, inherit);
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: 500;
+  color: var(--On-Color);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Horizontal mark labels */
+#dds .MuiSlider-root:not(.vertical) .MuiSlider-markLabel {
+  top: calc(100% + var(--Sizing-1));
+}
+
+/* Vertical mark labels */
+#dds .MuiSlider-root.vertical .MuiSlider-markLabel {
+  left: calc(100% + var(--Sizing-1));
+  transform: translateY(-50%);
+}
+
+/* Small mark labels */
+#dds .MuiSlider-root.small .MuiSlider-markLabel {
+  font-size: var(--font-size-xs, 0.75rem);
+}
+
+#dds .MuiSlider-root.small:not(.vertical) .MuiSlider-markLabel {
+  top: calc(100% + calc(var(--Sizing-1) * 0.5));
+}
+
+#dds .MuiSlider-root.small.vertical .MuiSlider-markLabel {
+  left: calc(100% + calc(var(--Sizing-1) * 0.5));
+}
+
+/* ===== VALUE LABELS ===== */
+#dds .MuiSlider-valueLabel {
+  font-family: var(--font-family, inherit);
+  font-size: var(--font-size-xs, 0.75rem);
+  font-weight: 500;
+  line-height: 1;
+  padding: calc(var(--Sizing-1) * 0.5) var(--Sizing-1);
+  border-radius: var(--Sizing-1);
+  background-color: var(--On-Color);
+  color: var(--Background);
+  position: relative;
+  transform: translateX(-50%) scale(0);
+  transition: transform var(--animation-speed) cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: bottom center;
+  top: calc(var(--Sizing-4) * -1);
+  z-index: 1;
+  white-space: nowrap;
+}
+
+/* Value label arrow */
+#dds .MuiSlider-valueLabel::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: calc(var(--Sizing-1) * 0.5) solid transparent;
+  border-right: calc(var(--Sizing-1) * 0.5) solid transparent;
+  border-top: calc(var(--Sizing-1) * 0.5) solid var(--On-Color);
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Show value label */
+#dds .MuiSlider-valueLabelOpen {
+  transform: translateX(-50%) scale(1);
+}
+
+/* Vertical value labels */
+#dds .MuiSlider-root.vertical .MuiSlider-valueLabel {
+  left: calc(var(--Sizing-4) * -1);
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  transform-origin: right center;
+}
+
+#dds .MuiSlider-root.vertical .MuiSlider-valueLabel::before {
+  border-top: calc(var(--Sizing-1) * 0.5) solid transparent;
+  border-bottom: calc(var(--Sizing-1) * 0.5) solid transparent;
+  border-left: calc(var(--Sizing-1) * 0.5) solid var(--On-Color);
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+}
+
+#dds .MuiSlider-root.vertical .MuiSlider-valueLabelOpen {
+  transform: translateY(-50%) scale(1);
+}
+
+/* ===== DISABLED STATE ===== */
+#dds .MuiSlider-root.disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+#dds .MuiSlider-root.disabled .MuiSlider-rail {
+  background-color: var(--Surface-Dim, #f3f4f6);
+}
+
+#dds .MuiSlider-root.disabled .MuiSlider-track {
+  background-color: var(--Surface-Dim, #e5e7eb);
+}
+
+#dds .MuiSlider-root.disabled .MuiSlider-thumb {
+  background-color: var(--Surface-Dim, #e5e7eb);
+  border-color: var(--Surface-Dim, #e5e7eb);
+  box-shadow: none;
+}
+
+#dds .MuiSlider-root.disabled .MuiSlider-mark {
+  background-color: var(--Surface-Dim, #e5e7eb);
+}
+
+#dds .MuiSlider-root.disabled .MuiSlider-markLabel {
+  color: var(--Surface-Dim, #9ca3af);
+}
+
+/* ===== FORCED DEMO STATES ===== */
+#dds .forced-hover .MuiSlider-thumb {
+  box-shadow: 0 0 0 8px rgba(var(--Button-rgb, 59, 130, 246), 0.16);
+}
+
+#dds .forced-focus .MuiSlider-thumb {
+  box-shadow: 0 0 0 8px rgba(var(--Button-rgb, 59, 130, 246), 0.16);
+}
+
+#dds .forced-focus-visible .MuiSlider-thumb {
+  box-shadow: 0 0 0 8px rgba(var(--Button-rgb, 59, 130, 246), 0.16);
+}
+
+/* ===== RANGE SLIDER SPECIFIC ===== */
+#dds .MuiSlider-root[data-index="0"] .MuiSlider-thumb,
+#dds .MuiSlider-root[data-index="1"] .MuiSlider-thumb {
+  z-index: 1;
+}
+
+/* ===== VERTICAL ORIENTATION ===== */
+#dds .MuiSlider-root.vertical {
+  display: inline-block;
+  width: calc(var(--Sizing-1) * 0.5);
+  height: 200px;
+  padding: 0 var(--Sizing-2);
+}
+
+#dds .MuiSlider-root.vertical.small {
+  width: calc(var(--Sizing-1) * 0.25);
+  padding: 0 var(--Sizing-1);
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  #dds .MuiSlider-rail {
+    background: #f3f4f6 !important;
+  }
+  
+  #dds .MuiSlider-track {
+    background: #000 !important;
+  }
+  
+  #dds .MuiSlider-thumb {
+    background: #000 !important;
+    border-color: #fff !important;
+    box-shadow: none !important;
+  }
+  
+  #dds .MuiSlider-mark {
+    background: #000 !important;
+  }
+  
+  #dds .MuiSlider-markLabel,
+  #dds .MuiSlider-valueLabel {
+    color: #000 !important;
+    background: #fff !important;
+  }
+}

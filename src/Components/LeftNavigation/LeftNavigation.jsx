@@ -12,9 +12,11 @@ const LeftNavigation = ({
 }) => {
   const navItems = [
     { id: 'button', label: 'Button', icon: 'circle' },
+    { id: 'icon', label: 'Icon', icon: 'star' }, // Added Icon component
     { id: 'card', label: 'Card', icon: 'file' },
     { id: 'avatar', label: 'Avatar', icon: 'user' },
     { id: 'badge', label: 'Badge', icon: 'tag' },
+    { id: 'menu-item', label: 'Menu Item', icon: 'list' },
     { id: 'input', label: 'Input', icon: 'edit' },
     { id: 'checkbox', label: 'Checkbox', icon: 'check-square' },
     { id: 'radio', label: 'Radio', icon: 'dot-circle' },
@@ -26,7 +28,7 @@ const LeftNavigation = ({
   ];
 
   return (
-    <nav className={`left-navigation ${isCollapsed ? 'collapsed' : ''}`} data-surface="Surface-Dim">
+    <nav className={`left-navigation ${isCollapsed ? 'collapsed' : ''}`} data-surface="surface-dim">
       {/* Header with toggle */}
       <div className="nav-header">
         {!isCollapsed && <h2 className="nav-title">Components</h2>}

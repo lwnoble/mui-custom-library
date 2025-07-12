@@ -49,57 +49,54 @@ function convertFontFamilyReference(value) {
  * @returns {string} - Generated CSS for base system tokens
  */
 function extractBaseSystemTokens(jsonContent) {
-  // Specifically look for 'System-Styles/Default' for base.css
-  const systemDefault = jsonContent['System-Styles/Default'];
-  
-  if (!systemDefault) {
-    console.error('System-Styles/Default section not found in JSON content');
-    return '';
-  }
-
-  // Start building the CSS
-  let css = '';
-  
-  // List of system properties to include in base.css
-  const baseSystemProperties = [
-    'Transparent',
-    'Name',
-    'Color-Theory',
-    'Surface-Style',
-    'Desktop-Target',
-    'Grid'
-  ];
-  
-  // Process the selected system properties
-  for (const key of baseSystemProperties) {
-    if (systemDefault[key] && systemDefault[key].value !== undefined) {
-      // Format the value based on its type
-      let cssValue = systemDefault[key].value;
-      
-      // Handle string numbers first (like "24", "8")
-      const numValue = Number(cssValue);
-      if (!isNaN(numValue)) {
-        // It's a numeric value (either number or string number) - add 'px'
-        cssValue = `${numValue}px`;
-      } else if (typeof cssValue === 'string') {
-        // Check if it's a reference
-        if (cssValue.startsWith('{') && cssValue.endsWith('}')) {
-          // Convert reference to var() format
-          cssValue = `var(--${cssValue.substring(1, cssValue.length - 1).replace(/\./g, '-')})`;
-        } else if (cssValue.startsWith('#') || cssValue.startsWith('rgb') || cssValue.startsWith('hsl')) {
-          // Color values don't need quotes
-        } else {
-          // Add quotes to string values
-          cssValue = `"${cssValue}"`;
-        }
-      }
-      
-      // Add the variable to the CSS with proper indentation
-      css += `  --${key}: ${cssValue};\n`;
+    // Specifically look for 'System-Styles/Default' for base.css
+    const systemDefault = jsonContent['System-Styles/Default'];
+    
+    if (!systemDefault) {
+      console.error('System-Styles/Default section not found in JSON content');
+      return '';
     }
-  }
   
-  return css;
+    // Start building the CSS
+    let css = '';
+    
+    // List of system properties to include in base.css
+    const baseSystemProperties = [
+      'Transparent',
+      'Name',
+      'Color-Theory',
+      'Surface-Style',
+      'Desktop-Target',
+      'Grid'
+    ];
+    
+    // Process the selected system properties
+    for (const key of baseSystemProperties) {
+      if (systemDefault[key] && systemDefault[key].value !== undefined) {
+        // Format the value based on its type
+        let cssValue = systemDefault[key].value;
+        if (typeof cssValue === 'number') {
+          // Add 'px' to numeric values
+          cssValue = `${cssValue}px`;
+        } else if (typeof cssValue === 'string') {
+          // Check if it's a reference
+          if (cssValue.startsWith('{') && cssValue.endsWith('}')) {
+            // Convert reference to var() format
+            cssValue = `var(--${cssValue.substring(1, cssValue.length - 1).replace(/\./g, '-')})`;
+          } else if (cssValue.startsWith('#') || cssValue.startsWith('rgb') || cssValue.startsWith('hsl')) {
+            // Color values don't need quotes
+          } else {
+            // Add quotes to string values
+            cssValue = `"${cssValue}"`;
+          }
+        }
+        
+        // Add the variable to the CSS with proper indentation
+        css += `  --${key}: ${cssValue};\n`;
+      }
+    }
+    
+    return css;
 }
 
 /**
@@ -109,127 +106,119 @@ function extractBaseSystemTokens(jsonContent) {
  * @returns {Promise<Object>} - Information about the generated file
  */
 function convertSystemToCss(jsonContent) {
-  const systemDefaults = jsonContent['System/Default'];
-  
-  // Helper function to clean up variable names - keep section prefixes but remove redundancy
-  const cleanVariableName = (name) => {
-      // For specific sections, keep the prefix but clean up redundancy
-      return name
-      .replace(/^Buttons-Button-/, 'Button-')  // Buttons-Button-X becomes Button-X
-      .replace(/^Buttons-/, 'Button-')         // Buttons-X becomes Button-X
-      .replace(/^Cards-Card-/, 'Card-')        // Cards-Card-X becomes Card-X
-      .replace(/^Cards-/, 'Card-')             // Cards-X becomes Card-X
-      .replace(/^Inputs-Input-/, 'Input-')     // Inputs-Input-X becomes Input-X
-      .replace(/^Inputs-/, 'Input-')           // Inputs-X becomes Input-X
-      .replace(/^Handles-Handle-/, 'Handle-')  // Handles-Handle-X becomes Handle-X
-      .replace(/^Handles-/, 'Handle-')         // Handles-X becomes Handle-X
-      .replace(/^Avatars-/, 'Avatars-')        // Keep Avatars- prefix
-      .replace(/^Modals-Modal-/, 'Modal-')     // Modals-Modal-X becomes Modal-X
-      .replace(/^Modals-/, 'Modal-')           // Modals-X becomes Modal-X
-      .replace(/^Navigation-/, 'Navigation-')   // Keep Navigation- prefix
-      .replace(/^StatusBar-/, 'StatusBar-')    // Keep StatusBar- prefix
-      .replace(/^Breakpoints-/, 'Breakpoints-') // Keep Breakpoints- prefix
-      .replace(/^Focus-Focus-/, 'Focus-')      // Focus-Focus-X becomes Focus-X
-      .replace(/^Sizing-Sizing-/, 'Sizing-')   // Sizing-Sizing-X becomes Sizing-X
-      .replace(/^Platform-Default-/, 'Platform-') // Platform-Default-X becomes Platform-X
-      .replace(/^Platform-Platform-/, 'Platform-'); // Platform-Platform-X becomes Platform-X
-  };
+    const systemDefaults = jsonContent['System/Default'];
+    
+    // Helper function to clean up variable names
+    const cleanVariableName = (name) => {
+        // Remove redundant repeated prefixes and section names
+        return name
+        .replace(/^Sizing-Sizing-/, 'Sizing-')
+        .replace(/^Focus-Focus-/, 'Focus-')
+        .replace(/^Buttons-Buttons-/, '')
+        .replace(/^Buttons-Button-/, '')
+        .replace(/^Card-Card-/, '')
+        .replace(/^Cards-Card-/, '')
+        .replace(/^Input-Input-/, '')
+        .replace(/^Inputs-Input-/, '')
+        .replace(/^Handle-Handle-/, '')
+        .replace(/^Handles-Handle-/, '')
+        .replace(/^Avatars-Small-/, 'Small-')
+        .replace(/^Modals-Modal-/, '')
+        .replace(/^Navigation-LeftNav-/, 'LeftNav-')
+        // Replace references to 'Default-' with direct reference
+        .replace(/^Default-/, '');
+    };
 
-
-  // Start building CSS
-  let css = `:root {\n`;
   
-  // Mode Target calculation with dynamic handling
-  if (systemDefaults['Mode-Target']) {
-    if (typeof systemDefaults['Mode-Target'].value === 'string') {
-      if (systemDefaults['Mode-Target'].value.startsWith('{') && systemDefaults['Mode-Target'].value.endsWith('}')) {
-        const refValue = systemDefaults['Mode-Target'].value.substring(1, systemDefaults['Mode-Target'].value.length - 1).replace(/\./g, '-');
-        css += `  --Mode-Target: var(--${cleanVariableName(refValue)});\n\n`;
-      } else {
-        css += `  --Mode-Target: ${systemDefaults['Mode-Target'].value}px;\n\n`;
-      }
-    } else if (typeof systemDefaults['Mode-Target'] === 'object' && systemDefaults['Mode-Target'].Desktop) {
-      const platforms = ['Desktop', 'Android', 'IOS-Mobile', 'IOS-Tablet'];
-      platforms.forEach(platform => {
-        if (systemDefaults['Mode-Target'][platform]) {
-          css += `  --Mode-Target-${platform.replace(/-/g, '-')}: ${systemDefaults['Mode-Target'][platform].value}px;\n`;
+    // Start building CSS
+    let css = `:root {\n`;
+    
+    // Mode Target calculation with dynamic handling
+    if (systemDefaults['Mode-Target']) {
+      if (typeof systemDefaults['Mode-Target'].value === 'string') {
+        if (systemDefaults['Mode-Target'].value.startsWith('{') && systemDefaults['Mode-Target'].value.endsWith('}')) {
+          const refValue = systemDefaults['Mode-Target'].value.substring(1, systemDefaults['Mode-Target'].value.length - 1).replace(/\./g, '-');
+          css += `  --Mode-Target: var(--${refValue});\n\n`;
+        } else {
+          css += `  --Mode-Target: ${systemDefaults['Mode-Target'].value}px;\n\n`;
         }
-      });
-      css += '\n';
+      } else if (typeof systemDefaults['Mode-Target'] === 'object' && systemDefaults['Mode-Target'].Desktop) {
+        const platforms = ['Desktop', 'Android', 'IOS-Mobile', 'IOS-Tablet'];
+        platforms.forEach(platform => {
+          if (systemDefaults['Mode-Target'][platform]) {
+            css += `  --Mode-Target-${platform.replace(/-/g, '-')}: ${systemDefaults['Mode-Target'][platform].value}px;\n`;
+          }
+        });
+        css += '\n';
+      }
     }
-  }
+    
+    // Minimum Target calculation
+    css += `  --Minimum-Target: min(var(--Cognitive-Target), var(--Platform-Target), var(--Mode-Target));\n`;
+    css += `  --Min-Target: min(var(--Desktop-Target), var(--Platform-Target), var(--Cognitive-Target));\n\n`;
+    
+    // Hotlinks and ListItem with calc() using Sizing-1
+    css += `  --Hotlinks-Minimum-Hotlink-Area: calc(var(--Minimum-Target) - var(--Sizing-1));\n`;
+    css += `  --ListItem-Minimum-List-Item: calc(var(--Minimum-Target) - var(--Sizing-1));\n\n`;
+
+
   
-  // Minimum Target calculation - use max() to get the largest accessible target
-  css += `  --Minimum-Target: max(var(--Cognitive-Target), var(--Platform-Target), var(--Mode-Target));\n\n`;
-  
-  // Hotlinks and ListItem with calc() using Sizing-1
-  css += `  --Hotlinks-Minimum-Hotlink-Area: calc(var(--Minimum-Target) - var(--Sizing-1));\n`;
-  css += `  --ListItem-Minimum-List-Item: calc(var(--Minimum-Target) - var(--Sizing-1));\n\n`;
+    // Recursive function to process nested objects
+    const processSection = (section, sectionName = '') => {
+        Object.entries(section).forEach(([key, valueObj]) => {
+        // Skip label or non-value entries
+        if (key === 'SurfaceContainer-Label' || !valueObj || valueObj.value === undefined) return;
 
+        // Skip Buttons-Button-Overlay-Radius
+        if (sectionName === 'Buttons' && key === 'Button Overlay Radius') return;
 
+        // Create full property name with cleaned-up section and key
+        const prop = cleanVariableName(sectionName ? `${sectionName}-${key.replace(/ /g, '-')}` : key.replace(/ /g, '-'));
+        
+        if (typeof valueObj.value === 'string' && valueObj.value.startsWith('{') && valueObj.value.endsWith('}')) {
+            // Reference value
+            const refValue = valueObj.value.substring(1, valueObj.value.length - 1).replace(/\./g, '-');
+            css += `  --${prop}: var(--${cleanVariableName(refValue)});\n`;
+        } else if (typeof valueObj.value === 'number' || (typeof valueObj.value === 'string' && !isNaN(Number(valueObj.value)))) {
+            // Numeric value
+            css += `  --${prop}: ${Number(valueObj.value)}px;\n`;
+        } else {
+            // Direct value
+            css += `  --${prop}: ${valueObj.value};\n`;
+        }
+        });
+        css += '\n';
+    };
 
-  // Recursive function to process nested objects
-  const processSection = (section, sectionName = '') => {
-      Object.entries(section).forEach(([key, valueObj]) => {
-      // Skip label or non-value entries
-      if (key === 'SurfaceContainer-Label' || !valueObj || valueObj.value === undefined) return;
-
-      // Create full property name with proper section prefix
-      let prop;
-      if (sectionName) {
-          // For sections like Buttons, Cards, etc., create proper prefixed names
-          const cleanKey = key.replace(/ /g, '-');
-          prop = cleanVariableName(`${sectionName}-${cleanKey}`);
-      } else {
-          // For root level properties
-          prop = cleanVariableName(key.replace(/ /g, '-'));
-      }
-      
-      if (typeof valueObj.value === 'string' && valueObj.value.startsWith('{') && valueObj.value.endsWith('}')) {
-          // Reference value
-          const refValue = valueObj.value.substring(1, valueObj.value.length - 1).replace(/\./g, '-');
-          css += `  --${prop}: var(--${cleanVariableName(refValue)});\n`;
-      } else if (typeof valueObj.value === 'number' || (typeof valueObj.value === 'string' && !isNaN(Number(valueObj.value)))) {
-          // Numeric value
-          css += `  --${prop}: ${Number(valueObj.value)}px;\n`;
-      } else {
-          // Direct value
-          css += `  --${prop}: ${valueObj.value};\n`;
-      }
-      });
-      // Don't add extra newline here to control spacing better
-  };
-
-  // Process sections in the correct order to match expected output
-  const sectionsToProcess = [
-      'Buttons', 
-      'Focus', 
-      'Cards', 
-      'Inputs', 
-      'Handles', 
-      'Avatars', 
-      'Breakpoints', 
-      'Modals', 
-      'Navigation', 
-      'StatusBar'
+    // List of sections to process
+const sectionsToProcess = [
+    'Buttons', 
+    'Focus', 
+    'Cards', 
+    'Inputs', 
+    'Handles', 
+    'Avatars', 
+    'Breakpoints', 
+    'Modals', 
+    'Navigation', 
+    'StatusBar'
   ];
-
+  
   // Border section - hardcode the values
   css += `  --Border-Standard: 1px;\n`;
   css += `  --Border-Thick: 2px;\n\n`;
-
-  // Process each section with proper spacing
-  sectionsToProcess.forEach(sectionName => {
-      if (systemDefaults[sectionName]) {
-          processSection(systemDefaults[sectionName], sectionName);
-          css += '\n'; // Add spacing after each section
-      }
-  });
-  // Close the CSS block
-  css += `}\n`;
   
-  return css;
-}
+  // Process each section
+  sectionsToProcess.forEach(sectionName => {
+    if (systemDefaults[sectionName]) {
+      processSection(systemDefaults[sectionName], sectionName);
+    }
+  });
+    // Close the CSS block
+    css += `}\n`;
+    
+    return css;
+  }
 
 /**
  * Extract all mode variables from the background content
@@ -677,40 +666,21 @@ function extractPlatformVariables(platformContent, platformName) {
             cssValue = cssValue.replace(/[{}]/g, '').replace(/\./g, '-');
             cssValue = `var(--${cssValue})`;
           }
-        } else {
-          // Handle numeric values (both numbers and string numbers)
-          const numValue = Number(cssValue);
-          if (!isNaN(numValue)) {
-            // Properties that should have px units - ADDED 'Height' and 'Width'
-            const pxProperties = ['Font-Size', 'Line-Height', 'Character-Spacing', 'Target', 'Height', 'Width'];
-            const shouldAddPx = pxProperties.some(prop => key.includes(prop));
-            if (shouldAddPx) {
-              cssValue = `${numValue}px`;
-            } else {
-              // Keep as number for properties that don't need px
-              cssValue = numValue;
-            }
-          }
         }
         
-        // Create variable name, avoiding duplicate Platform prefix
-        let variableName;
-        if (key.startsWith('Platform-')) {
-          // If key already starts with Platform-, don't add another Platform prefix
-          variableName = `--${key.replace(/\./g, '-')}`;
-        } else {
-          // If key doesn't start with Platform-, add the prefix
-          variableName = `--${prefix}-${key.replace(/\./g, '-')}`;
+        // Add px for numeric values
+        if (typeof cssValue === 'number') {
+          cssValue = `${cssValue}px`;
         }
         
+        // Create variable name, replacing dots and handling special cases
+        const variableName = `--${prefix}-${key.replace(/\./g, '-')}`;
         variables.push(`  ${variableName}: ${cssValue};\n`);
       }
       
       // Recursively process nested objects
       if (typeof value === 'object' && value !== null) {
-        // For nested objects, only add the key to the prefix if it doesn't already start with Platform-
-        const newPrefix = key.startsWith('Platform-') ? key : `${prefix}-${key}`;
-        processPlatformVariables(value, newPrefix);
+        processPlatformVariables(value, `${prefix}-${key}`);
       }
     }
   };
@@ -720,6 +690,7 @@ function extractPlatformVariables(platformContent, platformName) {
   
   return variables;
 }
+
 /**
  * Extract cognitive variables - updated to match the exact desired output format
  * @param {Object} cognitiveContent - The cognitive profile content
@@ -825,19 +796,15 @@ function extractCognitiveVariables(cognitiveContent, cognitiveType = 'none') {
                           else {
                               value = `var(--${varName})`;
                           }
-                      } else {
-                          // Handle numeric values (both numbers and string numbers)
-                          const numValue = Number(value);
-                          if (!isNaN(numValue)) {
-                              // Properties that should have px units
-                              const pxProperties = ['Font-Size', 'Line-Height', 'Character-Spacing', 'Paragraph-Spacing'];
-                              const shouldAddPx = pxProperties.some(prop => propName.includes(prop));
-                              if (shouldAddPx) {
-                                  value = `${numValue}px`;
-                              } else {
-                                  // Keep as number for properties that don't need px
-                                  value = numValue;
-                              }
+                      }
+                      
+                      // Add px to specific numeric properties
+                      if (typeof value === 'number') {
+                          // Properties that should have px units
+                          const pxProperties = ['Font-Size', 'Line-Height', 'Character-Spacing', 'Paragraph-Spacing'];
+                          const shouldAddPx = pxProperties.some(prop => propName.includes(prop));
+                          if (shouldAddPx) {
+                              value = `${value}px`;
                           }
                       }
                       
@@ -891,15 +858,9 @@ function extractCognitiveVariables(cognitiveContent, cognitiveType = 'none') {
                   varName = varName.replace('Platform-Default-', 'Platform-');
               }
               targetValue = `var(--${varName})`;
-          } else {
-              // Handle numeric target values (both numbers and string numbers)
-              const numValue = Number(targetValue);
-              if (!isNaN(numValue)) {
-                  targetValue = `${numValue}px`;
-              } else {
-                  // Fallback - ensure px is added even if conversion fails
-                  targetValue = `${targetValue}px`;
-              }
+          } else if (typeof targetValue === 'number') {
+              // Add px to numeric target values
+              targetValue = `${targetValue}px`;
           }
           variables.push(`  --Cognitive-Target: ${targetValue};\n`);
       } else {
@@ -1000,9 +961,9 @@ function processSurfaceContainers(jsonContent) {
         
         // Create the CSS selector, default is without value
         if (containerName === 'Surface') {
-          css += `[data-surface] {\n`;
+          css += `[data-surface-container] {\n`;
         } else {
-          css += `[data-surface="${labelValue.toLowerCase()}"] {\n`;
+          css += `[data-surface-container="${labelValue.toLowerCase()}"] {\n`;
         }
         
         // Process all properties
@@ -1039,6 +1000,9 @@ function processSurfaceContainers(jsonContent) {
   function processSizingSpacing(jsonContent) {
     let css = '';
     
+    // Start the CSS block
+    css += ':root {\n';
+    
     // Extract multiplier values from each mode
     const multipliers = {
       Default: 1,
@@ -1057,34 +1021,13 @@ function processSurfaceContainers(jsonContent) {
       }
     });
     
-    // Add data-spacing selectors for different modes FIRST
-    css += '/* Spacing mode overrides */\n';
-    css += '[data-spacing] {\n';
-    css += '  --Spacing-multiplier: max(var(--Cognitive-Multiplier), var(--Default-Spacing-Multiplier));\n';
-    css += '}\n\n';
+    // Add multiplier variables with clean formatting
+    css += '  --Default-Spacing-Multiplier: ' + multipliers.Default + ';\n';
+    css += '  --Standard-Spacing-Multiplier: ' + multipliers.Standard + ';\n';
+    css += '  --Expanded-Spacing-Multiplier: ' + multipliers.Expanded + ';\n';
+    css += '  --Reduced-Spacing-Multiplier: ' + multipliers.Reduced + ';\n';
     
-    css += '[data-spacing="expanded"] {\n';
-    css += '  --Spacing-multiplier: max(var(--Cognitive-Multiplier), var(--Expanded-Spacing-Multiplier));\n';
-    css += '}\n\n';
-    
-    css += '[data-spacing="reduced"] {\n';
-    css += '  --Spacing-multiplier: max(var(--Cognitive-Multiplier), var(--Reduced-Spacing-Multiplier));\n';
-    css += '}\n\n';
-    
-    css += '[data-spacing="standard"] {\n';
-    css += '  --Spacing-multiplier: max(var(--Cognitive-Multiplier), var(--Standard-Spacing-Multiplier));\n';
-    css += '}\n\n';
-    
-    // Start the :root CSS block
-    css += ':root {\n';
-    
-    // Add multiplier variables WITHOUT px units (they should be unitless)
-    css += `  --Default-Spacing-Multiplier: ${multipliers.Default};\n`;
-    css += `  --Standard-Spacing-Multiplier: ${multipliers.Standard};\n`;
-    css += `  --Expanded-Spacing-Multiplier: ${multipliers.Expanded};\n`;
-    css += `  --Reduced-Spacing-Multiplier: ${multipliers.Reduced};\n`;
-    
-    // Use the variable directly
+    // Use the variable directly without min()
     css += '  --Spacing-multiplier: var(--Default-Spacing-Multiplier);\n';
     
     // Get the default sizing values from the Default mode
@@ -1092,93 +1035,66 @@ function processSurfaceContainers(jsonContent) {
     if (defaultSection && defaultSection.Default) {
       const defaultValues = defaultSection.Default;
       
-      // Collect all variables by type
-      const sizingVars = [];
-      const negativeVars = [];
-      const spacingVars = [];
-      
-      // Sort variables into categories
-      Object.keys(defaultValues).forEach(prop => {
+      // Process sizing and spacing properties
+      const processProp = (prop) => {
         if (defaultValues[prop] && defaultValues[prop].value !== undefined) {
-          if (prop.startsWith('Sizing-')) {
-            sizingVars.push(prop);
-          } else if (prop.startsWith('Negative-')) {
-            negativeVars.push(prop);
-          } else if (prop.startsWith('Spacing-')) {
-            spacingVars.push(prop);
+          // Direct numeric value or reference
+          let value = defaultValues[prop].value;
+          
+          // Convert reference format
+          if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+            value = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
+          } else if (typeof value === 'number') {
+            value = `${value}px`;
           }
-        }
-      });
-      
-      // Process Sizing variables (add px) - handle string numbers
-      sizingVars.forEach(prop => {
-        const valueObj = defaultValues[prop];
-        const value = valueObj.value;
-        
-        // Handle reference values first
-        if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-          const refValue = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
-          css += `  --${prop}: ${refValue};\n`;
-        } else {
-          // Convert string numbers to actual numbers and add px
-          const numValue = Number(value);
-          if (!isNaN(numValue)) {
-            css += `  --${prop}: ${numValue}px;\n`;
-          } else {
-            // Fallback for non-numeric values
-            css += `  --${prop}: ${value};\n`;
-          }
-        }
-      });
-      
-      // Process Negative variables (add px) - handle string numbers
-      negativeVars.forEach(prop => {
-        const valueObj = defaultValues[prop];
-        const value = valueObj.value;
-        
-        // Handle reference values first
-        if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-          const refValue = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
-          css += `  --${prop}: ${refValue};\n`;
-        } else {
-          // Convert string numbers to actual numbers and add px
-          const numValue = Number(value);
-          if (!isNaN(numValue)) {
-            css += `  --${prop}: ${numValue}px;\n`;
-          } else {
-            // Fallback for non-numeric values
-            css += `  --${prop}: ${value};\n`;
-          }
-        }
-      });
-      
-      // Process Spacing variables (use calc with px for the base value) - handle string numbers
-      spacingVars.forEach(prop => {
-        const valueObj = defaultValues[prop];
-        const value = valueObj.value;
-        
-        // Handle reference values first
-        if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
-          const refValue = `var(--${value.substring(1, value.length - 1).replace(/\./g, '-')})`;
-          css += `  --${prop}: calc(${refValue} * var(--Spacing-multiplier));\n`;
-        } else {
-          // Convert string numbers to actual numbers and add px in calc
-          const numValue = Number(value);
-          if (!isNaN(numValue)) {
-            css += `  --${prop}: calc(${numValue}px * var(--Spacing-multiplier));\n`;
-          } else {
-            // Fallback for non-numeric values
+          
+          // For spacing, use multiplier calculation
+          if (prop.startsWith('Spacing-')) {
             css += `  --${prop}: calc(${value} * var(--Spacing-multiplier));\n`;
+          } else {
+            css += `  --${prop}: ${value};\n`;
           }
         }
+      };
+      
+      // Process various property types
+      const propTypes = [
+        'Sizing-',
+        'Negative-',
+        'Spacing-'
+      ];
+      
+      propTypes.forEach(type => {
+        Object.keys(defaultValues)
+          .filter(prop => prop.startsWith(type))
+          .forEach(processProp);
       });
     }
     
     // Close the root block
     css += '}\n\n';
     
+    // Add data-spacing selectors for different modes
+    css += '/* Spacing mode overrides */\n';
+    css += '[data-spacing] {\n';
+    css += '  --Spacing-multiplier: min(var(--Cognitive-Multiplier), var(--Default-Spacing-Multiplier));\n';
+    css += '}\n\n';
+    
+    css += '[data-spacing="expanded"] {\n';
+    css += '  --Spacing-multiplier: min(var(--Cognitive-Multiplier), var(--Expanded-Spacing-Multiplier));\n';
+    css += '}\n\n';
+    
+    css += '[data-spacing="reduced"] {\n';
+    css += '  --Spacing-multiplier: min(var(--Cognitive-Multiplier), var(--Reduced-Spacing-Multiplier));\n';
+    css += '}\n\n';
+    
+    css += '[data-spacing="standard"] {\n';
+    css += '  --Spacing-multiplier: min(var(--Cognitive-Multiplier), var(--Standard-Spacing-Multiplier));\n';
+    css += '}\n\n';
+    
     return css;
 }
+
 /**
  * Convert the given JSON content to multiple CSS files with a base file
  * @param {Object} jsonContent - The parsed JSON content
@@ -1223,7 +1139,7 @@ async function convertToCssFiles(jsonContent, outputDir) {
     */
     :root {
     /* Other global variables */
-    --Animation-Speed: 0.2s;
+    --global-transition-duration: 0.2s;
     ${systemTokensContent}}`;
 
     // Save base CSS file
@@ -1594,6 +1510,7 @@ async function generateLoaderScript(outputDir, fileInfo) {
         // Load base CSS files
         const baseFiles = [
             { name: 'base.css', id: 'theme-base' },
+            { name: 'typography.css', id: 'theme-typography' }, // <-- Add this line
             { name: 'system.css', id: 'theme-system' },
             { name: 'shadow-levels.css', id: 'theme-shadow-levels' },
             { name: 'sizing-spacing.css', id: 'theme-sizing-spacing' },
@@ -1762,6 +1679,10 @@ async function convertJsonFileToCssFiles(inputPath, outputDir) {
       
       console.log(`Successfully generated CSS files in ${outputDir}`);
       console.log(`- base.css (common styles)`);
+
+      if (results.typography) {
+        console.log(`- typography.css (typography variables)`);
+      }
       
       if (results.system) {
         console.log(`- system.css (system tokens)`);

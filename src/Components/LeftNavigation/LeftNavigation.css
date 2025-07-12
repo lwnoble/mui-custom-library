@@ -86,7 +86,7 @@
 .nav-list {
   list-style: none;
   padding: 0;
-  margin: 20px 0;
+  margin: var(--Sizing-3) var(--Sizing-Quarter);;
   flex: 1;
   overflow-y: auto;
 }
@@ -115,7 +115,7 @@
   padding: 12px 20px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--Sizing-1);
   cursor: pointer;
   transition: all 0.2s ease;
   border-radius: 0;

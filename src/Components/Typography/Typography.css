@@ -1,0 +1,239 @@
+.Body-Small {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc(var(--Typography-Body-Small-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Body-Small-Font-Size);
+    font-weight: var(--Typography-Body-Small-Font-Weight);
+    letter-spacing: min(var(--Typography-Body-Small-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  .Body-Small-Semibold {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc(var(--Typography-Body-Small-Semibold-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Body-Small-Semibold-Font-Size);
+    font-weight: var(--Typography-Body-Small-Semibold-Font-Weight);
+    letter-spacing: min(var(--Typography-Body-Small-Semibold-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  .Body-Medium {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc(var(--Typography-Body-Medium-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Body-Medium-Font-Size);
+    font-weight: var(--Typography-Body-Medium-Font-Weight);
+    letter-spacing: min(var(--Typography-Body-Medium-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  .Body-Medium-Semibold {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Body-Medium-Semibold-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Body-Medium-Semibold-Font-Size);
+    font-weight: var(--Typography-Body-Medium-Semibold-Font-Weight);
+    letter-spacing: min(var(--Typography-Body-Medium-Semibold-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  .Body-Large {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Body-Large-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Body-Large-Font-Size);
+    font-weight: var(--Typography-Body-Large-Font-Weight);
+    letter-spacing: min(var(--Typography-Body-Large-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  .Body-Large-Semibold {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Body-Large-Semibold-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Body-Large-Semibold-Font-Size);
+    font-weight: var(--Typography-Body-Large-Semibold-Font-Weight);
+    letter-spacing: min(var(--Typography-Body-Large-Semibold-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  .Buttons-Small, .button--small {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: var(--Typography-Buttons-Small-Line-Height);
+    font-size: var(--Typography-Buttons-Small-Font-Size);
+    font-weight: var(--Typography-Buttons-Small-Font-Weight);
+    letter-spacing: min(var(--Typography-Buttons-Small-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  .Buttons-Standard, .MuiButton-root, .button--large {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: var(--Typography-Buttons-Standard-Line-Height);
+    font-size: var(--Typography-Buttons-Standard-Font-Size);
+    font-weight: var(--Typography-Buttons-Standard-Font-Weight);
+    letter-spacing: min(var(--Typography-Buttons-Standard-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  .Buttons-Extra-Small, .Buttons-Extra-Small {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: var(--Typography-Buttons-Extra-Small-Line-Height);
+    font-size: var(--Typography-Buttons-Extra-Small-Font-Size);
+    font-weight: var(--Typography-Buttons-Extra-Small-Font-Weight);
+    letter-spacing: min(var(--Typography-Buttons-Extra-Small-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  .Captions-Standard {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Captions-Standard-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Captions-Standard-Font-Size);
+    font-weight: var(--Typography-Captions-Standard-Font-Weight);
+    letter-spacing: min(var(--Typography-Captions-Standard-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  .Captions-Standard {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Captions-Bold-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Captions-Bold-Font-Size);
+    font-weight: var(--Typography-Captions-Bold-Font-Weight);
+    letter-spacing: min(var(--Typography-Captions-Bold-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  .Captions-Bold {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Captions-Bold-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Captions-Bold-Font-Size);
+    font-weight: var(--Typography-Captions-Bold-Font-Weight);
+    letter-spacing: min(var(--Typography-Captions-Bold-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  .Subtitles-Small {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Subtitles-Small-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Subtitles-Small-Font-Size);
+    font-weight: var(--Typography-Subtitles-Small-Font-Weight);
+    letter-spacing: min(var(--Typography-Subtitles-Small-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  .Subtitles-Large {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Subtitles-Large-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Subtitles-Large-Font-Size);
+    font-weight: var(--Typography-Subtitles-Large-Font-Weight);
+    letter-spacing: min(var(--Typography-Subtitles-Large-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  .Legal-Standard {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Legal-Standard-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Legal-Standard-Font-Size);
+    font-weight: var(--Typography-Legal-Standard-Font-Weight);
+    letter-spacing: min(var(--Typography-Legal-Standard-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  .Legal-Semibold {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Legal-Semibold-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Legal-Semibold-Font-Size);
+    font-weight: var(--Typography-Legal-Semibold-Font-Weight);
+    letter-spacing: min(var(--Typography-Legal-Semibold-Character-Spacing), var(--Min-Letter-Spacing));
+  } 
+  label.Extra-Small {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Labels-Extra-Small-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Labels-Extra-Small-Font-Size);
+    font-weight: var(--Typography-Labels-Extra-Small-Font-Weight);
+    letter-spacing: min(var(--Typography-Labels-Extra-Small-Character-Spacing), var(--Min-Letter-Spacing));
+  } 
+  label.Small {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Labels-Small-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Labels-Small-Font-Size);
+    font-weight: var(--Typography-Labels-Small-Font-Weight);
+    letter-spacing: min(var(--Typography-Labels-Small-Character-Spacing), var(--Min-Letter-Spacing));
+  } 
+  label {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Labels-Medium-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Labels-Medium-Font-Size);
+    font-weight: var(--Typography-Labels-Medium-Font-Weight);
+    letter-spacing: min(var(--Typography-Labels-Medium-Character-Spacing), var(--Min-Letter-Spacing));
+  } 
+  label.Large {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Labels-Large-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Labels-Large-Font-Size);
+    font-weight: var(--Typography-Labels-Large-Font-Weight);
+    letter-spacing: min(var(--Typography-Labels-Large-Character-Spacing), var(--Min-Letter-Spacing));
+  } 
+  .Overline-Small {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Overline-Small-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Overline-Small-Font-Size);
+    font-weight: var(--Typography-Overline-Small-Font-Weight);
+    letter-spacing: min(var(--Typography-Overline-Small-Character-Spacing), var(--Min-Letter-Spacing));
+  } 
+  .Overline-Medium {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Overline-Medium-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Overline-Medium-Font-Size);
+    font-weight: var(--Typography-Overline-Medium-Font-Weight);
+    letter-spacing: min(var(--Typography-Overline-Medium-Character-Spacing), var(--Min-Letter-Spacing));
+  } 
+  .Overline-Large {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Overline-Large-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Overline-Large-Font-Size);
+    font-weight: var(--Typography-Overline-Large-Font-Weight);
+    letter-spacing: min(var(--Typography-Overline-Large-Character-Spacing), var(--Min-Letter-Spacing));
+  } 
+  .Display-Small {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Display-Small-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Display-Small-Font-Size);
+    font-weight: var(--Typography-Display-Small-Font-Weight);
+    letter-spacing: min(var(--Typography-Display-Small-Character-Spacing), var(--Min-Letter-Spacing));
+  } 
+  .Display-Large {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Display-Large-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Display-Large-Font-Size);
+    font-weight: var(--Typography-Display-Large-Font-Weight);
+    letter-spacing: min(var(--Typography-Display-Large-Character-Spacing), var(--Min-Letter-Spacing));
+  } 
+  h1, .MuiTypography-h1 {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Headers-H1-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Headers-H1-Font-Size);
+    font-weight: var(--Typography-Headers-H1-Font-Weight);
+    letter-spacing: min(var(--Typography-Headers-H1-Character-Spacing), var(--Min-Letter-Spacing));
+  } 
+  h2, .MuiTypography-h2 {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Headers-H2-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Headers-H2-Font-Size);
+    font-weight: var(--Typography-Headers-H2-Font-Weight);
+    letter-spacing: min(var(--Typography-Headers-H2-Character-Spacing), var(--Min-Letter-Spacing));
+  } 
+  h3, .MuiTypography-h3 {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Headers-H3-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Headers-H3-Font-Size);
+    font-weight: var(--Typography-Headers-H3-Font-Weight);
+    letter-spacing: min(var(--Typography-Headers-H3-Character-Spacing), var(--Min-Letter-Spacing));
+  } 
+  h4, .MuiTypography-h4 {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Headers-H4-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Headers-H4-Font-Size);
+    font-weight: var(--Typography-Headers-H4-Font-Weight);
+    letter-spacing: min(var(--Typography-Headers-H4-Character-Spacing), var(--Min-Letter-Spacing));
+  }
+  h5, .MuiTypography-h5 {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Headers-H5-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Headers-H5-Font-Size);
+    font-weight: var(--Typography-Headers-H5-Font-Weight);
+    letter-spacing: min(var(--Typography-Headers-H5-Character-Spacing), var(--Min-Letter-Spacing));
+  }  
+  h6, .MuiTypography-h6, .left-navigation__title {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Headers-H6-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Headers-H6-Font-Size);
+    font-weight: var(--Typography-Headers-H6-Font-Weight);
+    letter-spacing: min(var(--Typography-Headers-H6-Character-Spacing), var(--Min-Letter-Spacing));
+  } 
+  .Number-Small {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Number-Small-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Number-Small-Font-Size);
+    font-weight: var(--Typography-Number-Small-Font-Weight);
+    letter-spacing: min(var(--Typography-Number-Small-Character-Spacing), var(--Min-Letter-Spacing));
+  } 
+  .Number-Medium {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Number-Medium-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Number-Medium-Font-Size);
+    font-weight: var(--Typography-Number-Medium-Font-Weight);
+    letter-spacing: min(var(--Typography-Number-Medium-Character-Spacing), var(--Min-Letter-Spacing));
+  }   
+  .Number-Large {
+    font-family: var(--Typography-Font-Families-Standard);
+    line-height: calc( var(--Typography-Number-Large-Line-Height) * var(--Cognitive-Multiplier));
+    font-size: var(--Typography-Number-Large-Font-Size);
+    font-weight: var(--Typography-Number-Large-Font-Weight);
+    letter-spacing: min(var(--Typography-Number-Large-Character-Spacing), var(--Min-Letter-Spacing));
+  }  
+   

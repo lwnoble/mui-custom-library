@@ -3,3 +3,13 @@
     flex: 0 0 auto !important;
     width: 100% !important;
   }
+
+  .select-wrapper {
+    margin-top: var(--Sizing-Half);
+  }
+
+  select {
+    min-height: max(var(--Button-Height), var(--Minimum-Target)) !important; 
+    min-height: max(var(--Button-Height), var(--Minimum-Target)) !important; 
+    padding: 0 var(--Sizing-1);
+  }

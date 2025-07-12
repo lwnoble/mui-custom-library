@@ -1,0 +1,190 @@
+:root {
+  --On-Quiet: #cccccc;
+  --Desktop-Target: 24px;
+  --Platform-Target: 24px;
+  --Platform-Font-Families-Standard: "Open Sans";
+  --Platform-Font-Families-Decorative: "Open Sans";
+  --Typography-Font-Families-Standard: "Open Sans";
+  --Typography-Font-Families-Decorative: "Open Sans";
+  --Border-Standard: 1px;
+  --Border-Thick: 2px;
+  /* Mode */
+  --Mode-Target-Desktop: var(--Desktop-Target);
+  --Mode-Target-Android: 48px;
+  --Mode-Target-IOS-Mobile: 44px;
+  --Mode-Target-IOS-Tablet: 44px;
+  --Mode-PS-multiplier: 2em;
+  --Surface: #2d1a1f;
+  --Surface-Dim: #25181b;
+  --Surface-Bright: #3a232a;
+  --Surface-Quiet: #908688;
+  --Surface-Dim-Quiet: #898284;
+  --Surface-Bright-Quiet: #998d90;
+  --Container: #2d1a1f;
+  --Container-Low: #25181b;
+  --Container-Lowest: #000000;
+  --Container-High: #3e272d;
+  --Container-Highest: #422b31;
+  --Container-Low-Quiet: #898284;
+  --Container-Lowest-Quiet: #757575;
+  --Container-High-Quiet: #9d9194;
+  --Container-Highest-Quiet: #a2979a;
+  --Dropdown-Color-1: #1c1215b3;
+  --Dropdown-Color-2: #1c12158a;
+  --Dropdown-Color-3: #1c121561;
+  --Dropdown-Color-4: #1c121552;
+  --Dropdown-Color-5: #1c121533;
+  --Surface-Icon-Primary: #b9687d;
+  --Surface-Icon-Secondary: #a07954;
+  --Surface-Icon-Tertiary: #9d6fb0;
+  --Surface-Icon-BG: #00000000;
+  --Surface-Icon-Success: #3e913f;
+  --Surface-Icon-Error: #d95356;
+  --Surface-Icon-Warning: #a37a06;
+  --Surface-Icon-Info: #1481e8;
+  --Container-Icon-Primary: #b9687d;
+  --Container-Icon-Secondary: #a07954;
+  --Container-Icon-Tertiary: #9d6fb0;
+  --Container-Icon-BG: #00000000;
+  --Container-Icon-Success: #3e913f;
+  --Container-Icon-Error: #d95356;
+  --Container-Icon-Warning: #a37a06;
+  --Container-Icon-Info: #1481e8;
+  --Surface-Border: #7f7376;
+  --Container-Border: #857a7d;
+  --Surface-Button: #b9687d;
+  --Surface-Button-Half: #ffffff;
+  --Container-Button: #b9687d;
+  --Container-Button-Half: #ffffff;
+  --Surface-On-Button: #532733;
+  --Container-On-Button: #ffffff;
+  --Surface-Light-Button: #ffffff;
+  --Container-Light-Button: #b9687d;
+  --Surface-On-Light-Button: #ffffff;
+  --Container-On-Light-Button: #ffffff;
+  --Surface-Hotlink: #f0dbe0;
+  --Surface-Hotlink-Default-Underline: true;
+  --Surface-Hotlink-Hover-Underline: false;
+  --Container-Hotlink: #f0dbe0;
+  --Container-Hotlink-Default-Underline: true;
+  --Container-Hotlink-Hover-Underline: false;
+  --Dropdown-Color-1: #1c1215b3;
+  --Dropdown-Color-2: #1c12158a;
+  --Dropdown-Color-3: #1c121561;
+  --Dropdown-Color-4: #1c121552;
+  --Dropdown-Color-5: #1c121533;
+  --Surface: #2d1a1f;
+  --Surface-Dim: #25181b;
+  --Surface-Bright: #3a232a;
+  --On-Surface: #ffffff;
+  --Surface-Quiet: #908688;
+  --Surface-Dim-Quiet: #898284;
+  --Surface-Bright-Quiet: #998d90;
+  --Container: #2d1a1f;
+  --Container-Low: #25181b;
+  --Container-Lowest: #000000;
+  --Container-High: #3e272d;
+  --Container-Highest: #422b31;
+  --On-Container: #ffffff;
+  --Container-Quiet: #908688;
+  --Container-Low-Quiet: #898284;
+  --Container-Lowest-Quiet: #757575;
+  --Container-High-Quiet: #9d9194;
+  --Container-Highest-Quiet: #a2979a;
+  --Container-On-On-Button: #ffffff;
+  --Surface-On-On-Button: #ffffff;
+  --Surface-On-On-Light-Button: #ffffff;
+  --Container-On-On-Light-Button: #ffffff;
+  --Surface-Message-Padding: 0;
+  --Container-Message-Padding: 0;
+
+  /* Font Families */
+  --Platform-Font-Families-Standard: "Roboto";
+  --Platform-Font-Families-Decorative: "Bungee";
+
+  /* Surface and Container variables */
+  --Background: var(--Surface);
+  --On-Color: var(--On-Surface);
+  --On-Quiet: var(--Container-Highest-Quiet);
+  --Button: var(--Surface-Button);
+  --On-Button: var(--Surface-On-Button);
+  --On-On-Button: var(--Surface-On-On-Button);
+  --Hotlink: var(--Surface-Hotlink);
+  --Icon-BG: var(--Surface-Icon-BG);
+  --Icon-Error: var(--Surface-Icon-Error);
+  --Icon-Warning: var(--Surface-Icon-Warning);
+  --Icon-Success: var(--Surface-Icon-Success);
+  --Icon-Info: var(--Surface-Icon-Info);
+  --Icon-Primary: var(--Surface-Icon-Primary);
+  --Icon-Secondary: var(--Surface-Icon-Secondary);
+  --Icon-Tertiary: var(--Surface-Icon-Tertiary);
+  --Drop1-Color: var(--Dropdown-Color-1);
+  --Drop2-Color: var(--Dropdown-Color-2);
+  --Drop3-Color: var(--Dropdown-Color-2);
+  --Drop4-Color: var(--Dropdown-Color-4);
+  --Drop5-Color: var(--Dropdown-Color-5);
+  --Border: var(--Surface-Border);
+  --Icon-Default: var(--On-Surface);
+  --Button-Light: var(--Surface-Light-Button);
+  --Button-Light-Text: var(--Surface-Light-Button-Text);
+  --Hotlink-Hover-Underline: var(--Surface-Hotlink-Hover-Underline);
+  --Hotlink-Default-Underline: var(--Surface-Hotlink-Default-Underline);
+  --Message-Padding: var(--Surface-Message-Padding);
+  
+  --Cognitive-Target: var(var(--Platform-Target));
+  --Cognitive-Multiplier: 1;
+  --Default-Spacing-Multiplier: 1;
+  --Spacing-multiplier: min(var(--Cognitive-Multiplier, 1), var(--Default-Spacing-Multiplier, 1));
+  --animation-speed: 0.2s;
+
+  /* Column counts */
+  --columns-desktop: 12;
+  --columns-tablet: 8;
+  --columns-mobile: 4;
+  --margin-desktop: 120px;
+  --margin-tablet: 32px;
+  --margin-mobile: 16px;
+  --margin: var(--margin-desktop);
+  --gutter-desktop: 32px;
+  --gutter-mobile: 8px;
+  --gutter-tablet: 20px;
+  --gutter-laptop: 28px;
+  --gutter:  var(--gutter-desktop);
+  --columns: 12;
+
+  --Default-Spacing-Multiplier: 1;
+  --Standard-Spacing-Multiplier: 1;
+  --Expanded-Spacing-Multiplier: 1.5;
+  --Reduced-Spacing-Multiplier: 0.75;
+
+
+  /* Screen reader spacing */
+  --Min-Letter-Spacing: 0em;
+  --Min-Word-Spacing: 0em;
+  --Min-Paragraph-Spacing: 2em;
+
+  [data-reader] {
+    --Min-Letter-Spacing: 0em;
+    --Min-Word-Spacing: 0em;
+    --Min-Paragraph-Spacing: 2em;
+  }
+  [data-reader="true"] {
+   --Min-Letter-Spacing: 1.2em;
+   --Min-Word-Spacing: 1.6em;
+   --Min-Paragraph-Spacing: var(--Mode-PS-multiplier);
+  }
+  --Animation-Speed: 0.2s;
+
+  /* Transitions */
+  [data-movement] {
+    --Animation-Speed: 0.2s;
+  }
+  [data-movement="none"] {
+    --Animation-Speed: 0.0s;
+  }
+
+
+}
+p {
+  margin-bottom: var(--Min-Paragraph-Spacing);
+}

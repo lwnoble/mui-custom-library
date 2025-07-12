@@ -1,0 +1,10 @@
+.expand {
+    display: flex;
+    flex-direction: row;
+    flex-basis: auto;
+}
+  
+  .expand .class {
+    transform: rotate(90.00deg) !important;
+  }
+  

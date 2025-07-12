@@ -4,10 +4,10 @@
     */
     :root {
     /* Other global variables */
-    --global-transition-duration: 0.2s;
+    --Animation-Speed: 0.2s;
       --Transparent: #00000000;
-  --Name: "Lise Noble - Testing";
-  --Color-Theory: "Analogous";
+  --Name: "Lise";
+  --Color-Theory: "Custom";
   --Surface-Style: "Light Tonal";
   --Desktop-Target: 24px;
   --Grid: 8px;

@@ -114,6 +114,25 @@ const FontLoader = () => {
       }
     };
     
+    // Add this to the useEffect in FontLoader.jsx
+    const loadFontAwesome = () => {
+      // Check if Font Awesome is already loaded
+      if (document.querySelector('link[href*="font-awesome"]')) {
+        console.log('Font Awesome already loaded');
+        return;
+      }
+
+      console.log('Loading Font Awesome');
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+      link.crossOrigin = 'anonymous';
+      document.head.appendChild(link);
+    };
+
+    // Call it immediately in the useEffect (before the theme change handler)
+    loadFontAwesome();
+
     // Handler for theme changes
     const handleThemeChange = (event) => {
       // Get current theme settings from event or attributes

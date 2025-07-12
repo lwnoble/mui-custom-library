@@ -5,21 +5,22 @@ import ComponentPlayground from '../ComponentPlayground/ComponentPlayground.jsx'
 const RadioDemo = () => {
   // Initial configuration
   const initialConfig = {
-    size: 'standard',
+    size: 'medium',
     disabled: false,
     groupType: 'options', // 'options', 'single', 'custom'
     name: 'demo-radio-group',
     className: '',
-    selectedValue: 'option1'
+    selectedValue: 'option1',
+    animated: true
   };
 
   // Enhanced demo component that handles Radio-specific logic
   const DemoRadio = (config) => {
     const [selectedValue, setSelectedValue] = useState(config.selectedValue);
 
-    const handleChange = (value) => {
-      setSelectedValue(value);
-      console.log('Radio selected:', value);
+    const handleChange = (e) => {
+      setSelectedValue(e.target.value);
+      console.log('Radio selected:', e.target.value);
     };
 
     // Generate radio options based on groupType
@@ -67,33 +68,18 @@ const RadioDemo = () => {
         </div>
         
         {radioOptions.map((option) => (
-          <label 
+          <Radio
             key={option.value}
-            style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px',
-              cursor: config.disabled ? 'not-allowed' : 'pointer',
-              opacity: config.disabled ? 0.6 : 1
-            }}
-          >
-            <Radio
-              checked={selectedValue === option.value}
-              onChange={handleChange}
-              value={option.value}
-              name={config.name}
-              size={config.size}
-              disabled={config.disabled}
-              className={config.className}
-              aria-label={option.label}
-            />
-            <span style={{ 
-              fontSize: '14px',
-              color: config.disabled ? '#999' : '#333'
-            }}>
-              {option.label}
-            </span>
-          </label>
+            selected={selectedValue === option.value}
+            onChange={handleChange}
+            value={option.value}
+            name={config.name}
+            label={option.label}
+            size={config.size}
+            disabled={config.disabled}
+            className={config.className}
+            animated={config.animated}
+          />
         ))}
         
         <div style={{ 
@@ -118,7 +104,8 @@ const RadioDemo = () => {
           label: 'Size',
           type: 'select',
           options: [
-            { value: 'standard', label: 'Standard' },
+            { value: 'small', label: 'Small' },
+            { value: 'medium', label: 'Medium' },
             { value: 'large', label: 'Large' }
           ]
         },
@@ -182,7 +169,8 @@ const RadioDemo = () => {
     {
       title: 'States',
       toggles: [
-        { key: 'disabled', label: 'Disabled' }
+        { key: 'disabled', label: 'Disabled' },
+        { key: 'animated', label: 'Animated' }
       ]
     }
   ];
@@ -212,12 +200,15 @@ const RadioDemo = () => {
     const props = [];
     
     // Add size if not default
-    if (config.size !== 'standard') {
+    if (config.size !== 'medium') {
       props.push(`size="${config.size}"`);
     }
     
     // Add disabled state
     if (config.disabled) props.push('disabled');
+    
+    // Add animated if disabled
+    if (!config.animated) props.push('animated={false}');
     
     // Add className if provided
     if (config.className) {
@@ -230,51 +221,53 @@ const RadioDemo = () => {
       ...props
     ];
     
-    const propsString = baseProps.length > 0 ? `\n      ${baseProps.join('\n      ')}` : '';
+    const propsString = baseProps.length > 0 ? `\n  ${baseProps.join('\n  ')}` : '';
     
     // Generate the full radio group code
     const radioElements = radioOptions.map(option => {
-      const checkedProp = config.selectedValue === option.value ? '\n      checked={true}' : '';
-      return `    <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <Radio${checkedProp}
-      value="${option.value}"${propsString}
-      />
-      <span>${option.label}</span>
-    </label>`;
-    }).join('\n    ');
+      const selectedProp = config.selectedValue === option.value ? '\n  selected={true}' : '';
+      return `<Radio${selectedProp}
+  value="${option.value}"
+  label="${option.label}"${propsString}
+/>`;
+    }).join('\n');
 
     return `// Radio group with state management
 const [selectedValue, setSelectedValue] = useState('${config.selectedValue || ''}');
 
-const handleChange = (value) => {
-  setSelectedValue(value);
+const handleChange = (e) => {
+  setSelectedValue(e.target.value);
 };
 
-<div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-${radioElements}
-</div>`;
+${radioElements}`;
   };
 
   // Example configurations
   const examples = [
     {
       props: {
-        size: 'standard',
+        size: 'medium',
         groupType: 'options',
         selectedValue: 'option1'
       },
       code: `const [selectedValue, setSelectedValue] = useState('option1');
 
+const handleChange = (e) => {
+  setSelectedValue(e.target.value);
+};
+
 <Radio 
-  checked={selectedValue === 'option1'}
-  onChange={setSelectedValue}
+  selected={selectedValue === 'option1'}
+  onChange={handleChange}
   value="option1"
+  label="Option 1"
   name="example-group"
 />
 <Radio 
-  checked={selectedValue === 'option2'}
-  onChange={setSelectedValue}
+  selected={selectedValue === 'option2'}
+  onChange={handleChange}
   value="option2"
+  label="Option 2"
   name="example-group"
 />`
     },
@@ -286,23 +279,25 @@ ${radioElements}
       },
       code: `<Radio 
   size="large"
-  checked={selectedValue === 'yes'}
-  onChange={setSelectedValue}
+  selected={selectedValue === 'yes'}
+  onChange={handleChange}
   value="yes"
+  label="Yes"
   name="confirmation"
 />`
     },
     {
       props: {
-        size: 'standard',
+        size: 'medium',
         disabled: true,
         groupType: 'options',
         selectedValue: 'option2'
       },
       code: `<Radio 
-  checked={true}
+  selected={true}
   disabled
   value="option2"
+  label="Option 2"
   name="disabled-group"
 />`
     },
@@ -314,35 +309,42 @@ ${radioElements}
       },
       code: `<Radio 
   size="large"
-  checked={selectedValue === 'single'}
-  onChange={setSelectedValue}
+  selected={selectedValue === 'single'}
+  onChange={handleChange}
   value="single"
+  label="Single Radio Option"
   name="single-option"
 />`
     },
     {
       props: {
-        size: 'standard',
+        size: 'small',
         groupType: 'custom',
         selectedValue: 'no'
       },
       code: `// Yes/No/Maybe radio group
 <Radio 
-  checked={selectedValue === 'yes'}
-  onChange={setSelectedValue}
+  size="small"
+  selected={selectedValue === 'yes'}
+  onChange={handleChange}
   value="yes"
+  label="Yes"
   name="decision"
 />
 <Radio 
-  checked={selectedValue === 'no'}
-  onChange={setSelectedValue}
+  size="small"
+  selected={selectedValue === 'no'}
+  onChange={handleChange}
   value="no"
+  label="No"
   name="decision"
 />
 <Radio 
-  checked={selectedValue === 'maybe'}
-  onChange={setSelectedValue}
+  size="small"
+  selected={selectedValue === 'maybe'}
+  onChange={handleChange}
   value="maybe"
+  label="Maybe"
   name="decision"
 />`
     }

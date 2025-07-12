@@ -69,6 +69,7 @@
 
 .button--solid.button--small .button-content {
   background-color: var(--Button);
+  color: var(--On-Button);
   border: var(--Border-Thick) solid var(--Button);
 }
 
@@ -136,6 +137,7 @@
 .button--outline.button--small .button-content {
   background-color: var(--Background);
   border: var(--Border-Thick) solid var(--Button);
+  color: var(--On-Color)
 }
 
 .button--outline .icon--small i::before {
@@ -196,7 +198,7 @@
 }
 
 .button--text .icon--small i::before {
-  color: var(--Hotlink);
+  color: var(--On-Color);
 } 
 
 .button--text:hover:not(:disabled) {
@@ -329,13 +331,18 @@
   min-width: var(--Button-Small-Height);
   min-height: var(--Button-Small-Height);
   aspect-ratio: 1;
+  padding: 0;
 }
 
 .button--letter,
 .button--number {
-  padding: 0 var(--Sizing-Half);
+  padding: 0;
   min-width: var(--Minimum-Target, 44px);
   aspect-ratio: 1;
+}
+
+.button--letter .button-text, .button--number .button-text {
+  padding: 0 var(--Sizing-Half);
 }
 
 .button--letter.button--small,
@@ -348,10 +355,12 @@
 
 .button--letter.button--small .button-content,
 .button--number.button--small .button-content {
-  min-width: var(--Button-Small-Height, 36px);
-  min-height: var(--Button-Small-Height, 36px);
+  min-width: var(--Button-Small-Height);
+  min-height: var(--Button-Small-Height);
   aspect-ratio: 1;
+  padding: 0 ;;
 }
+
 
 /* Text underline for text variant */
 .button-text--underlined {
@@ -401,9 +410,4 @@
   transform: none !important;
   box-shadow: none !important;
   outline: none !important;
-}
-
-/* Shadow level support */
-.button[data-shadow-level-mode="l-1"] {
-  box-shadow: var(--Box-Shadow-L1, 0 1px 3px rgba(0, 0, 0, 0.12));
 }

@@ -93,7 +93,7 @@ export const MenuItem = ({
   return (
     <div
       className={`menu-item ${state} ${level} ${alignment} ${isClickable ? 'menu-item--clickable' : ''} ${className}`}
-      data-surface-and-containers-mode={
+      data-surface={
         level === "one" && state === "active" && alignment === "left"
           ? "surface"
           : state === "disabled" && alignment === "left"
@@ -155,17 +155,16 @@ export const MenuItem = ({
             />
           )}
 
-          {/* Main icon - decorative when text is present, accessible when icon-only */}
-          {icon && (
-            <Icon
-              className="mui-icon-instance"
-              color="default"
-              name={iconName}
-              size="small"
-              aria-hidden={iconShouldBeDecorative}
-            />
-          )}
-
+        {/* Main icon - decorative when text is present, accessible when icon-only */}
+        {icon && (
+        <Icon
+            className="mui-icon-instance"
+            variant={["hover", "focus", "focus-visible", "active", "disabled"].includes(state) ? "default" : "quiet"}
+            name={iconName}
+            size="small"
+            aria-hidden={iconShouldBeDecorative}
+        />
+        )}
           {/* Text content */}
           <div className="typography-wrapper">
             <Typography

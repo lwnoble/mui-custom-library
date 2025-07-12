@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Typography } from '../../components/Typography'; // Named export
-import Checkbox from '../../components/Checkbox'; // Default export - fixed to match your index.js
+import Checkbox from '../../components/Checkbox'; // Default export
+import Radio from '../../components/Radio'; // Default export  
+import Button from '../../components/Button'; // Default export
 import './ComponentPlayground.css';
 
 /**
@@ -105,6 +107,28 @@ const ComponentPlayground = ({
                         step={control.step}
                       />
                     )}
+                    
+                    {control.type === 'radio' && (
+                      <div className="radio-group">
+                        {(typeof control.options === 'function' 
+                          ? control.options(config) 
+                          : control.options
+                        ).map(option => (
+                          <label key={option.value} className="radio-option">
+                            <Radio
+                              checked={config[control.key] === option.value}
+                              onChange={() => updateConfig(control.key, option.value)}
+                              value={option.value}
+                              name={control.key}
+                              size="standard"
+                            />
+                            <Typography variant="body-medium" element="span">
+                              {option.label}
+                            </Typography>
+                          </label>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -114,19 +138,18 @@ const ComponentPlayground = ({
               <div className="toggle-controls">
                 {section.toggles.map((toggle, toggleIndex) => (
                   <div key={toggleIndex} className="toggle-control">
-                    <div 
-                      onClick={() => updateConfig(toggle.key, !config[toggle.key])}
+                    <label 
                       style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
                     >
                       <Checkbox 
-                        checked={config[toggle.key] || false} 
+                        checked={config[toggle.key] || false}
+                        onChange={() => updateConfig(toggle.key, !config[toggle.key])}
                         size="default"
-                        state={config[toggle.key] ? undefined : undefined} // Add focus state if needed
                       />
-                      <Typography variant="body-medium" element="label">
+                      <Typography variant="body-medium" element="span">
                         {toggle.label}
                       </Typography>
-                    </div>
+                    </label>
                     {toggle.description && (
                       <Typography variant="body-small" element="p" className="toggle-description">
                         {toggle.description}
@@ -142,25 +165,34 @@ const ComponentPlayground = ({
 
       {/* Tabs */}
       <div className="demo-tabs">
-        <button 
-          className={`tab ${activeTab === 'preview' ? 'active' : ''}`}
+        <Button
+          type="text"
+          variant={activeTab === 'preview' ? 'filled' : 'text'}
+          size="standard"
           onClick={() => setActiveTab('preview')}
+          className={`tab ${activeTab === 'preview' ? 'active' : ''}`}
         >
-          <Typography variant="button-standard" element="span">Preview</Typography>
-        </button>
-        <button 
-          className={`tab ${activeTab === 'code' ? 'active' : ''}`}
+          Preview
+        </Button>
+        <Button
+          type="text" 
+          variant={activeTab === 'code' ? 'filled' : 'text'}
+          size="standard"
           onClick={() => setActiveTab('code')}
+          className={`tab ${activeTab === 'code' ? 'active' : ''}`}
         >
-          <Typography variant="button-standard" element="span">Code</Typography>
-        </button>
+          Code
+        </Button>
         {examples && (
-          <button 
-            className={`tab ${activeTab === 'examples' ? 'active' : ''}`}
+          <Button
+            type="text"
+            variant={activeTab === 'examples' ? 'filled' : 'text'}
+            size="standard"
             onClick={() => setActiveTab('examples')}
+            className={`tab ${activeTab === 'examples' ? 'active' : ''}`}
           >
-            <Typography variant="button-standard" element="span">Examples</Typography>
-          </button>
+            Examples
+          </Button>
         )}
       </div>
 
@@ -170,7 +202,7 @@ const ComponentPlayground = ({
           <div className="preview-section">
             <Typography variant="h3" element="h3">Live Preview</Typography>
             <div className="preview-container">
-              <div className="component-preview" data-surface="container">
+              <div className="component-preview">
                 <Component {...config} />
               </div>
               <div className="preview-info">
@@ -188,9 +220,16 @@ const ComponentPlayground = ({
           <div className="code-section">
             <div className="code-header">
               <Typography variant="h3" element="h3">Generated Code</Typography>
-              <button className="copy-button" onClick={copyCode}>
-                <Typography variant="button-small" element="span">Copy</Typography>
-              </button>
+              <Button
+                type="text"
+                variant="outlined"
+                size="small"
+                leftIcon="copy"
+                onClick={copyCode}
+                className="copy-button"
+              >
+                Copy
+              </Button>
             </div>
             <pre className="code-block">
               <code>{generateCode(config)}</code>

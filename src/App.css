@@ -1,21 +1,44 @@
-/* App.css - Add these styles to your existing App.css file */
 
 /* App Container - Flexbox Layout */
 .app-container {
   display: flex;
   min-height: 100vh;
   width: 100%;
+  position: relative; /* Add relative positioning */
+  overflow: hidden; /* Prevent layout shifts */
 }
 
-/* Main Content Container */
+/* Left Navigation - Fixed width that changes when collapsed */
+.left-navigation {
+  flex-shrink: 0; /* Prevent the nav from shrinking unexpectedly */
+  flex-grow: 0; /* Prevent the nav from growing */
+  position: relative; /* Position relative within flex container */
+  transition: width var(--Animation-Speed, 0.3s) ease;
+  overflow: hidden; /* Hide content that overflows during transition */
+  z-index: 100; /* Ensure it stays above main content */
+}
+
+/* Left Navigation width states */
+.left-navigation:not(.collapsed) {
+  width: 280px; /* Expanded width - adjust as needed */
+}
+
+.left-navigation.collapsed {
+  width: 60px; /* Collapsed width - adjust as needed */
+}
+
+/* Main Content Container - Grows to fill remaining space */
 .main-content-container {
-  flex: 1; /* This makes it expand to fill remaining space */
+  flex: 1; /* This makes it expand to fill ALL remaining space */
+  flex-shrink: 1; /* Allow it to shrink if needed */
+  flex-grow: 1; /* Allow it to grow to fill space */
   display: flex;
   flex-direction: column;
   position: relative;
   min-height: 100vh;
-  transition: all 0.3s ease; /* Smooth transitions */
+  transition: all var(--Animation-Speed, 0.3s) ease; /* Smooth transitions */
   overflow-x: hidden; /* Prevent horizontal scroll */
+  min-width: 0; /* Important: allows flex item to shrink below content size */
 }
 
 /* Component Content Area */
@@ -23,6 +46,9 @@
   flex: 1;
   padding: 20px;
   overflow-y: auto; /* Allow vertical scrolling if content is long */
+  overflow-x: hidden; /* Prevent horizontal overflow */
+  width: 100%; /* Ensure it takes full available width */
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
 /* Settings Toggle Button */
@@ -31,26 +57,18 @@
   top: 20px;
   right: 20px;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.9) !important;
-  backdrop-filter: blur(10px);
-  border-radius: 8px !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
-  transition: all 0.2s ease !important;
-}
-
-/* Hover effect for settings button */
-.settings-toggle-button:hover {
-  background: rgba(255, 255, 255, 1) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
-  transform: translateY(-1px);
 }
 
 /* Dark theme adjustments for settings button */
+[data-background="dark"] .settings-toggle-button,
+[data-mode*="dark"] .settings-toggle-button {
+  background: rgba(30, 30, 30, 0.9) !important;
+  color: white;
+}
 
-/* Ensure the left navigation doesn't shrink */
-.left-navigation {
-  flex-shrink: 0; /* Prevent the nav from shrinking */
-  transition: width var(--Animation-Speed) ease;
+[data-background="dark"] .settings-toggle-button:hover,
+[data-mode*="dark"] .settings-toggle-button:hover {
+  background: rgba(30, 30, 30, 1) !important;
 }
 
 /* Component placeholder styling */
@@ -64,12 +82,45 @@
   background: rgba(0, 0, 0, 0.02);
   border-radius: 8px;
   border: 2px dashed #ddd;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Ensure proper layout flow */
+.App {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Additional specificity for navigation transitions */
+.left-navigation.collapsed .nav-list,
+.left-navigation.collapsed .nav-header h2,
+.left-navigation.collapsed .nav-footer {
+  opacity: 0.8;
+  transition: opacity var(--Animation-Speed, 0.3s) ease;
+}
+
+.left-navigation:not(.collapsed) .nav-list,
+.left-navigation:not(.collapsed) .nav-header h2,
+.left-navigation:not(.collapsed) .nav-footer {
+  opacity: 1;
+  transition: opacity var(--Animation-Speed, 0.3s) ease;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .app-container {
     flex-direction: column;
+  }
+  
+  .left-navigation:not(.collapsed) {
+    width: 100%; /* Full width on mobile when expanded */
+  }
+  
+  .left-navigation.collapsed {
+    width: 100%; /* Still full width but height can be smaller */
+    height: auto;
   }
   
   .component-content {
@@ -82,11 +133,46 @@
   }
 }
 
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .left-navigation:not(.collapsed) {
+    width: 240px; /* Slightly smaller on tablets */
+  }
+  
+  .left-navigation.collapsed {
+    width: 50px;
+  }
+}
+
+/* Large screen adjustments */
+@media (min-width: 1200px) {
+  .left-navigation:not(.collapsed) {
+    width: 320px; /* Larger on big screens */
+  }
+  
+  .component-content {
+    padding: 30px;
+  }
+}
+
 /* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {
   .main-content-container,
   .left-navigation,
-  .settings-toggle-button {
+  .settings-toggle-button,
+  .left-navigation.collapsed .nav-list,
+  .left-navigation.collapsed .nav-header h2,
+  .left-navigation.collapsed .nav-footer,
+  .left-navigation:not(.collapsed) .nav-list,
+  .left-navigation:not(.collapsed) .nav-header h2,
+  .left-navigation:not(.collapsed) .nav-footer {
     transition: none;
   }
+}
+
+/* Force layout recalculation helper */
+.app-container::after {
+  content: '';
+  display: table;
+  clear: both;
 }

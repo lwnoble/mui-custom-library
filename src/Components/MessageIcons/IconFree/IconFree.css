@@ -1,0 +1,54 @@
+.icon-free {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  
+  .icon-free--padding-none {
+    padding: 0;
+  }
+  
+  .icon-free--padding-small {
+    padding: var(--spacing-xsmall, 4px);
+  }
+  
+  .icon-free--padding-medium {
+    padding: var(--spacing-small, 8px);
+  }
+  
+  .icon-free--padding-large {
+    padding: var(--spacing-medium, 16px);
+  }
+  
+  /* Font Awesome scale handling - using CSS font-size instead of FA classes */
+  .icon-free--scale-one-x i {
+    font-size: 1em;
+  }
+  
+  .icon-free--scale-two-x i {
+    font-size: 1.33em; /* Font Awesome 2x equivalent */
+  }
+  
+  .icon-free--scale-three-x i {
+    font-size: 1.67em; /* Font Awesome 3x equivalent */
+  }
+  
+  .icon-free--scale-four-x i {
+    font-size: 2em; /* Font Awesome 4x equivalent */
+  }
+  
+  .icon-free--scale-five-x i {
+    font-size: 2.5em; /* Font Awesome 5x equivalent */
+  }
+  
+  .icon-free i {
+    display: block;
+    line-height: 1;
+    /* Ensure Font Awesome icons render properly */
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "Font Awesome 5 Free", "Font Awesome 5 Pro";
+    font-weight: 900; /* Solid icons */
+    font-style: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+  }

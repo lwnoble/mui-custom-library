@@ -1,233 +1,150 @@
-/* Radio.css - Single Color Design Token System */
-
-/* 
- * Single Color Design System:
- * - --Button: The one primary color used for all interactive states
- * - All other colors derived from system defaults (white, gray, transparent)
- * - Unchecked: transparent background with gray border (circular)
- * - Checked: --Button background and border with white dot
- * - Focus/Hover: --Button for highlights
- */
-
-/* Base MUI Radio Root - Min Target Area */
-#dds .MuiRadio-root {
+/* CSS Variables - Based on your design system */
+:root {
+    --Minimum-Target: 44px;
+    --Sizing-One-and-Half: 12px;
+    --Sizing-2: 16px;
+    --Sizing-3: 24px;
+    --Sizing-Half: 4px;
+    --Sizing-1: 8px;
+    --Border-Thick: 2px;
+    --On-Quiet: #6e7171;
+    --On-Color: #1976d2;
+    --Button: #1976d2;
+  }
+  
+  /* Base Radio Wrapper - Container with minimum target size */
+  .radio-wrapper {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
     min-width: var(--Minimum-Target);
     min-height: var(--Minimum-Target);
-    display: inline-flex;
+    justify-content: flex-start;
+  }
+  
+  .radio-wrapper.disabled {
+    cursor: not-allowed;
+    opacity: 0.38;
+  }
+  
+  /* Hidden Input */
+  .radio-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* Radio Control Container */
+  .radio-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  
+  /* Radio Indicator (Outer Circle) */
+  .radio-indicator {
+    border-radius: 50%;
+    border: var(--Border-Thick) solid var(--On-Quiet);
+    display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: 0;
-    margin: 0;
-    border-radius: 0px;
-    transition: all var(--animation-speed) ease;
-    cursor: pointer;
-  }
-  
-  /* Hide default MUI elements */
-  #dds .MuiRadio-root .MuiSvgIcon-root {
-    display: none;
-  }
-  
-  /* Visual Radio Circle using ::before */
-  #dds .MuiRadio-root::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%; /* Circular for radio buttons */
-    border: var(--Border-Thick) solid var(--Border);
-    background-color: transparent;
-    transition: all var(--animation-speed) ease;
     box-sizing: border-box;
+    background-color: transparent;
   }
   
-  /* Standard Size */
-  #dds .MuiRadio-root.standard::before {
+  /* Radio Dot (Inner Circle) - Only visible when selected */
+  .radio-dot {
+    border-radius: 50%;
+    background-color: var(--Button);
+    transform: scale(0);
+    position: absolute;
+  }
+  
+  /* Radio Label */
+  .radio-label {
+    margin-left: 8px;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.4;
+  }
+  
+  /* Size Variants */
+  .size-small .radio-indicator {
+    width: var(--Sizing-One-and-Half);
+    height: var(--Sizing-One-and-Half);
+  }
+  
+  .size-small .radio-dot {
+    width: var(--Sizing-Half);
+    height: var(--Sizing-Half);
+  }
+  
+  .size-small .radio-label {
+    font-size: 12px;
+  }
+  
+  .size-medium .radio-indicator {
     width: var(--Sizing-2);
     height: var(--Sizing-2);
   }
   
-  /* Large Size */
-  #dds .MuiRadio-root.large::before {
+  .size-medium .radio-dot {
+    width: var(--Sizing-Half);
+    height: var(--Sizing-Half);
+  }
+  
+  .size-large .radio-indicator {
     width: var(--Sizing-3);
     height: var(--Sizing-3);
   }
   
-  /* Checked State - Border only, dot comes from ::after */
-  #dds .MuiRadio-root.Mui-checked::before {
-    border-color: var(--Button);
+  .size-large .radio-dot {
+    width: var(--Sizing-1);
+    height: var(--Sizing-1);
   }
   
-  /* Radio Dot using ::after */
-  #dds .MuiRadio-root.Mui-checked::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    background-color: var(--Button);
-    transition: all var(--animation-speed) ease;
+  .size-large .radio-label {
+    font-size: 16px;
   }
   
-  /* Standard Size Dot */
-  #dds .MuiRadio-root.standard.Mui-checked::after {
-    width: calc(var(--Sizing-2) * 0.5);
-    height: calc(var(--Sizing-2) * 0.5);
+  /* State Styles */
+  .hover:not(.disabled) .radio-indicator,
+  .focus:not(.disabled) .radio-indicator {
+    border-color: var(--On-Color);
   }
   
-  /* Large Size Dot */
-  #dds .MuiRadio-root.large.Mui-checked::after {
-    width: calc(var(--Sizing-3) * 0.5);
-    height: calc(var(--Sizing-3) * 0.5);
-  }
-  
-  /* Focus-Visible State */
-  #dds .MuiRadio-root.Mui-focusVisible::before {
-    border-color: var(--Button);
-    outline: 2px solid var(--Button);
-    outline-offset: 2px;
-  }
-  
-  /* Hover States */
-  #dds .MuiRadio-root:hover:not(.Mui-disabled)::before {
-    background-color: var(--Background);
-    border-color: var(--Button);
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
-  }
-  
-  #dds .MuiRadio-root.Mui-checked:hover:not(.Mui-disabled)::before {
-    background-color: var(--Background);
-    border-color: var(--Button);
-  }
-  
-  #dds .MuiRadio-root.Mui-checked:hover:not(.Mui-disabled)::after {
-    background-color: var(--Button);
-  }
-  
-  /* Disabled State */
-  #dds .MuiRadio-root.Mui-disabled {
-    opacity: 0.38;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-  
-  #dds .MuiRadio-root.Mui-disabled:hover {
-    background-color: transparent;
-  }
-  
-  #dds .MuiRadio-root.Mui-disabled::before {
-    border-color: var(--Border);
-    background-color: transparent;
-  }
-  
-  #dds .MuiRadio-root.Mui-disabled.Mui-checked::before {
-    border-color: #9ca3af;
-  }
-  
-  #dds .MuiRadio-root.Mui-disabled.Mui-checked::after {
-    background-color: #9ca3af;
-  }
-  
-  /* Radio Group for form layouts */
-  .radio-group {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .radio-group.horizontal {
-    flex-direction: row;
-    gap: 2rem;
-  }
-  
-  .radio-label {
-    display: flex;
-    align-items: center;
-    gap: var(--Sizing-1);
-    cursor: pointer;
-    padding: var(--Sizing-1);
-    border-radius: var(--Sizing-1);
-    transition: background-color var(--animation-speed) ease;
-    border: 1px solid transparent;
-  }
-  
-  .radio-label:hover {
-    background-color: var(--Surface-Dim);
-    border-color: var(--Transparent);
-  }
-  
-  .radio-label:focus-within {
-    background-color: var(--Surface-Dim);
-    border-color: var(--Button);
-  }
-  
-  .radio-label span {
+  .hover:not(.disabled) .radio-label,
+  .focus:not(.disabled) .radio-label,
+  .focus-visible:not(.disabled) .radio-label {
     color: var(--On-Color);
-    user-select: none;
   }
   
-  /* Disabled label styling */
-  .radio-label[aria-disabled="true"] {
-    cursor: not-allowed;
-    opacity: 0.6;
+  .focus-visible:not(.disabled) .radio-indicator {
+    border-color: var(--On-Color);
+    outline: var(--Border-Thick) solid var(--Button);
+    outline-offset: var(--Border-Thick);
   }
   
-  .radio-label[aria-disabled="true"]:hover {
-    background-color: transparent;
-    border-color: transparent;
+  /* Selected State */
+  .selected .radio-dot {
+    transform: scale(1);
   }
   
-  .radio-label[aria-disabled="true"] span {
-    color: #9ca3af;
+  .selected .radio-indicator {
+    border-color: var(--Button) !important;
   }
   
-  /* Special demo classes for forced states */
-  #dds .forced-hover.MuiRadio-root {
-    background-color: rgba(59, 130, 246, 0.04);
+  /* Animations */
+  .animated .radio-indicator {
+    transition: border-color 0.2s ease-in-out, outline 0.2s ease-in-out;
   }
   
-  #dds .forced-hover.MuiRadio-root::before {
-    border-color: var(--Button);
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
-  }
-  
-  #dds .forced-focus.MuiRadio-root::before {
-    border-color: var(--Button);
-  }
-  
-  #dds .forced-focus-visible.MuiRadio-root {
-    outline: 2px solid var(--Button);
-    outline-offset: 2px;
-  }
-  
-  #dds .forced-focus-visible.MuiRadio-root::before {
-    border-color: var(--Button);
-  }
-  
-  /* Print Styles */
-  @media print {
-    #dds .MuiRadio-root {
-      background: #fff !important;
-    }
-    
-    #dds .MuiRadio-root::before {
-      background: transparent !important;
-      border: 2px solid #000 !important;
-    }
-    
-    #dds .MuiRadio-root.Mui-checked::before {
-      border-color: #000 !important;
-    }
-    
-    #dds .MuiRadio-root.Mui-checked::after {
-      background-color: #000 !important;
-    }
-    
-    .radio-label {
-      background: none !important;
-      border: none !important;
-    }
+  .animated .radio-dot {
+    transition: transform 0.2s ease-in-out;
   }

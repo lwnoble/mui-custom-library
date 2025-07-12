@@ -1,86 +1,187 @@
-/* Icon.css */
+ /* Icon Colors */
+ :root {
+    --fa-primary-color: var(--On-Color);
+    --fa-secondary-color: var(--On-Color);
+    --fa-secondary-opacity: .6; 
+ }
+   /* Default variant */
+   [data-icon],
+   [data-icon="default"] {
+     --fa-primary-color: var(--On-Color);
+     --fa-secondary-color: var(--Button);
+   }
+   
+   /* Quiet variant */
+   [data-icon="quiet"] {
+     --fa-primary-color: var(--On-Quiet);
+     --fa-secondary-color: var(--Button);
+   }
+ 
+   /* Error variant */
+   [data-icon="error"] {
+       --fa-primary-color: var(--Icon-Error);
+       --fa-secondary-color: var(--On-Color);
+   }
 
+   /* Warning variant */
+   [data-icon="warning"] {
+       --fa-primary-color: var(--Icon-Warning);
+       --fa-secondary-color: var(--On-Color);
+   }
+   
+   /* Success variant */
+   [data-icon="success"] {
+       --fa-primary-color: var(--Icon-Success);
+       --fa-secondary-color: var(--On-Color);
+   } 
+   
+   /* Info variant */
+   [data-icon="info"] {
+       --fa-primary-color: var(--Icon-Info);
+       --fa-secondary-color: var(--On-Color);
+   }
+   
+   /* Primary variant */
+   [data-icon="primary"] {
+       --fa-primary-color: var(--Icon-Primary);
+       --fa-secondary-color: var(--On-Color);
+   }
+   
+   /* Secondary variant */
+   [data-icon="secondary"] {
+       --fa-primary-color: var(--Icon-Secondary);
+       --fa-secondary-color: var(--Icon-Secondary);
+   }
+   
+   /* Tertiary variant */
+   [data-icon="tertiary"] {
+       --fa-primary-color: var(--Icon-Tertiary);
+       --fa-secondary-color: var(--Icon-Tertiary);
+   }
+   
+   /* On-button variant */
+   [data-icon="on-button"] {
+       --fa-primary-color: var(--Icon-On-Button);
+       --fa-secondary-color: var(--Icon-On-Button);
+   }
+
+/* Base icon styles */
 .icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--fa-primary-color, var(--On-Color, #333));
-    transition: color 0.2s ease;
+    border-radius: 50%;
+    background: transparent;
+    position: relative;
+    flex-shrink: 0;
+
+  }
+
+  /* Size variants */
+  .icon--extra-small,
+  .icon--xs {
+    width: var(--Sizing-2, 8px);
+    height: var(--Sizing-2, 8px);
   }
   
-  /* Icon sizes using design system spacing tokens */
-  .icon--xs {
-    width: var(--Sizing-2);
-    height: var(--Sizing-2);
+  .icon--extra-small i::before,
+  .icon--xs i::before {
+    font-size: calc(var(--Sizing-2) * .8);
   }
   
   .icon--small {
-    width: var(--Sizing-3);
-    height: var(--Sizing-3);
+    width: var(--Sizing-3, 12px);
+    height: var(--Sizing-3, 12px);
+  }
+  
+  .icon--small i::before {
+    font-size: calc(var(--Sizing-3) * .8);
   }
   
   .icon--medium {
-    width: var(--Sizing-4);
-    height: var(--Sizing-4);
+    width: var(--Sizing-4, 16px);
+    height: var(--Sizing-4, 16px);
+  }
+  
+  .icon--medium i::before {
+    font-size: calc(var(--Sizing-4) * .8);
   }
   
   .icon--large {
-    width: var(--Sizing-6);
-    height: var(--Sizing-6);
+    width: var(--Sizing-5, 20px);
+    height: var(--Sizing-5, 20px);
   }
   
+  .icon--large i::before {
+    font-size: calc(var(--Sizing-5) * .8);
+  }
+  
+  .icon--extra-large,
   .icon--xl {
-    width: var(--Sizing-7);
-    height: var(--Sizing-7);
+    width: var(--Sizing-6, 24px);
+    height: var(--Sizing-6, 24px);
   }
   
+  .icon--extra-large i::before,
+  .icon--xl i::before {
+    font-size: calc(var(--Sizing-6) * .8);
+  }
+  
+  .icon--extra-extra-large,
   .icon--xxl {
-    width: var(--Sizing-10);
-    height: var(--Sizing-10);
+    width: var(--Sizing-7, 28px);
+    height: var(--Sizing-7, 28px);
   }
   
-  /* Icon with background - always use fixed sizing */
-  .icon--with-background {
-    width: calc(var(--Sizing-4) * 0.8) !important;
-    height: calc(var(--Sizing-4) * 0.8) !important;
+  .icon--extra-extra-large i::before,
+  .icon--xxl i::before {
+    font-size: calc(var(--Sizing-7) * .8);
+  }
+
+  .icon--quiet {
+    background: transparent;
   }
   
-  /* Background container styles - always fixed size */
-  .icon-background {
-    display: inline-flex;
+  .icon--error {
+    background: var(--Icon-BG);
+  }
+  
+  .icon--warning {
+    background: var(--Icon-BG);
+  }
+  
+  
+  .icon--success {
+    background: var(--Icon-BG);
+  }
+  
+  .icon--info {
+    background: var(--Icon-BG);
+  }
+  
+  .icon--primary {
+    background: var(--Icon-BG);
+  }
+  
+  .icon--secondary {
+    background: var(--Icon-BG);
+  }
+  
+  .icon--tertiary {
+    background: var(--Icon-BG);
+  }
+  
+  .icon--on-button {
+    background: transparent;
+  }
+  
+   
+  .icon i {
+    line-height: 1;
+    display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--Icon-BG, #f5f5f5);
-    border-radius: 100%;
-    transition: background-color 0.2s ease;
-    width: var(--Sizing-4) !important;
-    height: var(--Sizing-4) !important;
+    color:var(--fa-primary-color);
   }
   
-  /* Interactive states for clickable icons */
-  .icon--interactive {
-    cursor: pointer;
-  }
-  
-  .icon--interactive:hover {
-    opacity: 0.8;
-  }
-  
-  .icon--interactive:active {
-    opacity: 0.6;
-  }
-  
-  /* Interactive states for background icons */
-  .icon-background--interactive {
-    cursor: pointer;
-  }
-  
-  .icon-background--interactive:hover {
-    opacity: 0.9;
-    transform: scale(1.05);
-  }
-  
-  .icon-background--interactive:active {
-    opacity: 0.8;
-    transform: scale(0.95);
-  }
+   

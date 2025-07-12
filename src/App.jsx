@@ -4,14 +4,14 @@ import LeftNavigation from './components/LeftNavigation/LeftNavigation.jsx';
 import Button from './components/Button/Button.jsx';
 import ButtonDemo from './ComponentDemo/Button/ButtonDemo.jsx';
 import CardDemo from './ComponentDemo/Card/CardDemo.jsx';
-//import IconDemo from './ComponentDemo/Icon/IconDemo.jsx';
+import IconDemo from './ComponentDemo/Icon/IconDemo.jsx';
 import InputDemo from './ComponentDemo/Input/InputDemo.jsx';
 import CheckboxDemo from './ComponentDemo/Checkbox/CheckboxDemo.jsx';
 import RadioDemo from './ComponentDemo/Radio/RadioDemo.jsx';
 import SwitchDemo from './ComponentDemo/Switch/SwitchDemo.jsx';
 import SliderDemo from './ComponentDemo/Slider/SliderDemo.jsx';
 // import FormElementDemo from './ComponentDemo/FormElement/FormElementsDemo.jsx';
-//import MenuItemDemo from './ComponentDemo/MenuItem/MenuItemDemo';
+import MenuDemo from './ComponentDemo/MenuItem/MenuItemDemo';
 import StateMessageDemo from './ComponentDemo/StateMessage/StateMessageDemo.jsx';
 import AvatarDemo from './ComponentDemo/Avatar/AvatarDemo.jsx';
 import BadgeDemo from './ComponentDemo/Badge/BadgeDemo.jsx';
@@ -48,6 +48,7 @@ function App() {
     background: 'default',
     surface: 'surface',
     spacing: 'default',
+    reader: 'default',
   });
   
   // Load stored preferences or initialize with system defaults
@@ -102,23 +103,10 @@ function App() {
   useEffect(() => {
     console.log('Applying theme settings:', themeSettings);
     
+    // Load theme - this handles all data attributes and CSS loading
     loadTheme(themeSettings);
     
-    const spacingMap = {
-      'default': '',
-      'standard': 'standard',
-      'expanded': 'expanded',
-      'reduced': 'reduced'
-    };
-    
-    const dataSpacingValue = spacingMap[themeSettings.spacing] || '';
-    
-    if (dataSpacingValue === '') {
-      document.documentElement.removeAttribute('data-spacing');
-    } else {
-      document.documentElement.setAttribute('data-spacing', dataSpacingValue);
-    }
-    
+    // Save to localStorage
     try {
       localStorage.setItem('userThemePreferences', JSON.stringify(themeSettings));
     } catch (e) {
@@ -131,13 +119,9 @@ function App() {
     setThemeSettings(prev => {
       const updatedSettings = { ...prev, ...newSettings };
       
+      // Handle special dataSpacing case if present
       if (newSettings.dataSpacing !== undefined) {
-        if (newSettings.dataSpacing === '') {
-          document.documentElement.removeAttribute('data-spacing');
-        } else {
-          document.documentElement.setAttribute('data-spacing', newSettings.dataSpacing);
-        }
-        
+        // Remove dataSpacing from the settings object before storing
         const { dataSpacing, ...settingsToStore } = updatedSettings;
         return settingsToStore;
       }
@@ -153,20 +137,8 @@ function App() {
     console.log('Settings panel should now be open');
   };
 
-  // Generate data attributes for background and surface
-  const getMainContentDataAttributes = () => {
-    const attributes = {};
-    
-    if (themeSettings.background && themeSettings.background !== 'default') {
-      attributes['data-background'] = themeSettings.background;
-    }
-    
-    if (themeSettings.surface) {
-      attributes['data-surface'] = themeSettings.surface;
-    }
-    
-    return attributes;
-  };
+  // Generate data attributes for main content - removed since loadTheme handles this
+  // The loadTheme function now updates both html element and main-content-container
 
   // Render the active component
   const renderActiveComponent = () => {
@@ -179,6 +151,10 @@ function App() {
         return <ButtonDemo />;
       case 'card':
         return <CardDemo />;
+      case 'icon':
+        return <IconDemo />;
+      case 'menu-item':
+          return <MenuDemo />;  
       case 'typography':
         return <TypographyDemo />;
       case 'checkbox':
@@ -215,11 +191,8 @@ function App() {
           onSettings={handleSettingsClick}
         />
         
-        {/* Main Content Container */}
-        <div 
-          className="main-content-container" 
-          {...getMainContentDataAttributes()}
-        >
+        {/* Main Content Container - data attributes handled by loadTheme */}
+        <div className="main-content-container">
           {/* Settings Toggle Button */}
           <Button
             type="icon-only"

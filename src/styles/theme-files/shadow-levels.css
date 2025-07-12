@@ -1,5 +1,5 @@
 /* Box Shadow Variables */
-:root {
+:root, ::after, ::before {
   --Box-Shadow-0: none;
   --Box-Shadow-L-1: var(--Shadows-Level-L-1-Drop-Shadows-Horizontal) var(--Shadows-Level-L-1-Drop-Shadows-Vertical) var(--Shadows-Level-L-1-Drop-Shadows-Blur) var(--Shadows-Level-L-1-Drop-Shadows-Spread) var(--Shadows-Level-L-1-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-L-1-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-L-1-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-L-1-Drop-Shadows-Blur) var(--Inner-Shadows-Level-L-1-Drop-Shadows-Spread) var(--Inner-Shadows-Level-L-1-Drop-Shadows-Color);
   --Box-Shadow-L-2: var(--Shadows-Level-L-2-Drop-Shadows-Horizontal) var(--Shadows-Level-L-2-Drop-Shadows-Vertical) var(--Shadows-Level-L-2-Drop-Shadows-Blur) var(--Shadows-Level-L-2-Drop-Shadows-Spread) var(--Shadows-Level-L-2-Drop-Shadows-Color), inset var(--Inner-Shadows-Level-L-2-Drop-Shadows-Horizontal) var(--Inner-Shadows-Level-L-2-Drop-Shadows-Vertical) var(--Inner-Shadows-Level-L-2-Drop-Shadows-Blur) var(--Inner-Shadows-Level-L-2-Drop-Shadows-Spread) var(--Inner-Shadows-Level-L-2-Drop-Shadows-Color);

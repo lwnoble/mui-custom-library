@@ -1,5 +1,4 @@
 body {
-    font-family: var(--Typography-Font-Families-Standard);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -11,6 +10,12 @@ div, header, footer {
 
 .quiet { 
     color: var(--On-Quiet);
+}
+
+.disabled {
+    cursor: not-allowed;
+    opacity: 0.38;
+    pointer-events: none;
 }
 
 h1 p  {

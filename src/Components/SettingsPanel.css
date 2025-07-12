@@ -7,17 +7,32 @@
   right: 0;
   width: 320px;
   height: 100vh;
-  background: var(--Surface-Container);
   border-left: 1px solid var(--Border);
   box-shadow: var(--Box-Shadow-L3);
   overflow-y: auto;
   z-index: 1100;
   transform: translateX(100%);
   transition: transform var(--Animation-Speed, 0.3s) ease-in-out;
+  background: var(--Background);
+  padding: var(--Sizing-3);
 }
+
 
 .settings-panel.open {
   transform: translateX(0);
+}
+
+.close-button {
+  position: absolute;
+  top: var(--Sizing-5);
+  right: var(--Sizing-4);
+}
+
+.toggle-group {
+  display: flex;
+  align-items: center;
+  gap: var(--Spacing-2, 8px);
+  margin-top: var(--Sizing-1);
 }
 
 /* Settings panel header */
@@ -40,7 +55,14 @@
 
 /* Settings sections */
 .settings-section {
-  margin-bottom: var(--Spacing-6, 24px);
+  margin-bottom: var(--Spacing-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--Sizing-1);
+}
+
+.settings-section h3 {
+  border-bottom: 1px solid var(--Border);
 }
 
 .settings-section:last-child {

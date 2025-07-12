@@ -1,6 +1,5 @@
 :root {
-  --Minimum-Target: min(var(--Cognitive-Target), var(--Platform-Target), var(--Mode-Target));
-  --Min-Target: min(var(--Desktop-Target), var(--Platform-Target), var(--Cognitive-Target));
+  --Minimum-Target: max(var(--Cognitive-Target), var(--Platform-Target), var(--Mode-Target));
 
   --Hotlinks-Minimum-Hotlink-Area: calc(var(--Minimum-Target) - var(--Sizing-1));
   --ListItem-Minimum-List-Item: calc(var(--Minimum-Target) - var(--Sizing-1));
@@ -8,17 +7,17 @@
   --Border-Standard: 1px;
   --Border-Thick: 2px;
 
-  --Height: var(--Sizing-4);
-  --Minimum-Width: var(--Sizing-8);
-  --Border-Radius: var(--Sizing-1);
-  --Focus-Radius: var(--Focus-1);
-  --Horizontal-Padding: var(--Sizing-1);
-  --Horizontal-Padding-With-Icon: var(--Sizing-Half);
-  --Small-Height: var(--Sizing-3);
-  --Small-Horizontal-Padding: var(--Sizing-1);
-  --Small-Horizontal-Padding-With-Icon: var(--Sizing-Half);
-  --Border: var(--Border-Standard);
-  --Overlay-Radius: var(--HoverOverlay-Overlay-1);
+  --Button-Height: var(--Platform-Button-Height);
+  --Button-Minimum-Width: var(--Sizing-8);
+  --Button-Border-Radius: var(--Sizing-Half);
+  --Button-Focus-Radius: var(--Focus-Half);
+  --Button-Horizontal-Padding: var(--Sizing-1);
+  --Button-Horizontal-Padding-With-Icon: var(--Sizing-Half);
+  --Button-Small-Height: var(--Sizing-3);
+  --Button-Small-Horizontal-Padding: var(--Sizing-1);
+  --Button-Small-Horizontal-Padding-With-Icon: var(--Sizing-Half);
+  --Button-Border: var(--Border-Standard);
+  --Button-Overlay-Radius: var(--HoverOverlay-Overlay-Half);
 
   --Focus-1: 11px;
   --Focus-2: 19px;
@@ -34,18 +33,18 @@
   --Focus-10: 83px;
   --Focus-One-And-Half: 15px;
 
-  --Padding: var(--Sizing-4);
-  --Border-Radius: var(--Sizing-4);
-  --Focus-Radius: var(--Focus-4);
+  --Card-Padding: var(--Sizing-2);
+  --Card-Border-Radius: var(--Sizing-3);
+  --Card-Focus-Radius: var(--Focus-3);
 
-  --Border-Radius: var(--Sizing-2);
-  --Horizontal-Padding: var(--Sizing-2);
-  --Focus-Radius: var(--Focus-2);
+  --Input-Border-Radius: var(--Sizing-Half);
+  --Input-Horizontal-Padding: var(--Sizing-2);
+  --Input-Focus-Radius: var(--Focus-Half);
 
-  --Border-Radius: var(--Sizing-8);
-  --Focus-Radius: var(--Focus-8);
+  --Handle-Border-Radius: var(--Sizing-8);
+  --Handle-Focus-Radius: var(--Focus-8);
 
-  --Small-Avatar-Border: var(--Border-Standard);
+  --Avatars-Small-Avatar-Border: var(--Default-Border-Standard);
   --Avatars-Large-Avatar-Border: var(--Sizing-Half);
 
   --Breakpoints-Medium: 768px;
@@ -55,11 +54,11 @@
   --Breakpoints-Extra-Small: 320px;
   --Breakpoints-Extra-Extra-Large: 1440px;
 
-  --Border-Radius: var(--Sizing-8);
-  --Padding: var(--Sizing-4);
+  --Modal-Border-Radius: var(--Sizing-4);
+  --Modal-Padding: var(--Sizing-3);
 
-  --LeftNav-Width: var(--Sizing-30);
-  --Navigation-Navigation-Rail: var(--Sizing-6);
+  --Navigation-LeftNav-Width: var(--Sizing-30);
+  --Navigation-Navigation-Rail: var(--Sizing-8);
   --Navigation-TopNav-Height: var(--Sizing-6);
 
   --StatusBar-BarHeight: 5px;

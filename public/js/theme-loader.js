@@ -151,7 +151,7 @@ class ThemeLoader {
     
     // These attributes are needed for certain CSS variables
     document.documentElement.setAttribute('data-background', '');
-    document.documentElement.setAttribute('data-surfaceContainer', '');
+    document.documentElement.setAttribute('data-surface', '');
     document.documentElement.setAttribute('data-sizing-spacing', '');
     document.documentElement.setAttribute('data-shadow', '');
 
