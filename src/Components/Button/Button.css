@@ -61,6 +61,12 @@
   border: var(--Border-Thick) solid var(--Button);
 }
 
+/* full width */
+.button--full-width .button-content{
+  width: 100%;
+  display: block; /* Optional: ensures proper full-width behavior */
+}
+
 /* Small solid button - main button transparent, styling on button-content */
 .button--solid.button--small {
   background: transparent;
@@ -73,7 +79,7 @@
   border: var(--Border-Thick) solid var(--Button);
 }
 
-.button--solid .icon--small i::before {
+.button--solid .icon i, .button--solid .icon i::before {
  color: var(--On-Button)
 } 
 
@@ -310,11 +316,6 @@
   color: var(--On-Button)
 } 
 
-/* Full width variant */
-.button--full-width {
-  width: 100%;
-  justify-content: center;
-}
 .button--icon-only {
   padding: 0;
   min-width: var(--Minimum-Target, 44px);

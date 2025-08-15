@@ -20,6 +20,9 @@ import "./Button.css";
  * 
  * // Text button with underline
  * <Button variant="text">Read more</Button>
+ * 
+ * // Full width button
+ * <Button fullWidth>Full Width Button</Button>
  */
 export const Button = ({
   children,
@@ -29,6 +32,7 @@ export const Button = ({
   leftIcon,
   rightIcon,
   disabled = false,
+  fullWidth = false,
   className = "",
   onClick,
   ...props
@@ -41,6 +45,7 @@ export const Button = ({
     `button--${size}`,
     `button--${type}`,
     disabled && "button--disabled",
+    fullWidth && "button--full-width",
     className
   ].filter(Boolean).join(" ");
 
@@ -152,6 +157,8 @@ Button.propTypes = {
   rightIcon: PropTypes.string,
   /** Whether button is disabled */
   disabled: PropTypes.bool,
+  /** Whether button should take full width of container */
+  fullWidth: PropTypes.bool,
   /** Additional CSS classes */
   className: PropTypes.string,
   /** Click handler */

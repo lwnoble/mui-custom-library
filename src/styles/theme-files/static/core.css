@@ -188,3 +188,19 @@
 p {
   margin-bottom: var(--Min-Paragraph-Spacing);
 }
+
+.hug-element {
+  /* No fixed width/height */
+  /* No flex-grow: 1; */
+  flex-shrink: 1; /* Allows shrinking if needed */
+  padding: 10px; /* Example padding */
+}
+
+.fill-element {
+  flex-grow: 1; /* Fills available space */
+  /* Optional: min-width: 0; or min-height: 0; to prevent overflow */
+}
+
+.clip {
+  overflow: hidden;
+}

@@ -1,7 +1,7 @@
 /* Desktop platform specific typography */
-:root, ::after, ::before  {
-  --Platform-Font-Families-Standard: "SF Pro";
-  --Platform-Font-Families-Decorative: "SF Pro";
+:root {
+  --Platform-Font-Families-Standard: "Roboto";
+  --Platform-Font-Families-Decorative: "Roboto";
   --Android: none;
   --IOS: none;
   --Desktop: block;

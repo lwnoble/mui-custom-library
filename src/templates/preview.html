@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figma Component Preview</title>
+    
+    <!-- Load theme CSS files based on detected settings -->
+    <link href="./styles/theme-files/static/core.css" rel="stylesheet">
+    <link href="./styles/theme-files/base.css" rel="stylesheet">
+    <link href="./styles/theme-files/system.css" rel="stylesheet">
+    <link href="./styles/theme-files/mode-aa-light.css" rel="stylesheet">
+    <link href="./styles/theme-files/platform-desktop.css" rel="stylesheet">
+    <link href="./styles/theme-files/cognitive-reduced.css" rel="stylesheet">
+    <link href="./styles/theme-files/sizing-spacing.css" rel="stylesheet">
+    <link href="./styles/theme-files/surface-containers.css" rel="stylesheet">
+    <link href="./styles/theme-files/shadow-levels.css" rel="stylesheet">
+    <link href="./styles/theme-files/static/typography.css" rel="stylesheet">
+    <link href="./styles/theme-files/static/theme.css" rel="stylesheet">
+    
+    <style>
+        .loading-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            flex-direction: column;
+            gap: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #18a0fb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        .error-container h1 {
+            color: #dc2626;
+            margin-bottom: 16px;
+        }
+        
+        .error-container p {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+        
+        .retry-button {
+            background: #18a0fb;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .retry-button:hover {
+            background: #0f7bd6;
+        }
+        
+        /* Development indicator */
+        .dev-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #10b981;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 500;
+            z-index: 1000;
+            font-family: monospace;
+        }
+        
+        .dev-indicator.live {
+            background: #10b981;
+        }
+        
+        .theme-info-display {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-family: monospace;
+            z-index: 1000;
+            line-height: 1.4;
+        }
+        
+        /* Basic preview styling if CSS files fail to load */
+        .preview-container {
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.5;
+        }
+        
+        .preview-header {
+            padding: 24px;
+            text-align: center;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        
+        .preview-header h1 {
+            margin: 0 0 12px 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .theme-info {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            font-size: 14px;
+            color: #666;
+            flex-wrap: wrap;
+        }
+        
+        .preview-content {
+            padding: 32px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .component-section {
+            margin-bottom: 48px;
+            padding: 24px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+        }
+        
+        .component-section h3 {
+            margin: 0 0 16px 0;
+            font-size: 18px;
+            font-weight: 600;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        
+        .component-preview {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #e5e5e5;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .preview-footer {
+            padding: 16px 24px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            border-top: 1px solid #e5e5e5;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .theme-info {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .preview-content {
+                padding: 16px;
+            }
+            
+            .component-section {
+                padding: 16px;
+                margin-bottom: 24px;
+            }
+            
+            .theme-info-display {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin: 10px;
+                background: rgba(0, 0, 0, 0.9);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dev-indicator">🌐 Live Preview</div>
+    
+    <!-- Display detected theme settings -->
+    <div class="theme-info-display">
+        Mode: aa-light<br>
+        Platform: desktop<br>
+        Cognitive: reduced<br>
+        Background: Default<br>
+        Surface: Surface
+    </div>
+    
+    <!-- Loading state -->
+    <div class="loading-container" id="loading-container">
+        <div class="loading-spinner"></div>
+        <div>Loading Figma components...</div>
+        <div style="font-size: 12px; color: #666;">
+            Theme: aa-light | Platform: desktop
+        </div>
+    </div>
+    
+    <!-- Error state (hidden by default) -->
+    <div class="error-container" id="error-container" style="display: none;">
+        <h1>⚠️ Preview Error</h1>
+        <p>There was an issue loading the component preview. This could be due to:</p>
+        <ul style="text-align: left; max-width: 400px; margin: 0 auto 24px;">
+            <li>Components are still being generated</li>
+            <li>CSS files are not yet available</li>
+            <li>GitHub Pages is still building</li>
+            <li>JavaScript bundle failed to load</li>
+        </ul>
+        <button class="retry-button" onclick="window.location.reload()">
+            🔄 Retry
+        </button>
+        <div style="margin-top: 16px; font-size: 12px; color: #666;">
+            Last updated: <span id="last-updated">Unknown</span>
+        </div>
+    </div>
+    
+    <!-- Main content container -->
+    <div id="root"></div>
+    
+    <!-- Scripts -->
+    <script>
+        // Apply theme attributes to document root
+        document.documentElement.setAttribute('data-theme-mode', 'aa-light');
+        document.documentElement.setAttribute('data-theme-platform', 'desktop');
+        document.documentElement.setAttribute('data-theme-cognitive', 'reduced');
+        document.documentElement.setAttribute('data-background', 'Default');
+        document.documentElement.setAttribute('data-surface', 'Surface');
+        
+        // Development/production detection
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const isDev = window.location.search.includes('dev=true');
+        const devIndicator = document.querySelector('.dev-indicator');
+        
+        if (isLocal || isDev) {
+            devIndicator.textContent = '🔧 Development';
+            devIndicator.style.background = '#f59e0b';
+        } else {
+            devIndicator.textContent = '🌐 Live Preview';
+            devIndicator.style.background = '#10b981';
+        }
+        
+        // Error handling
+        window.addEventListener('error', function(event) {
+            console.error('Preview error:', event.error);
+            showError('JavaScript error occurred. Check console for details.');
+        });
+        
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('Unhandled promise rejection:', event.reason);
+            showError('Component loading failed. Please try refreshing.');
+        });
+        
+        function showError(message) {
+            document.getElementById('loading-container').style.display = 'none';
+            document.getElementById('error-container').style.display = 'block';
+            
+            const errorContainer = document.getElementById('error-container');
+            const errorMessage = errorContainer.querySelector('p');
+            if (message) {
+                errorMessage.textContent = message;
+            }
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading-container').style.display = 'none';
+        }
+        
+        // Set last updated time
+        const lastUpdatedElement = document.getElementById('last-updated');
+        if (lastUpdatedElement) {
+            lastUpdatedElement.textContent = new Date().toLocaleString();
+        }
+        
+        // Auto-hide loading after timeout
+        setTimeout(() => {
+            if (document.getElementById('loading-container').style.display !== 'none') {
+                showError('Preview took too long to load. The components may not be ready yet.');
+            }
+        }, 15000); // 15 second timeout
+        
+        // Check if React and preview are loaded
+        const checkReactLoaded = setInterval(() => {
+            if (window.React && document.getElementById('root').children.length > 0) {
+                hideLoading();
+                clearInterval(checkReactLoaded);
+            }
+        }, 100);
+        
+        // Page visibility API to handle tab switching
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                // Page became visible, check for updates
+                const lastCheck = localStorage.getItem('figma-preview-last-check');
+                const now = Date.now();
+                
+                if (!lastCheck || (now - parseInt(lastCheck)) > 60000) { // Check every minute
+                    localStorage.setItem('figma-preview-last-check', now.toString());
+                    // Could implement a check for updates here
+                }
+            }
+        });
+        
+        // Service worker registration for offline support (optional)
+        if ('serviceWorker' in navigator && !isLocal) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(function(err) {
+                        console.log('ServiceWorker registration failed');
+                    });
+            });
+        }
+        
+        // Theme detection and application
+        function detectAndApplyTheme() {
+            const hour = new Date().getHours();
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const savedTheme = localStorage.getItem('figma-preview-theme');
+            
+            // Don't override theme attributes set by the application
+            // This is handled by the React app and Figma theme detection
+            
+            // Listen for theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                if (!localStorage.getItem('figma-preview-theme')) {
+                    console.log('System theme changed to:', e.matches ? 'dark' : 'light');
+                }
+            });
+        }
+        
+        // Apply theme detection
+        detectAndApplyTheme();
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            // Ctrl/Cmd + R for refresh
+            if ((event.ctrlKey || event.metaKey) && event.key === 'r') {
+                event.preventDefault();
+                window.location.reload();
+            }
+            
+            // Ctrl/Cmd + D for debug info
+            if ((event.ctrlKey || event.metaKey) && event.key === 'd') {
+                event.preventDefault();
+                console.log('Theme Debug Info:', {
+                    mode: document.documentElement.getAttribute('data-theme-mode'),
+                    platform: document.documentElement.getAttribute('data-theme-platform'),
+                    cognitive: document.documentElement.getAttribute('data-theme-cognitive'),
+                    background: document.documentElement.getAttribute('data-background'),
+                    surface: document.documentElement.getAttribute('data-surface'),
+                    cssFiles: Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(link => link.href)
+                });
+            }
+            
+            // Escape to toggle theme info display
+            if (event.key === 'Escape') {
+                const themeInfo = document.querySelector('.theme-info-display');
+                if (themeInfo) {
+                    themeInfo.style.display = themeInfo.style.display === 'none' ? 'block' : 'none';
+                }
+            }
+        });
+        
+        // CSS loading verification
+        function verifyCSSLoading() {
+            const links = document.querySelectorAll('link[rel="stylesheet"]');
+            const loadPromises = Array.from(links).map(link => {
+                return new Promise((resolve, reject) => {
+                    if (link.sheet) {
+                        resolve(link.href);
+                    } else {
+                        link.addEventListener('load', () => resolve(link.href));
+                        link.addEventListener('error', () => reject(link.href));
+                    }
+                });
+            });
+            
+            Promise.allSettled(loadPromises).then(results => {
+                const failed = results.filter(result => result.status === 'rejected');
+                if (failed.length > 0) {
+                    console.warn('Some CSS files failed to load:', failed.map(f => f.reason));
+                } else {
+                    console.log('All CSS files loaded successfully');
+                }
+            });
+        }
+        
+        // Verify CSS loading after DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', verifyCSSLoading);
+        } else {
+            verifyCSSLoading();
+        }
+    </script>
+    
+    <!-- Load the generated preview component -->
+    <script src="./preview.js"></script>
+</body>
+</html>

@@ -127,26 +127,6 @@ function SettingsPanel({ isOpen, onClose, settings, onSettingsChange }) {
           <h3>Device Settings</h3>
           
           <div className="setting-group">
-            <label>WCAG Level</label>
-            <div className="toggle-group">
-              <Button 
-                variant={settings.wcag === 'aa' ? 'solid' : 'outline'}
-                size="small"
-                onClick={() => onSettingsChange({ wcag: 'aa' })}
-              >
-                AA
-              </Button>
-              <Button 
-                variant={settings.wcag === 'aaa' ? 'solid' : 'outline'}
-                size="small"
-                onClick={() => onSettingsChange({ wcag: 'aaa' })}
-              >
-                AAA
-              </Button>
-            </div>
-          </div>
-          
-          <div className="setting-group">
             <label>Color Mode</label>
             <div className="toggle-group">
               <Button 
@@ -247,22 +227,6 @@ function SettingsPanel({ isOpen, onClose, settings, onSettingsChange }) {
                 <option value="standard">Standard</option>
                 <option value="expanded">Expanded</option>
                 <option value="reduced">Reduced</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="setting-group">
-            <label>Reader Mode</label>
-            <div className="select-wrapper">
-              <select 
-                value={settings.reader || 'default'}
-                onChange={(e) => onSettingsChange({ reader: e.target.value })}
-              >
-                {readerOptions.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
               </select>
             </div>
           </div>

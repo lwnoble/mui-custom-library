@@ -1,5 +1,5 @@
 /* AAA-dark mode CSS */
-:root, ::after, ::before {
+:root {
   --Mode-Target: 48px;
   /* AAA-dark mode targets from JSON */
   --Mode-Target: 48px;
@@ -1650,24 +1650,24 @@
 
 /* AAA-dark mode Default chart */
 [charts="Default"] {
-  --Chart-1: #598a84;
-  --Chart-2: #d85640;
-  --Chart-3: #cdbb87;
-  --Chart-4: #a4b4c9;
-  --Chart-5: #b57105;
-  --Chart-6: #5f7694;
-  --Chart-7: #577f3f;
-  --Chart-8: #e49b8e;
+  --Chart-1: #7c7cac;
+  --Chart-2: #df438a;
+  --Chart-3: #aace86;
+  --Chart-4: #ab7607;
+  --Chart-5: #00736a;
+  --Chart-6: #42b5e2;
+  --Chart-7: #fec757;
+  --Chart-8: #b4b4b4;
   --Chart-9: #e1a571;
   --Chart-BG: #121212;
-  --Chart-1-Half: #598a8480;
-  --Chart-2-Half: #d8564080;
-  --Chart-3-Half: #cdbb8780;
-  --Chart-4-Half: #a4b4c980;
-  --Chart-5-Half: #b5710580;
-  --Chart-6-Half: #5f769480;
-  --Chart-7-Half: #577f3f80;
-  --Chart-8-Half: #e49b8e80;
+  --Chart-1-Half: #7c7cac80;
+  --Chart-2-Half: #df438a80;
+  --Chart-3-Half: #aace8680;
+  --Chart-4-Half: #ab760780;
+  --Chart-5-Half: #00736a80;
+  --Chart-6-Half: #42b5e280;
+  --Chart-7-Half: #fec75780;
+  --Chart-8-Half: #b4b4b480;
   --Chart-9-Half: #e1a57180;
   --Chart-10-Half: #ebbbb480;
   --Chart-10: #ebbbb4;

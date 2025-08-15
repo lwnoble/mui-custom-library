@@ -1,0 +1,131 @@
+# .github/workflows/build-preview.yml
+name: Build and Deploy Preview
+
+on:
+  push:
+    paths:
+      - 'src/pages/preview.jsx'
+      - 'src/styles/**'
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: |
+          npm install
+          # Install build tools if not in package.json
+          npm install --save-dev @babel/core @babel/preset-react @babel/preset-env
+          npm install --save-dev webpack webpack-cli html-webpack-plugin babel-loader
+          npm install --save-dev style-loader css-loader
+          
+      - name: Build Preview Component
+        run: |
+          # Create webpack config if it doesn't exist
+          if [ ! -f webpack.preview.config.js ]; then
+            cat > webpack.preview.config.js << 'EOF'
+          const path = require('path');
+          const HtmlWebpackPlugin = require('html-webpack-plugin');
+          
+          module.exports = {
+            mode: 'production',
+            entry: './src/pages/preview.jsx',
+            output: {
+              path: path.resolve(__dirname, 'dist'),
+              filename: 'preview.js',
+              clean: true
+            },
+            module: {
+              rules: [
+                {
+                  test: /\.(js|jsx)$/,
+                  exclude: /node_modules/,
+                  use: {
+                    loader: 'babel-loader',
+                    options: {
+                      presets: [
+                        '@babel/preset-env',
+                        ['@babel/preset-react', { runtime: 'automatic' }]
+                      ]
+                    }
+                  }
+                },
+                {
+                  test: /\.css$/,
+                  use: ['style-loader', 'css-loader']
+                }
+              ]
+            },
+            resolve: {
+              extensions: ['.js', '.jsx']
+            },
+            plugins: [
+              new HtmlWebpackPlugin({
+                template: './src/templates/preview.html',
+                filename: 'preview.html',
+                inject: true
+              })
+            ]
+          };
+          EOF
+          fi
+          
+          # Create HTML template if it doesn't exist
+          mkdir -p src/templates
+          if [ ! -f src/templates/preview.html ]; then
+            cat > src/templates/preview.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Figma Component Preview</title>
+              <style>
+                  body {
+                      margin: 0;
+                      padding: 0;
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                  }
+                  #root {
+                      width: 100%;
+                      min-height: 100vh;
+                  }
+              </style>
+          </head>
+          <body>
+              <div id="root"></div>
+          </body>
+          </html>
+          EOF
+          fi
+          
+          # Build the preview
+          npx webpack --config webpack.preview.config.js
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

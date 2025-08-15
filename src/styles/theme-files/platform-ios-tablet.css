@@ -1,5 +1,5 @@
 /* IOS-Tablet platform specific typography */
-:root, ::after, ::before {
+:root {
   --Platform-Font-Families-Standard: "SF Pro";
   --Platform-Font-Families-Decorative: "SF Pro";
   --Android: none;

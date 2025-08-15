@@ -1,5 +1,9 @@
 /* MenuItem.css - Add these styles to your existing MenuItem.css */
 
+.left-navigation {
+  background: var(--Background);
+}
+
 /* Base menu item styles */
 .menu-item {
     display: flex;
@@ -70,7 +74,7 @@
     
    }
   
-  .menu-item--clickable:focus:not(:focus-visible)  .nav-content {
+  .menu-item--clickable:focus:not(:focus-visible)  .nav-content,  .menu-item--clickable.active  .nav-content  {
     border-left: var(--Sizing-Half) solid var(--Button);
   }
 

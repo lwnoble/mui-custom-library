@@ -1,5 +1,5 @@
 /* AAA-light mode CSS */
-:root, ::after, ::before  {
+:root {
   --Mode-Target: 48px;
   /* AAA-light mode targets from JSON */
   --Mode-Target: 48px;
@@ -1650,24 +1650,24 @@
 
 /* AAA-light mode Default chart */
 [charts="Default"] {
-  --Chart-1: #2e4e4b;
-  --Chart-2: #d85640;
-  --Chart-3: #897229;
-  --Chart-4: #6b82a1;
-  --Chart-5: #633d2d;
-  --Chart-6: #71866d;
-  --Chart-7: #51492b;
-  --Chart-8: #476734;
+  --Chart-1: #2a2b3e;
+  --Chart-2: #df438a;
+  --Chart-3: #567f2d;
+  --Chart-4: #a43b02;
+  --Chart-5: #007cac;
+  --Chart-6: #15544f;
+  --Chart-7: #929292;
+  --Chart-8: #7f1e4c;
   --Chart-9: #929292;
   --Chart-BG: #ffffff;
-  --Chart-1-Half: #2e4e4b80;
-  --Chart-2-Half: #d8564080;
-  --Chart-3-Half: #89722980;
-  --Chart-4-Half: #6b82a180;
-  --Chart-5-Half: #633d2d80;
-  --Chart-6-Half: #71866d80;
-  --Chart-7-Half: #51492b80;
-  --Chart-8-Half: #47673480;
+  --Chart-1-Half: #2a2b3e80;
+  --Chart-2-Half: #df438a80;
+  --Chart-3-Half: #567f2d80;
+  --Chart-4-Half: #a43b0280;
+  --Chart-5-Half: #007cac80;
+  --Chart-6-Half: #15544f80;
+  --Chart-7-Half: #92929280;
+  --Chart-8-Half: #7f1e4c80;
   --Chart-9-Half: #92929280;
   --Chart-10-Half: #20191380;
   --Chart-10: #201913;

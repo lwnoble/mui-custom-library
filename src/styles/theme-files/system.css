@@ -9,15 +9,15 @@
 
   --Button-Height: var(--Platform-Button-Height);
   --Button-Minimum-Width: var(--Sizing-8);
-  --Button-Border-Radius: var(--Sizing-Half);
-  --Button-Focus-Radius: var(--Focus-Half);
+  --Button-Border-Radius: var(--Sizing-5);
+  --Button-Focus-Radius: var(--Focus-5);
   --Button-Horizontal-Padding: var(--Sizing-1);
   --Button-Horizontal-Padding-With-Icon: var(--Sizing-Half);
   --Button-Small-Height: var(--Sizing-3);
   --Button-Small-Horizontal-Padding: var(--Sizing-1);
   --Button-Small-Horizontal-Padding-With-Icon: var(--Sizing-Half);
   --Button-Border: var(--Border-Standard);
-  --Button-Overlay-Radius: var(--HoverOverlay-Overlay-Half);
+  --Button-Overlay-Radius: var(--HoverOverlay-Overlay-5);
 
   --Focus-1: 11px;
   --Focus-2: 19px;
@@ -34,8 +34,8 @@
   --Focus-One-And-Half: 15px;
 
   --Card-Padding: var(--Sizing-2);
-  --Card-Border-Radius: var(--Sizing-3);
-  --Card-Focus-Radius: var(--Focus-3);
+  --Card-Border-Radius: var(--Sizing-2);
+  --Card-Focus-Radius: var(--Focus-2);
 
   --Input-Border-Radius: var(--Sizing-Half);
   --Input-Horizontal-Padding: var(--Sizing-2);
@@ -54,8 +54,8 @@
   --Breakpoints-Extra-Small: 320px;
   --Breakpoints-Extra-Extra-Large: 1440px;
 
-  --Modal-Border-Radius: var(--Sizing-4);
-  --Modal-Padding: var(--Sizing-3);
+  --Modal-Border-Radius: var(--Sizing-3);
+  --Modal-Padding: var(--Sizing-2);
 
   --Navigation-LeftNav-Width: var(--Sizing-30);
   --Navigation-Navigation-Rail: var(--Sizing-8);
